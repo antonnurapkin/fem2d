@@ -1,0 +1,7 @@
+cmake_minimum_required(VERSION 3.10)
+
+project(fem2d)
+
+add_executable(fem2d main.cpp)
+
+target_link_directories(fem2d solver_lib)
