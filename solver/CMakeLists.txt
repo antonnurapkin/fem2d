@@ -1,11 +1,13 @@
-cmake_minimum_required(VESRION 3.10)
+add_library(solver_lib Solver.cpp Solver.h)
 
-aux_source_directory(. SRC_FILES)
-
-add_library(solver_lib ${SRC_FILES})
+add_subdirectory(utils)
+add_subdirectory(node)
+add_subdirectory(material)
+add_subdirectory(elem_service)
+add_subdirectory(boundaries)
 
 target_include_directories(
-    solver_lib PUBLIC_HEADER
+    solver_lib PUBLIC
+    ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIRS}
-)   
-
+)

@@ -1,7 +1,16 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.23)
 
 project(fem2d)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+set(VCPKG_TOOLCHAIN_FILE "D:/vcpkg/scripts/buildsystems/vcpkg.cmake" CACHE FILEPATH "Path to vcpkg toolchain")
+include(${VCPKG_TOOLCHAIN_FILE})
+find_package(Boost 1.86.0 REQUIRED COMPONENTS numeric_ublas)
+
+add_subdirectory(solver)
+
 add_executable(fem2d main.cpp)
 
-target_link_directories(fem2d solver_lib)
+target_link_libraries(fem2d PUBLIC solver_lib ${Boost_LIBRARIES})

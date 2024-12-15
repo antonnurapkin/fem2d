@@ -1,5 +1,5 @@
 #include <optional>
-#include "Error.h"
+#include "../utils/Error.h"
 #include "Force.h"
 
 Force::Force(std::optional<int> i, std::optional<float> x, std::optional<float> y)

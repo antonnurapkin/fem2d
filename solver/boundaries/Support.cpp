@@ -1,5 +1,5 @@
 #include "Support.h"
-#include "Error.h"
+#include "../utils/Error.h"
 #include <optional>
 
 Support::Support(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y) {

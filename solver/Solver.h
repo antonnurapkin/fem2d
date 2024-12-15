@@ -5,12 +5,12 @@
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "IElement.h"
-#include "Node.h"
-#include "Material.h"
-#include "Force.h"
-#include "Support.h"
-#include "ElemParams.h"
+#include "elem_service/IElement.h"
+#include "node/Node.h"
+#include "material/Material.h"
+#include "boundaries/Force.h"
+#include "boundaries/Support.h"
+#include "elem_service/ElemParams.h"
 
 
 class Solver

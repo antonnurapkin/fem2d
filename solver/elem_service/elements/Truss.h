@@ -2,9 +2,9 @@
 #include <vector>
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
-#include "Material.h"
-#include "IElement.h"
-#include "ElemParams.h"
+#include "../../material/Material.h"
+#include "../IElement.h"
+#include "../ElemParams.h"
 
 class Truss : public IElement
 {

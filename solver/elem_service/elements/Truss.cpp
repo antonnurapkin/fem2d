@@ -2,11 +2,10 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/assignment.hpp>
 #include "Truss.h"
-#include "Node.h"
-#include "Material.h"
-#include "ElemParams.h"
-#include "ElemParams.h"
-#include "tools.h"
+#include "../../node/Node.h"
+#include "../../material/Material.h"
+#include "../ElemParams.h"
+#include "../../utils/tools.h"
 
 using namespace boost::numeric;
 

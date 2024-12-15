@@ -1,0 +1,4 @@
+#TODO: Неверно работает CMake
+aux_source_directory(. SRC_FILES)
+
+target_sources(solver_lib PUBLIC ${SRC_FILES})

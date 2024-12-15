@@ -1,6 +1,6 @@
 #include <optional>
 #include "Node.h"
-#include "Error.h"
+#include "../utils/Error.h"
 
 
 Node::Node(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
