@@ -10,7 +10,13 @@ int main()
 
 	std::cin >> path_to_config_file;
 
-	Solver solver(path_to_config_file);
+	Preprocessor preprocessor(path_to_config_file);
+
+	preprocessor.readConfig();
+
+	Solver solver(preprocessor);
+
+	solver.run();
 
     return 0;
 }

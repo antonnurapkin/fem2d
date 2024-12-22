@@ -11,7 +11,8 @@ include(${VCPKG_TOOLCHAIN_FILE})
 find_package(Boost 1.86.0 REQUIRED COMPONENTS numeric_ublas)
 
 add_subdirectory(solver)
+add_subdirectory(preprocessor)
 
 add_executable(fem2d main.cpp)
 
-target_link_libraries(fem2d PUBLIC solver_lib ${Boost_LIBRARIES})
+target_link_libraries(fem2d PUBLIC solver_lib preprocessor_lib ${Boost_LIBRARIES})
