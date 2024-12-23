@@ -11,7 +11,7 @@ Support::Support(std::optional<int> index, std::optional<double> disp_x, std::op
 
 void Support::checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y) {
 	if (!index.has_value() || (!disp_x.has_value() && !disp_y.has_value())) {
-		throw Error("Missing required parameter in displacements definition");
+		throw PreprocessorError("Missing required parameter in displacements definition");
 	}
 }
 

@@ -3,14 +3,9 @@
 
 #include "solver/Solver.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-	std::string path_to_config_file;
-	std::cout << "Enter path to config file:\n";
-
-	std::cin >> path_to_config_file;
-
-	Preprocessor preprocessor(path_to_config_file);
+	Preprocessor preprocessor(argc, argv);
 
 	preprocessor.readConfig();
 

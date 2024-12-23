@@ -2,12 +2,12 @@
 #include <exception>
 #include <string>
 
-class Error: public std::exception
+class PreprocessorError: public std::exception
 {
 private:
 	std::string message;
 public:
-	Error(const char* msg);
+	PreprocessorError(const char* msg);
 	const char* what() const throw();
 };
 

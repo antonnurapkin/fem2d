@@ -1,8 +1,8 @@
 #include "Error.h"
 
-Error::Error(const char* msg) : message(msg) {};
+PreprocessorError::PreprocessorError(const char* msg) : message(msg) {};
 
-const char* Error::what() const throw() {
+const char* PreprocessorError::what() const throw() {
 	return message.c_str();
 }
 

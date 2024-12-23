@@ -1,8 +1,9 @@
 #include "preprocessor.h"
+#include <iostream>
 
 
-Preprocessor::Preprocessor(std::string path_to_input_file) {
-    this->path_to_input_file = path_to_input_file;
+Preprocessor::Preprocessor(int number_params, char** params) {
+	path_to_input_file = getPathToConfig(number_params, params);
 }
 
 Preprocessor::~Preprocessor() {
@@ -12,6 +13,19 @@ Preprocessor::~Preprocessor() {
 		}
 	}
 }
+
+std::string Preprocessor::getPathToConfig(int number_params, char** params) {
+	if (number_params < 3) {
+		throw PreprocessorError("Not enough launch arguments!");
+	} 
+	else if (std::strcmp(params[1], "--input") != 0) {\
+		throw PreprocessorError("Unknown launch argument");	
+	} 
+	else {
+		return std::string(params[2]);
+	}
+}
+
 
 void Preprocessor::readConfig() {
 	try {
@@ -69,10 +83,10 @@ void Preprocessor::readConfig() {
 			std::fstream file(path_to_input_file);
 		}
 		else {
-			throw Error("The config file does not exist in this path\n");
+			throw PreprocessorError("The config file does not exist in this path\n");
 		}
 	}
-	catch (const Error& err) {
+	catch (const PreprocessorError& err) {
 		std::cout << "\nError while config file reading:\n" << err.what() << std::endl;
 		std::exit(1);
 	}
@@ -84,7 +98,7 @@ Node Preprocessor::getNodeByIndex(int index) {
 			return node;
 		}
 	}
-	throw Error("Node with the specified index does not exist\n");
+	throw PreprocessorError("Node with the specified index does not exist\n");
 }
 
 Material Preprocessor::getMaterialByIndex(int index) {
@@ -93,7 +107,7 @@ Material Preprocessor::getMaterialByIndex(int index) {
 			return material;
 		}
 	}
-	throw Error("Material with the specified index does not exist\n");
+	throw PreprocessorError("Material with the specified index does not exist\n");
 }
 
 ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<double>> elem_data, double geometry) {
