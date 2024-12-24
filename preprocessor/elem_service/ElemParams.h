@@ -6,7 +6,7 @@
 #include "../material/Material.h"
 
 struct ElemParams {
-	std::vector<Node> nodes;
+	std::vector<Node*> nodes;
 	Material material;
 	std::vector<int> indexes;
 	double geom_parameter;

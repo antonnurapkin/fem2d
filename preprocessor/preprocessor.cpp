@@ -12,6 +12,12 @@ Preprocessor::~Preprocessor() {
 			delete elem;
 		}
 	}
+
+	for (Node* node: nodes) {
+		if (node != nullptr) {
+			delete node;
+		}
+	}
 }
 
 std::string Preprocessor::getPathToConfig(int number_params, char** params) {
@@ -53,7 +59,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("NODE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> node_data = getDataFromString(line, { "index", "x", "y" });
-					Node node(node_data["index"], node_data["x"], node_data["y"]);
+					Node* node = new Node(node_data["index"], node_data["x"], node_data["y"]);
 					this->nodes.push_back(node);
 				}
 				// TODO: ������� �������� ������ ���������� � ����������� �� ���� ���������
@@ -92,9 +98,9 @@ void Preprocessor::readConfig() {
 	}
 }
 
-Node Preprocessor::getNodeByIndex(int index) {
-	for (Node node : nodes) {
-		if (node.getIndex() == index) {
+Node* Preprocessor::getNodeByIndex(int index) {
+	for (Node* node : nodes) {
+		if (node->getIndex() == index) {
 			return node;
 		}
 	}
@@ -117,8 +123,10 @@ ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<do
 	int index2 = static_cast<int>(elem_data["index2"].value());
 	int material_index = static_cast<int>(elem_data["material_index"].value());
 
+	std::vector<Node*> elem_nodes = { getNodeByIndex(index1), getNodeByIndex(index2) };
+
 	ElemParams elem_params = {
-		std::vector<Node> {getNodeByIndex(index1), getNodeByIndex(index2)},
+		elem_nodes,
 		getMaterialByIndex(material_index),
 		std::vector<int> {index1, index2},
 		geometry
@@ -146,7 +154,7 @@ std::vector<IElement*> Preprocessor::getElements() {
 	return this->elements;
 }
 
-std::vector<Node> Preprocessor::getNodes() {
+std::vector<Node*> Preprocessor::getNodes() {
 	return this->nodes;
 }
 
