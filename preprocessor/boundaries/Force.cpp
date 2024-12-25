@@ -12,7 +12,7 @@ Force::Force(std::optional<int> i, std::optional<float> x, std::optional<float> 
 
 void Force::checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y) {
 	if (!i.has_value() || !x.has_value() || !y.has_value()) {
-		throw Error("Missing required parameter in any force definition");
+		throw PreprocessorError("Missing required parameter in any force definition");
 	}
 }
 

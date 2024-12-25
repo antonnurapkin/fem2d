@@ -48,7 +48,7 @@ std::map<std::string, std::optional<double>> getDataFromString(std::string line,
         return result;
     }
     else {
-        throw Error("Invalid configuration file");
+        throw PreprocessorError("Invalid configuration file");
     }
 }
 

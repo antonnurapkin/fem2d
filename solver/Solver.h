@@ -25,5 +25,7 @@ public:
 	ublas::matrix<double> applySupports(ublas::matrix<double>& Kglobal, int matrix_size);
 	
 	int calculateMatrixSize();
+
+	void setSolutionToNodes(ublas::vector<double> solution);
 };
 

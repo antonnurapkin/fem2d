@@ -13,10 +13,10 @@ Node::Node(std::optional<int> index, std::optional<double> x, std::optional<doub
 
 void Node::checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
 	if (!index.has_value() || !x.has_value() || !y.has_value()) {
-		throw Error("Missing required parameter in any node definition");
+		throw PreprocessorError("Missing required parameter in any node definition");
 	} 
 	if (index < 0) {
-		throw Error("Index is lower tnan zero");
+		throw PreprocessorError("Index is lower tnan zero");
 	}
 }
 

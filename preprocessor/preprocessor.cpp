@@ -1,8 +1,9 @@
 #include "preprocessor.h"
+#include <iostream>
 
 
-Preprocessor::Preprocessor(std::string path_to_input_file) {
-    this->path_to_input_file = path_to_input_file;
+Preprocessor::Preprocessor(int number_params, char** params) {
+	path_to_input_file = getPathToConfig(number_params, params);
 }
 
 Preprocessor::~Preprocessor() {
@@ -11,7 +12,26 @@ Preprocessor::~Preprocessor() {
 			delete elem;
 		}
 	}
+
+	for (Node* node: nodes) {
+		if (node != nullptr) {
+			delete node;
+		}
+	}
 }
+
+std::string Preprocessor::getPathToConfig(int number_params, char** params) {
+	if (number_params < 3) {
+		throw PreprocessorError("Not enough launch arguments!");
+	} 
+	else if (std::strcmp(params[1], "--input") != 0) {\
+		throw PreprocessorError("Unknown launch argument");	
+	} 
+	else {
+		return std::string(params[2]);
+	}
+}
+
 
 void Preprocessor::readConfig() {
 	try {
@@ -39,7 +59,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("NODE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> node_data = getDataFromString(line, { "index", "x", "y" });
-					Node node(node_data["index"], node_data["x"], node_data["y"]);
+					Node* node = new Node(node_data["index"], node_data["x"], node_data["y"]);
 					this->nodes.push_back(node);
 				}
 				// TODO: ������� �������� ������ ���������� � ����������� �� ���� ���������
@@ -69,22 +89,22 @@ void Preprocessor::readConfig() {
 			std::fstream file(path_to_input_file);
 		}
 		else {
-			throw Error("The config file does not exist in this path\n");
+			throw PreprocessorError("The config file does not exist in this path\n");
 		}
 	}
-	catch (const Error& err) {
+	catch (const PreprocessorError& err) {
 		std::cout << "\nError while config file reading:\n" << err.what() << std::endl;
 		std::exit(1);
 	}
 }
 
-Node Preprocessor::getNodeByIndex(int index) {
-	for (Node node : nodes) {
-		if (node.getIndex() == index) {
+Node* Preprocessor::getNodeByIndex(int index) {
+	for (Node* node : nodes) {
+		if (node->getIndex() == index) {
 			return node;
 		}
 	}
-	throw Error("Node with the specified index does not exist\n");
+	throw PreprocessorError("Node with the specified index does not exist\n");
 }
 
 Material Preprocessor::getMaterialByIndex(int index) {
@@ -93,7 +113,7 @@ Material Preprocessor::getMaterialByIndex(int index) {
 			return material;
 		}
 	}
-	throw Error("Material with the specified index does not exist\n");
+	throw PreprocessorError("Material with the specified index does not exist\n");
 }
 
 ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<double>> elem_data, double geometry) {
@@ -103,8 +123,10 @@ ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<do
 	int index2 = static_cast<int>(elem_data["index2"].value());
 	int material_index = static_cast<int>(elem_data["material_index"].value());
 
+	std::vector<Node*> elem_nodes = { getNodeByIndex(index1), getNodeByIndex(index2) };
+
 	ElemParams elem_params = {
-		std::vector<Node> {getNodeByIndex(index1), getNodeByIndex(index2)},
+		elem_nodes,
 		getMaterialByIndex(material_index),
 		std::vector<int> {index1, index2},
 		geometry
@@ -132,7 +154,7 @@ std::vector<IElement*> Preprocessor::getElements() {
 	return this->elements;
 }
 
-std::vector<Node> Preprocessor::getNodes() {
+std::vector<Node*> Preprocessor::getNodes() {
 	return this->nodes;
 }
 
