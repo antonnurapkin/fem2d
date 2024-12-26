@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
+#include <boost/numeric/ublas/vector.hpp>
 #include "../../material/Material.h"
 #include "../IElement.h"
 #include "../ElemParams.h"
@@ -15,10 +16,7 @@ private:
 	double section;
 	double length;
 	double angle;
-	int matrix_size = 4;
-
-	double setLength(std::vector<Node*> nodes) const;
-	double setAngle(std::vector<Node*> nodes) const;
+	int MATRIX_SIZE = 4;
 public:
 	Truss(Material material, std::vector<int> indexes, std::vector<Node*> nodes, double section);
 	Truss(ElemParams& elemParams);
@@ -28,11 +26,19 @@ public:
 	ublas::matrix<double> BMatrix() const override;
 	ublas::matrix<double> DMatrix() const override;
 
+	ublas::matrix<double> getDisplacments() const;
+
+	ublas::matrix<double> getStrain() const;
+	ublas::matrix<double> getStress() const;
+
 	std::vector<Node*> getNodes() const override;
 	std::vector<int> getNodesIndexes() const;
-	/*ublas::vector<double> getStrain() const;
-	ublas::vector<double> getStress() const;*/
 
 	double getLength();
+	
+	double setLength(std::vector<Node*> nodes) const;
+	double setAngle(std::vector<Node*> nodes) const;
+
+	
 };
 

@@ -1,5 +1,4 @@
 #include <cmath>
-#include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/assignment.hpp>
 #include "Truss.h"
 #include "../../node/Node.h"
@@ -31,28 +30,19 @@ ublas::matrix<double> Truss::KMatrixElemGlobal() const {
 
 	ublas::matrix<double> K_elem_global = ublas::prod(ublas::trans(T_matrix), K_elem_global_temp);
 
-	/*for (int i = 0; i < indexes.size(); i++) {
-		std::cout << indexes[i] << " ";
-	}
-	std::cout << std::endl;
-	std::cout << angle / 3.1416 * 180 << std::endl;
-	
-	ublas::matrix<double> K_elem_normalized = K_elem_global / (material.getEmod() * section) * length;
-	print_matrix(K_elem_normalized);*/
-
 	return K_elem_global;
 }
 
 ublas::matrix<double> Truss::KMatrixElemLocal() const
 {
-	ublas::matrix<double> K_elem_local(matrix_size, matrix_size);
+	ublas::matrix<double> K_elem_local(MATRIX_SIZE, MATRIX_SIZE);
 
 	K_elem_local = (material.getEmod() * section * length) * ublas::prod(BMatrix(), ublas::trans(BMatrix()));
 	return K_elem_local;
 }
 
 ublas::matrix<double> Truss::BMatrix() const {
-	ublas::matrix<double> B(matrix_size, 1);
+	ublas::matrix<double> B(MATRIX_SIZE, 1);
 
 	B <<= -1 / length,
 		  0,
@@ -64,7 +54,7 @@ ublas::matrix<double> Truss::BMatrix() const {
 
 ublas::matrix<double> Truss::DMatrix() const
 {
-	return ublas::identity_matrix<double>(matrix_size, matrix_size) * material.getEmod();
+	return ublas::identity_matrix<double>(MATRIX_SIZE, MATRIX_SIZE) * material.getEmod();
 }
 
 std::vector<Node*> Truss::getNodes() const
@@ -75,6 +65,26 @@ std::vector<Node*> Truss::getNodes() const
 std::vector<int> Truss::getNodesIndexes() const
 {
 	return indexes;
+}
+
+ublas::matrix<double> Truss::getDisplacments() const
+{
+
+	ublas::matrix<double> displacements(MATRIX_SIZE, 1);	
+
+	for(int i = 0; i < nodes.size(); i++) {
+		displacements(2 * i) = nodes[i]->getDispX();
+		displacements(2 * i + 1) = nodes[i]->getDispY();
+	}
+
+    return displacements;
+}
+
+ublas::matrix<double> Truss::getStrain() const
+{	
+
+	ublas::matrix<double> strain = ublas::prod(BMatrix(), ublas::trans(getDisplacments()));
+    return strain;
 }
 
 double Truss::setLength(std::vector<Node*> nodes) const
