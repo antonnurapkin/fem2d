@@ -28,7 +28,7 @@ public:
 	ublas::matrix<double> BMatrix() const override;
 	ublas::matrix<double> DMatrix() const override;
 
-	std::vector<Node*> getNodes() const;
+	std::vector<Node*> getNodes() const override;
 	std::vector<int> getNodesIndexes() const;
 	/*ublas::vector<double> getStrain() const;
 	ublas::vector<double> getStress() const;*/
