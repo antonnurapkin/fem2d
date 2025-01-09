@@ -6,3 +6,10 @@ target_include_directories(
     ${Boost_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
 )
+
+target_link_libraries(postprocessor_lib PUBLIC ${VTK_LIBRARIES})
+
+vtk_module_autoinit(
+  TARGETS postprocessor_lib
+  MODULES ${VTK_LIBRARIES}
+)

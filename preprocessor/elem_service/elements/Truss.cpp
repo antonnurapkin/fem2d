@@ -44,9 +44,9 @@ ublas::matrix<double> Truss::KMatrixElemLocal() const
 ublas::matrix<double> Truss::BMatrix() const {
 	ublas::matrix<double> B(MATRIX_SIZE, 1);
 
-	B <<= -1 / length,
+	B <<= 1 / length,
 		  0,
-		  1 / length,
+		  -1 / length,
 		  0;
 
 	return B;
@@ -82,7 +82,6 @@ ublas::matrix<double> Truss::getDisplacments() const
 
 ublas::matrix<double> Truss::getStrain() const
 {	
-
 	ublas::matrix<double> strain = ublas::prod(BMatrix(), ublas::trans(getDisplacments()));
     return strain;
 }

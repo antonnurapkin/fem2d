@@ -2,6 +2,7 @@
 #include <string>
 
 #include "solver/Solver.h"
+#include "postprocessor/postprocessor.h"
 
 int main(int argc, char* argv[])
 {
@@ -12,6 +13,10 @@ int main(int argc, char* argv[])
 	Solver solver(preprocessor);
 
 	solver.run();
+
+	Postprocessor postprocessor(preprocessor);
+
+	postprocessor.run();
 
     return 0;
 }
