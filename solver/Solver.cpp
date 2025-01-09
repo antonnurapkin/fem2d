@@ -23,11 +23,7 @@ void Solver::run() {
 	setSolutionToNodes(dispSolution);
 
 	std::cout << "Solution:\n";
-	std::cout << dispSolution;
-
-	for (Node* node: preprocessor.getNodes()) {
-		std::cout << "x: " <<node->getDispX() << " y: " << node->getDispY() << std::endl;
-	}
+	std::cout << dispSolution << std::endl;
 }
 
 

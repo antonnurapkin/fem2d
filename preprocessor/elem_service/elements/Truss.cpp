@@ -1,8 +1,8 @@
 #include <cmath>
 #include <boost/numeric/ublas/assignment.hpp>
+#include <boost/numeric/ublas/io.hpp>
 #include "Truss.h"
 #include "../../node/Node.h"
-#include "../../material/Material.h"
 #include "../ElemParams.h"
 #include "../../utils/tools.h"
 
@@ -44,9 +44,9 @@ ublas::matrix<double> Truss::KMatrixElemLocal() const
 ublas::matrix<double> Truss::BMatrix() const {
 	ublas::matrix<double> B(MATRIX_SIZE, 1);
 
-	B <<= 1 / length,
+	B <<= -1 / length,
 		  0,
-		  -1 / length,
+		  1 / length,
 		  0;
 
 	return B;
@@ -80,10 +80,29 @@ ublas::matrix<double> Truss::getDisplacments() const
     return displacements;
 }
 
-ublas::matrix<double> Truss::getStrain() const
+double Truss::getStrain() const
 {	
-	ublas::matrix<double> strain = ublas::prod(BMatrix(), ublas::trans(getDisplacments()));
+	ublas::matrix<double> disp = getDisplacments();
+
+	std::vector<Node*> nodes = getNodes();
+
+	double x1_new = nodes[0]->getX() + disp(0);
+	double x2_new = nodes[1]->getX() + disp(2);
+
+	double y1_new = nodes[0]->getY() + disp(1);
+	double y2_new = nodes[1]->getY() + disp(3);
+
+	double new_length = pow(pow(x1_new - x2_new, 2) + pow(y1_new - y2_new, 2), 0.5);
+
+	double strain = (new_length - length) / length;
     return strain;
+}
+
+double Truss::getStress() const
+{	
+	double stress = this->material.getEmod() * this->getStrain();
+
+    return stress;
 }
 
 double Truss::setLength(std::vector<Node*> nodes) const

@@ -28,8 +28,8 @@ public:
 
 	ublas::matrix<double> getDisplacments() const;
 
-	ublas::matrix<double> getStrain() const;
-	ublas::matrix<double> getStress() const;
+	double getStrain() const;
+	double getStress() const;
 
 	std::vector<Node*> getNodes() const override;
 	std::vector<int> getNodesIndexes() const;
@@ -37,8 +37,6 @@ public:
 	double getLength();
 	
 	double setLength(std::vector<Node*> nodes) const;
-	double setAngle(std::vector<Node*> nodes) const;
-
-	
+	double setAngle(std::vector<Node*> nodes) const;	
 };
 
