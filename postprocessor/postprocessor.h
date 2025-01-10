@@ -11,10 +11,9 @@ class Postprocessor{
 private:
     Preprocessor preprocessor;
 
-    vtkSmartPointer<vtkPoints> points;
-    vtkSmartPointer<vtkCellArray> lines;
-    vtkSmartPointer<vtkPolyData> polydata;
-    vtkSmartPointer<vtkFloatArray> stressArray;
+    //vtkSmartPointer<vtkPoints> points;
+    //vtkSmartPointer<vtkCellArray> lines;
+    //vtkSmartPointer<vtkPolyData> polydata;
 
     const int WINDOW_SIZE = 600;
 
@@ -25,5 +24,5 @@ public:
 
     void createGeometryObjects();
 
-    void renderWindow(vtkSmartPointer<vtkPolyDataMapper> mapper);
+    vtkSmartPointer<vtkRenderer> createRenderer(std::vector<double> data, double viewport[4]);
 };
