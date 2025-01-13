@@ -11,6 +11,8 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkLookupTable.h>
 #include <vtkTransform.h>
+#include <vtkTextProperty.h>
+#include <vtkScalarBarActor.h>
 #include "postprocessor.h"
 
 
@@ -34,8 +36,11 @@ void Postprocessor::run() {
     double stress_viewport[4] = {0.0, 0.0, 0.5, 1.0};
     double strain_viewport[4] = {0.5, 0.0, 1.0, 1.0};
 
-    vtkSmartPointer<vtkRenderer> stress_renderer = createRenderer(stresses, stress_viewport);
-    vtkSmartPointer<vtkRenderer> strain_renderer = createRenderer(strains, strain_viewport); 
+    const char * stress_name = "stress";
+    const char * strain_name = "strain";
+
+    vtkSmartPointer<vtkRenderer> stress_renderer = createRenderer(stresses, stress_viewport, stress_name);
+    vtkSmartPointer<vtkRenderer> strain_renderer = createRenderer(strains, strain_viewport, strain_name); 
 
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     renderWindow->AddRenderer(stress_renderer);
@@ -70,7 +75,7 @@ void Postprocessor::createGeometryObjects(){
     // }
 }
 
-vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> data, double viewport[4]) {
+vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> data, double viewport[4], const char * name) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
     vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
@@ -106,8 +111,8 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> d
     }
     polydata->GetCellData()->SetScalars(data_store);
 
-    double min_value = *max_element(data.begin(), data.end());
-    double max_value = *min_element(data.begin(), data.end());
+    double min_value = *min_element(data.begin(), data.end());
+    double max_value = *max_element(data.begin(), data.end());
 
     vtkSmartPointer<vtkColorTransferFunction> ctf = vtkSmartPointer<vtkColorTransferFunction>::New();
     ctf->SetColorSpaceToRGB();
@@ -131,6 +136,22 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> d
     renderer->SetViewport(viewport);
     renderer->ResetCamera();
     renderer->SetBackground(1.0, 1.0, 1.0);
+
+    //--- Шкала цветов (Scalar Bar) ---
+    vtkNew<vtkScalarBarActor> scalarBar;
+    scalarBar->SetLookupTable(mapper->GetLookupTable());
+    scalarBar->SetTitle(name); // Используем имя, переданное в функцию, как заголовок
+    scalarBar->SetNumberOfLabels(8);
+
+    // Задание положения шкалы (настраивайте по своему усмотрению)
+     scalarBar->SetPosition(0.05, 0.05); //  Левый нижний угол, отступ 5%
+     scalarBar->SetPosition2(0.05, 0.9); // Вертикальная полоса
+     scalarBar->GetLabelTextProperty()->SetColor(0, 0, 0); // Установить цвет текста меток в черный
+     scalarBar->GetTitleTextProperty()->SetColor(0, 0, 0); // Установить цвет заголовка в черный
+     scalarBar->SetUnconstrainedFontSize(24);
+    // Добавляем шкалу в рендерер
+    renderer->AddActor2D(scalarBar);
+    //--- Конец шкалы цветов ---
 
     vtkNew<vtkTransform> transform;
     transform->Translate(0.0, 0.0, 0.0);
