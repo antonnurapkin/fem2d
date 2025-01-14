@@ -54,54 +54,10 @@ void Postprocessor::run() {
     interactor->Start();
 }
 
-void Postprocessor::createGeometryObjects(){
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-
-    for (Node* node: preprocessor.getNodes()) {
-        points->InsertNextPoint(node->getX(), node->getY(), 0);
-    }
-
-    // for (IElement* elem : preprocessor.getElements()) {
-    //     std::vector<int> ids = elem->getNodesIndexes();
-
-    //     int size = ids.size();
-
-    //     for (int i = 0; i < size; i++) {
-    //         ids[i] = ids[i] - 1;
-    //     }
-
-    //     std::vector<vtkIdType> cell(ids.begin(), ids.end());
-    //     lines->InsertNextCell(cell.size(), cell.data());
-    // }
-}
-
 vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> data, double viewport[4], const char * name) {
-    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
-    vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
     vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
-    for (Node* node: preprocessor.getNodes()) {
-        points->InsertNextPoint(node->getX(), node->getY(), 0);
-    }
-
-    for (IElement* elem : preprocessor.getElements()) {
-        std::vector<int> ids = elem->getNodesIndexes();
-
-        int size = ids.size();
-
-        for (int i = 0; i < size; i++) {
-            ids[i] = ids[i] - 1;
-        }
-
-        std::vector<vtkIdType> cell(ids.begin(), ids.end());
-        lines->InsertNextCell(cell.size(), cell.data());
-    }
-
-    polydata->SetPoints(points);
-
-    if (lines->GetNumberOfCells() > 0) {
-        polydata->SetLines(lines);
-    }
+    createGeoemetry(polydata);
 
     vtkSmartPointer<vtkFloatArray> data_store = vtkSmartPointer<vtkFloatArray>::New();
     data_store->SetNumberOfComponents(1);
@@ -137,21 +93,7 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> d
     renderer->ResetCamera();
     renderer->SetBackground(1.0, 1.0, 1.0);
 
-    //--- Шкала цветов (Scalar Bar) ---
-    vtkNew<vtkScalarBarActor> scalarBar;
-    scalarBar->SetLookupTable(mapper->GetLookupTable());
-    scalarBar->SetTitle(name); // Используем имя, переданное в функцию, как заголовок
-    scalarBar->SetNumberOfLabels(8);
-
-    // Задание положения шкалы (настраивайте по своему усмотрению)
-     scalarBar->SetPosition(0.05, 0.05); //  Левый нижний угол, отступ 5%
-     scalarBar->SetPosition2(0.05, 0.9); // Вертикальная полоса
-     scalarBar->GetLabelTextProperty()->SetColor(0, 0, 0); // Установить цвет текста меток в черный
-     scalarBar->GetTitleTextProperty()->SetColor(0, 0, 0); // Установить цвет заголовка в черный
-     scalarBar->SetUnconstrainedFontSize(24);
-    // Добавляем шкалу в рендерер
-    renderer->AddActor2D(scalarBar);
-    //--- Конец шкалы цветов ---
+    createScalarBar(renderer, mapper->GetLookupTable(), name);
 
     vtkNew<vtkTransform> transform;
     transform->Translate(0.0, 0.0, 0.0);
@@ -165,4 +107,45 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> d
     return renderer;
 }
 
+void Postprocessor::createGeoemetry(vtkSmartPointer<vtkPolyData> polydata) {
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
+    for (Node* node: preprocessor.getNodes()) {
+        points->InsertNextPoint(node->getX(), node->getY(), 0);
+    }
+
+    for (IElement* elem : preprocessor.getElements()) {
+        std::vector<int> ids = elem->getNodesIndexes();
+
+        int size = ids.size();
+
+        for (int i = 0; i < size; i++) {
+            ids[i] = ids[i] - 1;
+        }
+
+        std::vector<vtkIdType> cell(ids.begin(), ids.end());
+        lines->InsertNextCell(cell.size(), cell.data());
+    }
+
+    polydata->SetPoints(points);
+
+    if (lines->GetNumberOfCells() > 0) {
+        polydata->SetLines(lines);
+    }
+}
+
+void Postprocessor::createScalarBar(vtkSmartPointer<vtkRenderer> renderer, vtkScalarsToColors* lookupTable, const char * name) {
+    vtkNew<vtkScalarBarActor> scalarBar;
+    scalarBar->SetLookupTable(lookupTable);
+    scalarBar->SetTitle(name); // Используем имя, переданное в функцию, как заголовок
+    scalarBar->SetNumberOfLabels(8);
+
+    scalarBar->SetPosition(0.05, 0.05); //  Левый нижний угол, отступ 5%
+    scalarBar->SetPosition2(0.05, 0.9); // Вертикальная полоса
+    scalarBar->GetLabelTextProperty()->SetColor(0, 0, 0); // Установить цвет текста меток в черный
+    scalarBar->GetTitleTextProperty()->SetColor(0, 0, 0); // Установить цвет заголовка в черный
+    scalarBar->SetUnconstrainedFontSize(24);
+
+    renderer->AddActor2D(scalarBar);
+}
