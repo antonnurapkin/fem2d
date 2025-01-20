@@ -17,6 +17,7 @@ public:
 	virtual std::vector<Node*> getNodes() const = 0;
 	virtual std::vector<int> getNodesIndexes() const = 0;
 
-	/*virtual ublas::vector<double> getStrain() const = 0;
-	virtual ublas::vector<double> getStress() const = 0;*/
+	virtual double getStrain() const = 0;
+	virtual double getStress() const = 0;
+	virtual double getLength() const = 0;
 };

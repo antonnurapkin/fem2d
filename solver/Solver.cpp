@@ -18,16 +18,15 @@ void Solver::run() {
 
 	ublas::vector<double> Fvector = createFGlobal(matrix_size);
 
-	ublas::vector<double> dispSolution = solveSystem(Kglobal, Fvector);
+	dispSolution = solveSystem(Kglobal, Fvector);
+
+	setSolutionToNodes(dispSolution);
 
 	setSolutionToNodes(dispSolution);
 
 	std::cout << "Solution:\n";
-	std::cout << dispSolution;
 
-	for (Node* node: preprocessor.getNodes()) {
-		std::cout << "x: " <<node->getDispX() << " y: " << node->getDispY() << std::endl;
-	}
+	std::cout << dispSolution << std::endl;
 }
 
 
@@ -114,3 +113,8 @@ void Solver::setSolutionToNodes(ublas::vector<double> solution) {
 		preprocessor.getNodes()[i]->setDispY(solution[2 * i + 1]);
 	}
 }
+
+ublas::vector<double> Solver::getSolution() {
+	return dispSolution;
+}
+
