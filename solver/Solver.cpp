@@ -18,7 +18,7 @@ void Solver::run() {
 
 	ublas::vector<double> Fvector = createFGlobal(matrix_size);
 
-	ublas::vector<double> dispSolution = solveSystem(Kglobal, Fvector);
+	dispSolution = solveSystem(Kglobal, Fvector);
 
 	setSolutionToNodes(dispSolution);
 
@@ -109,4 +109,8 @@ void Solver::setSolutionToNodes(ublas::vector<double> solution) {
 		preprocessor.getNodes()[i]->setDispX(solution[2 * i]);
 		preprocessor.getNodes()[i]->setDispY(solution[2 * i + 1]);
 	}
+}
+
+ublas::vector<double> Solver::getSolution() {
+	return dispSolution;
 }

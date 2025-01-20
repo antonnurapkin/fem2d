@@ -14,6 +14,7 @@ class Solver
 {
 private:
 	Preprocessor preprocessor;
+	ublas::vector<double> dispSolution;
 public:
 	Solver(Preprocessor& preprocessor);
 	void run();
@@ -27,5 +28,7 @@ public:
 	int calculateMatrixSize();
 
 	void setSolutionToNodes(ublas::vector<double> solution);
+
+	ublas::vector<double> getSolution();
 };
 

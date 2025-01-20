@@ -34,7 +34,7 @@ public:
 	std::vector<Node*> getNodes() const override;
 	std::vector<int> getNodesIndexes() const;
 
-	double getLength();
+	double getLength() const override;
 	
 	double setLength(std::vector<Node*> nodes) const;
 	double setAngle(std::vector<Node*> nodes) const;	

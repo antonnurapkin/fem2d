@@ -127,7 +127,7 @@ double Truss::setAngle(std::vector<Node*> nodes) const
 	return atan((y2 - y1) / (x2 - x1));
 }
 
-double Truss::getLength()
+double Truss::getLength() const
 {
 	return length;
 }

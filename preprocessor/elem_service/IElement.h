@@ -19,4 +19,5 @@ public:
 
 	virtual double getStrain() const = 0;
 	virtual double getStress() const = 0;
+	virtual double getLength() const = 0;
 };

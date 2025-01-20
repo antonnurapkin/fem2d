@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
 
 	solver.run();
 
-	Postprocessor postprocessor(preprocessor);
+	Postprocessor postprocessor(preprocessor, solver);
 
 	postprocessor.run();
 

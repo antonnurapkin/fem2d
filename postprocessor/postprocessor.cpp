@@ -15,11 +15,10 @@
 #include "postprocessor.h"
 
 
-Postprocessor::Postprocessor(Preprocessor& preprocessor): preprocessor(preprocessor) {
-    // this->points = vtkSmartPointer<vtkPoints>::New();
-    // this->lines = vtkSmartPointer<vtkCellArray>::New();
+Postprocessor::Postprocessor(Preprocessor& preprocessor, Solver& solver): preprocessor(preprocessor), solver(solver) {}; 
 
-    // this->polydata = vtkSmartPointer<vtkPolyData>::New();
+Postprocessor::~Postprocessor() {
+    delete STRESS_NAME, STRAIN_NAME;
 }
 
 void Postprocessor::run() {
@@ -32,27 +31,22 @@ void Postprocessor::run() {
         strains.push_back(elem->getStrain());
     }
 
-    double stress_viewport[4] = {0.0, 0.0, 0.5, 1.0};
-    double strain_viewport[4] = {0.5, 0.0, 1.0, 1.0};
-
-    const char* stress_name = "stress";
-    const char* strain_name = "strain";
-
-    vtkSmartPointer<vtkRenderer> stress_renderer = createDataRenderer(stresses, stress_viewport, stress_name);
-    vtkSmartPointer<vtkRenderer> strain_renderer = createDataRenderer(strains, strain_viewport, strain_name); 
+    vtkSmartPointer<vtkRenderer> stress_renderer = createDataRenderer(stresses, STRESS_VIEWPORT, STRESS_NAME);
+    vtkSmartPointer<vtkRenderer> strain_renderer = createDataRenderer(strains, STRAIN_VIEWPORT, STRAIN_NAME);
+    vtkSmartPointer<vtkRenderer> deformed_shape_renderer = createDeformedShapeRenderer(DEFORMED_SHAPE_VIEWPORT); 
 
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     renderWindow->AddRenderer(stress_renderer);
     renderWindow->AddRenderer(strain_renderer);
-    renderWindow->SetSize(2 * WINDOW_SIZE, WINDOW_SIZE);
+    renderWindow->AddRenderer(deformed_shape_renderer);
+
+    renderWindow->SetSize(3 * WINDOW_SIZE, WINDOW_SIZE);
 
     vtkSmartPointer<vtkRenderWindowInteractor> interactor = vtkSmartPointer<vtkRenderWindowInteractor>::New();
     interactor->SetRenderWindow(renderWindow);
 
     renderWindow->Render();
     interactor->Start();
-
-    delete stress_name, strain_name;
 }
 
 vtkSmartPointer<vtkRenderer> Postprocessor::createDataRenderer(std::vector<double> data, double viewport[4], const char * name) {
@@ -169,3 +163,88 @@ vtkSmartPointer<vtkActor> Postprocessor::createActor(vtkSmartPointer<vtkPolyData
     actor->GetProperty()->SetLineWidth(3.0);
     return actor;
 }
+
+vtkSmartPointer<vtkRenderer> Postprocessor::createDeformedShapeRenderer(double viewport[4]) {
+    vtkSmartPointer<vtkPolyData> polydataOriginal = vtkSmartPointer<vtkPolyData>::New();
+    vtkSmartPointer<vtkPolyData> polydataDeformed = vtkSmartPointer<vtkPolyData>::New();
+
+    createGeoemetry(polydataOriginal);
+
+    createDeformedGeometry(polydataDeformed);
+
+    vtkSmartPointer<vtkPolyDataMapper> mapperOriginal = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapperOriginal->SetInputData(polydataOriginal);
+
+    vtkSmartPointer<vtkPolyDataMapper> mapperDeformed = vtkSmartPointer<vtkPolyDataMapper>::New();
+    mapperDeformed->SetInputData(polydataDeformed);
+
+    double black[3] = {0, 0, 0};
+
+    vtkSmartPointer<vtkActor> actorOriginal = createActor(mapperOriginal);
+    actorOriginal->GetProperty()->SetColor(black);
+    actorOriginal->GetProperty()->SetOpacity(0.3);
+
+    vtkSmartPointer<vtkActor> actorDeformed = createActor(mapperDeformed);
+    actorDeformed->GetProperty()->SetColor(black);
+
+    vtkSmartPointer<vtkRenderer> renderer = createRenderer(viewport);
+    renderer->AddActor(actorOriginal);
+    renderer->AddActor(actorDeformed);
+
+    addAxes(renderer);
+
+    return renderer;
+}
+
+void Postprocessor::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata) {
+    vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
+    vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
+
+    double max_length = 0;
+
+    for (IElement* elem : preprocessor.getElements()) {
+        std::vector<int> ids = elem->getNodesIndexes();
+
+        int size = ids.size();
+
+        for (int i = 0; i < size; i++) {
+            ids[i] = ids[i] - 1;
+        }
+
+        std::vector<vtkIdType> cell(ids.begin(), ids.end());
+        lines->InsertNextCell(cell.size(), cell.data());
+
+        if (elem->getLength() > max_length) {
+            max_length = elem->getLength();
+        }
+    }
+
+    double scale = calculateScaleFactor(max_length);
+
+    for (Node* node: preprocessor.getNodes()) {
+        points->InsertNextPoint(
+            node->getX() + node->getDispX() * scale, 
+            node->getY() + node->getDispY() * scale, 
+            0
+        );
+    }
+
+    polydata->SetPoints(points);
+
+    if (lines->GetNumberOfCells() > 0) {
+        polydata->SetLines(lines);
+    }
+}
+
+double Postprocessor::calculateScaleFactor(double max_length) {
+    boost::numeric::ublas::vector<double> solution = solver.getSolution();
+
+    double max_disp = *max_element(solution.begin(), solution.end(), [](double a, double b) { return std::abs(a) < std::abs(b);});
+
+    double ratio = max_disp / max_length;
+
+    double scale = (max_length / 50) / ratio;
+
+    return scale;
+
+} 
