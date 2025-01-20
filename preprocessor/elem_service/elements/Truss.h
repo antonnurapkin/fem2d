@@ -16,7 +16,12 @@ private:
 	double section;
 	double length;
 	double angle;
+
 	int MATRIX_SIZE = 4;
+
+	double setLength(std::vector<Node*> nodes) const;
+	double setAngle(std::vector<Node*> nodes) const;
+
 public:
 	Truss(Material material, std::vector<int> indexes, std::vector<Node*> nodes, double section);
 	Truss(ElemParams& elemParams);
@@ -32,6 +37,7 @@ public:
 	double getStress() const;
 
 	std::vector<Node*> getNodes() const override;
+
 	std::vector<int> getNodesIndexes() const;
 
 	double getLength() const override;

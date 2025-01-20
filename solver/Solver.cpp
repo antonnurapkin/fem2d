@@ -22,7 +22,10 @@ void Solver::run() {
 
 	setSolutionToNodes(dispSolution);
 
+	setSolutionToNodes(dispSolution);
+
 	std::cout << "Solution:\n";
+
 	std::cout << dispSolution << std::endl;
 }
 
@@ -114,3 +117,4 @@ void Solver::setSolutionToNodes(ublas::vector<double> solution) {
 ublas::vector<double> Solver::getSolution() {
 	return dispSolution;
 }
+

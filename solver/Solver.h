@@ -28,7 +28,8 @@ public:
 	int calculateMatrixSize();
 
 	void setSolutionToNodes(ublas::vector<double> solution);
-
+  
 	ublas::vector<double> getSolution();
+
 };
 
