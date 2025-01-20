@@ -6,7 +6,6 @@
 #include <vtkProperty.h>
 #include <vtkNew.h>
 #include <vtkRenderWindow.h>
-#include <vtkColorTransferFunction.h>
 #include <vtkAxesActor.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkLookupTable.h>
@@ -36,11 +35,11 @@ void Postprocessor::run() {
     double stress_viewport[4] = {0.0, 0.0, 0.5, 1.0};
     double strain_viewport[4] = {0.5, 0.0, 1.0, 1.0};
 
-    const char * stress_name = "stress";
-    const char * strain_name = "strain";
+    const char* stress_name = "stress";
+    const char* strain_name = "strain";
 
-    vtkSmartPointer<vtkRenderer> stress_renderer = createRenderer(stresses, stress_viewport, stress_name);
-    vtkSmartPointer<vtkRenderer> strain_renderer = createRenderer(strains, strain_viewport, strain_name); 
+    vtkSmartPointer<vtkRenderer> stress_renderer = createDataRenderer(stresses, stress_viewport, stress_name);
+    vtkSmartPointer<vtkRenderer> strain_renderer = createDataRenderer(strains, strain_viewport, strain_name); 
 
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     renderWindow->AddRenderer(stress_renderer);
@@ -52,9 +51,11 @@ void Postprocessor::run() {
 
     renderWindow->Render();
     interactor->Start();
+
+    delete stress_name, strain_name;
 }
 
-vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> data, double viewport[4], const char * name) {
+vtkSmartPointer<vtkRenderer> Postprocessor::createDataRenderer(std::vector<double> data, double viewport[4], const char * name) {
     vtkSmartPointer<vtkPolyData> polydata = vtkSmartPointer<vtkPolyData>::New();
 
     createGeoemetry(polydata);
@@ -70,39 +71,19 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(std::vector<double> d
     double min_value = *min_element(data.begin(), data.end());
     double max_value = *max_element(data.begin(), data.end());
 
-    vtkSmartPointer<vtkColorTransferFunction> ctf = vtkSmartPointer<vtkColorTransferFunction>::New();
-    ctf->SetColorSpaceToRGB();
-
-    ctf->AddRGBPoint(min_value, 0.0, 0.0, 1.0);
-    ctf->AddRGBPoint((max_value + min_value) / 2, 0.0, 1.0, 0.0);
-    ctf->AddRGBPoint(max_value / 2, 1.0, 1.0, 0.0);        
-    ctf->AddRGBPoint(max_value, 1.0, 0.0, 0.0); 
+    vtkSmartPointer<vtkColorTransferFunction> ctf = createColorTransferFunction(min_value, max_value);
 
     vtkSmartPointer<vtkPolyDataMapper> mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapper->SetInputData(polydata);
     mapper->SetLookupTable(ctf);
     mapper->SetScalarRange(min_value, max_value);
 
-    vtkSmartPointer<vtkActor> actor = vtkSmartPointer<vtkActor>::New();
-    actor->SetMapper(mapper);
-    actor->GetProperty()->SetLineWidth(3.0);
+    vtkSmartPointer<vtkActor> actor = createActor(mapper);
+    vtkSmartPointer<vtkRenderer> renderer = createRenderer(viewport);
 
-    vtkSmartPointer<vtkRenderer> renderer = vtkSmartPointer<vtkRenderer>::New();
     renderer->AddActor(actor);
-    renderer->SetViewport(viewport);
-    renderer->ResetCamera();
-    renderer->SetBackground(1.0, 1.0, 1.0);
-
     createScalarBar(renderer, mapper->GetLookupTable(), name);
-
-    vtkNew<vtkTransform> transform;
-    transform->Translate(0.0, 0.0, 0.0);
-
-    vtkNew<vtkAxesActor> axes;
-
-    axes->SetUserTransform(transform);
-
-    renderer->AddActor(axes);
+    addAxes(renderer);
 
     return renderer;
 }
@@ -148,4 +129,43 @@ void Postprocessor::createScalarBar(vtkSmartPointer<vtkRenderer> renderer, vtkSc
     scalarBar->SetUnconstrainedFontSize(24);
 
     renderer->AddActor2D(scalarBar);
+}
+
+vtkSmartPointer<vtkColorTransferFunction> Postprocessor::createColorTransferFunction(double min_value, double max_value){
+    vtkSmartPointer<vtkColorTransferFunction> ctf = vtkSmartPointer<vtkColorTransferFunction>::New();
+    ctf->SetColorSpaceToRGB();
+
+    double step = (max_value - min_value) / 4;
+
+    ctf->AddRGBPoint(min_value, 0.0, 0.0, 1.0);
+    ctf->AddRGBPoint(min_value + step, 0, 1.0, 1.0);
+    ctf->AddRGBPoint(min_value + 2 * step, 0.0, 1.0, 0.0);
+    ctf->AddRGBPoint(max_value - step, 1.0, 1.0, 0);
+    ctf->AddRGBPoint(max_value, 1.0, 0.0, 0.0);
+
+    return ctf;
+}
+
+void Postprocessor::addAxes(vtkSmartPointer<vtkRenderer>& renderer) {
+    vtkNew<vtkTransform> transform;
+    transform->Translate(0.0, 0.0, 0.0);
+
+    vtkNew<vtkAxesActor> axes;
+    axes->SetUserTransform(transform);
+    renderer->AddActor(axes);
+}
+
+vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(double viewport[4]) {
+    auto renderer = vtkSmartPointer<vtkRenderer>::New();
+    renderer->SetViewport(viewport);
+    renderer->ResetCamera();
+    renderer->SetBackground(1.0, 1.0, 1.0);
+    return renderer;
+}
+
+vtkSmartPointer<vtkActor> Postprocessor::createActor(vtkSmartPointer<vtkPolyDataMapper>& mapper) {
+    auto actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetLineWidth(3.0);
+    return actor;
 }
