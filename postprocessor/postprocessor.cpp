@@ -12,6 +12,9 @@
 #include <vtkTransform.h>
 #include <vtkTextProperty.h>
 #include <vtkScalarBarActor.h>
+#include <vtkArrowSource.h>
+#include <vtkMath.h>
+#include <vtkTransformPolyDataFilter.h>
 #include "postprocessor.h"
 
 
@@ -78,6 +81,7 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createDataRenderer(std::vector<doubl
     renderer->AddActor(actor);
     createScalarBar(renderer, mapper->GetLookupTable(), name);
     addAxes(renderer);
+    addForces(renderer);
 
     return renderer;
 }
@@ -160,7 +164,7 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(double viewport[4]) {
 vtkSmartPointer<vtkActor> Postprocessor::createActor(vtkSmartPointer<vtkPolyDataMapper>& mapper) {
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    actor->GetProperty()->SetLineWidth(3.0);
+    actor->GetProperty()->SetLineWidth(LINE_WIDTH);
     return actor;
 }
 
@@ -239,7 +243,10 @@ void Postprocessor::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata
 double Postprocessor::calculateScaleFactor(double max_length) {
     boost::numeric::ublas::vector<double> solution = solver.getSolution();
 
-    double max_disp = *max_element(solution.begin(), solution.end(), [](double a, double b) { return std::abs(a) < std::abs(b);});
+    double max_disp = *max_element(solution.begin(), solution.end());
+    double min_disp = *min_element(solution.begin(), solution.end());
+
+    double max_abs_disp = std::max(abs(max_disp), abs(min_disp));
 
     double ratio = max_disp / max_length;
 
@@ -247,4 +254,39 @@ double Postprocessor::calculateScaleFactor(double max_length) {
 
     return scale;
 
-} 
+}
+
+void Postprocessor::addForces(vtkSmartPointer<vtkRenderer>& renderer) {
+    for(const auto& force: preprocessor.getForces()) {
+        Node* node = preprocessor.getNodeByIndex(force.getIndex());
+
+        double startPoint[3] = {node->getX(), node->getY(), 0.0};
+
+        // 1.5 Добавляем актор в рендерер
+        renderer->AddActor(actor);
+    }
+}
+
+vtkSmartPointer<vtkActor> Postprocessor::createForceActor(Force force, double startPoint[3]) {
+
+    auto arrowSource = vtkSmartPointer<vtkArrowSource>::New();
+    arrowSource->SetShaftRadius(LINE_WIDTH * 0.005);
+    arrowSource->SetTipRadius(LINE_WIDTH * 0.02);
+
+    auto transform = vtkSmartPointer<vtkTransform>::New();
+    transform->Translate(startPoint);
+    transform->RotateZ(-90);
+
+    auto transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+	transformFilter->SetTransform(transform);
+	transformFilter->SetInputConnection(arrowSource->GetOutputPort());
+
+    auto mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputConnection(transformFilter->GetOutputPort());
+	
+    auto actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->
+
+    return actor;
+}
