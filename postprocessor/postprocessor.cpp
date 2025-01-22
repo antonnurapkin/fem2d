@@ -14,7 +14,9 @@
 #include <vtkScalarBarActor.h>
 #include <vtkArrowSource.h>
 #include <vtkMath.h>
+#include <vtkConeSource.h>
 #include <vtkTransformPolyDataFilter.h>
+#include <vtkTransformFilter.h>
 #include "postprocessor.h"
 
 
@@ -82,6 +84,7 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createDataRenderer(std::vector<doubl
     createScalarBar(renderer, mapper->GetLookupTable(), name);
     addAxes(renderer);
     addForces(renderer);
+    addSupports(renderer);
 
     return renderer;
 }
@@ -311,4 +314,57 @@ double Postprocessor::calculateAngle(Force force, char type) {
     else if (type == 'y' and force.getForceY() < 0) {
         return -90;
     }
+}
+
+void Postprocessor::addSupports(vtkSmartPointer<vtkRenderer>& renderer) {
+    for(const auto& support: preprocessor.getSupports()) {
+        Node* node = preprocessor.getNodeByIndex(support.getIndex());
+
+        double startPoint[3] = {node->getX(), node->getY(), 0.0};
+
+        if (support.getDispX() == 0) {
+            vtkSmartPointer<vtkActor> actor = createSupportActor(startPoint, true);
+            renderer->AddActor(actor);
+        }
+        if (support.getDispY() == 0) {
+            vtkSmartPointer<vtkActor> actor = createSupportActor(startPoint, false);
+            renderer->AddActor(actor);
+        }
+    }
+}
+
+vtkSmartPointer<vtkActor> Postprocessor::createSupportActor(double startPoint[3], bool isXAxis) {
+    // Создаем конус
+    vtkSmartPointer<vtkConeSource> coneSource = vtkSmartPointer<vtkConeSource>::New();
+    coneSource->SetHeight(LINE_WIDTH * 0.1); // Высота конуса
+    coneSource->SetRadius(LINE_WIDTH * 0.04); // Радиус основания конуса
+    coneSource->SetResolution(50); // Разрешение конуса
+
+    // Создаем трансформацию для поворота и перемещения конуса
+    vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
+
+    transform->Translate(startPoint[0], startPoint[1], startPoint[2]);
+    if (isXAxis) {
+        //transform->Translate(0 - coneSource->GetHeight() / 2.0, 0, 0);
+        transform->RotateZ(90); // Поворачиваем конус на 90 градусов вокруг оси Z, чтобы он был вдоль оси X
+         // Смещаем конус вдоль оси X
+    } else {
+        transform->RotateZ(0); // Конус остается направленным вдоль оси Y (по умолчанию)
+         // Смещаем конус вдоль оси Y
+    }
+    
+
+    // Применяем трансформацию к конусу
+    vtkSmartPointer<vtkTransformFilter> transformFilter = vtkSmartPointer<vtkTransformFilter>::New();
+    transformFilter->SetInputConnection(coneSource->GetOutputPort());
+    transformFilter->SetTransform(transform);
+
+    // Создаем маппер и актор для конуса
+    vtkSmartPointer<vtkPolyDataMapper> coneMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    coneMapper->SetInputConnection(transformFilter->GetOutputPort());
+
+    vtkSmartPointer<vtkActor> coneActor = vtkSmartPointer<vtkActor>::New();
+    coneActor->SetMapper(coneMapper);
+
+    return coneActor;
 }

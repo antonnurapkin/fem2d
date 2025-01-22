@@ -58,4 +58,8 @@ public:
     vtkSmartPointer<vtkActor> createForceActor(double startPoint[3], double angle);
 
     double calculateAngle(Force force, char type);
+
+    void addSupports(vtkSmartPointer<vtkRenderer>& renderer);
+
+    vtkSmartPointer<vtkActor> createSupportActor(double startPoint[3], bool isXAxis);
 };
