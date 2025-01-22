@@ -262,12 +262,20 @@ void Postprocessor::addForces(vtkSmartPointer<vtkRenderer>& renderer) {
 
         double startPoint[3] = {node->getX(), node->getY(), 0.0};
 
-        // 1.5 Добавляем актор в рендерер
-        renderer->AddActor(actor);
+        if (force.getForceX() != 0) {
+            double angle = calculateAngle(force, 'x');
+            vtkSmartPointer<vtkActor> actor = createForceActor(startPoint, angle);
+            renderer->AddActor(actor);
+        }
+        if (force.getForceY() != 0) {
+            double angle = calculateAngle(force, 'y');
+            vtkSmartPointer<vtkActor> actor = createForceActor(startPoint, angle);
+            renderer->AddActor(actor);
+        }
     }
 }
 
-vtkSmartPointer<vtkActor> Postprocessor::createForceActor(Force force, double startPoint[3]) {
+vtkSmartPointer<vtkActor> Postprocessor::createForceActor(double startPoint[3], double angle) {
 
     auto arrowSource = vtkSmartPointer<vtkArrowSource>::New();
     arrowSource->SetShaftRadius(LINE_WIDTH * 0.005);
@@ -275,7 +283,7 @@ vtkSmartPointer<vtkActor> Postprocessor::createForceActor(Force force, double st
 
     auto transform = vtkSmartPointer<vtkTransform>::New();
     transform->Translate(startPoint);
-    transform->RotateZ(-90);
+    transform->RotateZ(angle);
 
     auto transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
 	transformFilter->SetTransform(transform);
@@ -286,7 +294,21 @@ vtkSmartPointer<vtkActor> Postprocessor::createForceActor(Force force, double st
 	
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    actor->
 
     return actor;
+}
+
+double Postprocessor::calculateAngle(Force force, char type) {
+    if (type == 'x' and force.getForceX() > 0) {
+        return 0;
+    } 
+    else if (type == 'x' and force.getForceX() < 0) {
+        return 180;
+    }
+    else if (type == 'y' and force.getForceY() > 0) {
+        return 90;
+    } 
+    else if (type == 'y' and force.getForceY() < 0) {
+        return -90;
+    }
 }

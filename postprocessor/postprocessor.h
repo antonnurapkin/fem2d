@@ -55,5 +55,7 @@ public:
 
     void addForces(vtkSmartPointer<vtkRenderer>& renderer);
 
-    vtkSmartPointer<vtkActor> createForceActor(Force force, double startPoint[3]);
+    vtkSmartPointer<vtkActor> createForceActor(double startPoint[3], double angle);
+
+    double calculateAngle(Force force, char type);
 };
