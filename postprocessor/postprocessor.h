@@ -16,6 +16,7 @@ private:
 
     const int WINDOW_SIZE = 600;
     const double LINE_WIDTH = 3.0;
+    double BLACK[3] = {0, 0, 0};
 
     double STRESS_VIEWPORT[4] = {0.0, 0.0, 0.33, 1.0};
     double STRAIN_VIEWPORT[4] = {0.33, 0.0, 0.67, 1.0};

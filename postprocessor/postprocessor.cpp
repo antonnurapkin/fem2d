@@ -185,14 +185,12 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createDeformedShapeRenderer(double v
     vtkSmartPointer<vtkPolyDataMapper> mapperDeformed = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapperDeformed->SetInputData(polydataDeformed);
 
-    double black[3] = {0, 0, 0};
-
     vtkSmartPointer<vtkActor> actorOriginal = createActor(mapperOriginal);
-    actorOriginal->GetProperty()->SetColor(black);
+    actorOriginal->GetProperty()->SetColor(BLACK);
     actorOriginal->GetProperty()->SetOpacity(0.3);
 
     vtkSmartPointer<vtkActor> actorDeformed = createActor(mapperDeformed);
-    actorDeformed->GetProperty()->SetColor(black);
+    actorDeformed->GetProperty()->SetColor(BLACK);
 
     vtkSmartPointer<vtkRenderer> renderer = createRenderer(viewport);
     renderer->AddActor(actorOriginal);
@@ -246,8 +244,8 @@ void Postprocessor::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata
 double Postprocessor::calculateScaleFactor(double max_length) {
     boost::numeric::ublas::vector<double> solution = solver.getSolution();
 
-    double max_disp = *max_element(solution.begin(), solution.end());
-    double min_disp = *min_element(solution.begin(), solution.end());
+    double max_disp = *std::max_element(solution.begin(), solution.end());
+    double min_disp = *std::min_element(solution.begin(), solution.end());
 
     double max_abs_disp = std::max(abs(max_disp), abs(min_disp));
 
@@ -297,6 +295,7 @@ vtkSmartPointer<vtkActor> Postprocessor::createForceActor(double startPoint[3], 
 	
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
+    actor->GetProperty()->SetColor(BLACK);
 
     return actor;
 }
@@ -346,13 +345,14 @@ vtkSmartPointer<vtkActor> Postprocessor::createSupportActor(double startPoint[3]
     transform->Translate(startPoint[0], startPoint[1], startPoint[2]);
     if (isXAxis) {
         //transform->Translate(0 - coneSource->GetHeight() / 2.0, 0, 0);
-        transform->RotateZ(90); // Поворачиваем конус на 90 градусов вокруг оси Z, чтобы он был вдоль оси X
+        transform->RotateZ(0); // Поворачиваем конус на 90 градусов вокруг оси Z, чтобы он был вдоль оси X
          // Смещаем конус вдоль оси X
     } else {
-        transform->RotateZ(0); // Конус остается направленным вдоль оси Y (по умолчанию)
+        transform->RotateZ(90); // Конус остается направленным вдоль оси Y (по умолчанию)
          // Смещаем конус вдоль оси Y
     }
     
+    transform->Translate(-coneSource->GetHeight() / 2, 0, 0);
 
     // Применяем трансформацию к конусу
     vtkSmartPointer<vtkTransformFilter> transformFilter = vtkSmartPointer<vtkTransformFilter>::New();
@@ -365,6 +365,7 @@ vtkSmartPointer<vtkActor> Postprocessor::createSupportActor(double startPoint[3]
 
     vtkSmartPointer<vtkActor> coneActor = vtkSmartPointer<vtkActor>::New();
     coneActor->SetMapper(coneMapper);
+    coneActor->GetProperty()->SetColor(BLACK);
 
     return coneActor;
 }
