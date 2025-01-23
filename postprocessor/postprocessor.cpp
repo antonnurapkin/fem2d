@@ -12,6 +12,11 @@
 #include <vtkTransform.h>
 #include <vtkTextProperty.h>
 #include <vtkScalarBarActor.h>
+#include <vtkArrowSource.h>
+#include <vtkMath.h>
+#include <vtkConeSource.h>
+#include <vtkTransformPolyDataFilter.h>
+#include <vtkTransformFilter.h>
 #include "postprocessor.h"
 
 
@@ -78,6 +83,8 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createDataRenderer(std::vector<doubl
     renderer->AddActor(actor);
     createScalarBar(renderer, mapper->GetLookupTable(), name);
     addAxes(renderer);
+    addForces(renderer);
+    addSupports(renderer);
 
     return renderer;
 }
@@ -160,7 +167,7 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createRenderer(double viewport[4]) {
 vtkSmartPointer<vtkActor> Postprocessor::createActor(vtkSmartPointer<vtkPolyDataMapper>& mapper) {
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    actor->GetProperty()->SetLineWidth(3.0);
+    actor->GetProperty()->SetLineWidth(LINE_WIDTH);
     return actor;
 }
 
@@ -178,14 +185,12 @@ vtkSmartPointer<vtkRenderer> Postprocessor::createDeformedShapeRenderer(double v
     vtkSmartPointer<vtkPolyDataMapper> mapperDeformed = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapperDeformed->SetInputData(polydataDeformed);
 
-    double black[3] = {0, 0, 0};
-
     vtkSmartPointer<vtkActor> actorOriginal = createActor(mapperOriginal);
-    actorOriginal->GetProperty()->SetColor(black);
+    actorOriginal->GetProperty()->SetColor(BLACK);
     actorOriginal->GetProperty()->SetOpacity(0.3);
 
     vtkSmartPointer<vtkActor> actorDeformed = createActor(mapperDeformed);
-    actorDeformed->GetProperty()->SetColor(black);
+    actorDeformed->GetProperty()->SetColor(BLACK);
 
     vtkSmartPointer<vtkRenderer> renderer = createRenderer(viewport);
     renderer->AddActor(actorOriginal);
@@ -239,7 +244,10 @@ void Postprocessor::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata
 double Postprocessor::calculateScaleFactor(double max_length) {
     boost::numeric::ublas::vector<double> solution = solver.getSolution();
 
-    double max_disp = *max_element(solution.begin(), solution.end(), [](double a, double b) { return std::abs(a) < std::abs(b);});
+    double max_disp = *std::max_element(solution.begin(), solution.end());
+    double min_disp = *std::min_element(solution.begin(), solution.end());
+
+    double max_abs_disp = std::max(abs(max_disp), abs(min_disp));
 
     double ratio = max_disp / max_length;
 
@@ -247,4 +255,117 @@ double Postprocessor::calculateScaleFactor(double max_length) {
 
     return scale;
 
-} 
+}
+
+void Postprocessor::addForces(vtkSmartPointer<vtkRenderer>& renderer) {
+    for(const auto& force: preprocessor.getForces()) {
+        Node* node = preprocessor.getNodeByIndex(force.getIndex());
+
+        double startPoint[3] = {node->getX(), node->getY(), 0.0};
+
+        if (force.getForceX() != 0) {
+            double angle = calculateAngle(force, 'x');
+            vtkSmartPointer<vtkActor> actor = createForceActor(startPoint, angle);
+            renderer->AddActor(actor);
+        }
+        if (force.getForceY() != 0) {
+            double angle = calculateAngle(force, 'y');
+            vtkSmartPointer<vtkActor> actor = createForceActor(startPoint, angle);
+            renderer->AddActor(actor);
+        }
+    }
+}
+
+vtkSmartPointer<vtkActor> Postprocessor::createForceActor(double startPoint[3], double angle) {
+
+    auto arrowSource = vtkSmartPointer<vtkArrowSource>::New();
+    arrowSource->SetShaftRadius(LINE_WIDTH * 0.005);
+    arrowSource->SetTipRadius(LINE_WIDTH * 0.02);
+
+    auto transform = vtkSmartPointer<vtkTransform>::New();
+    transform->Translate(startPoint);
+    transform->RotateZ(angle);
+
+    auto transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
+	transformFilter->SetTransform(transform);
+	transformFilter->SetInputConnection(arrowSource->GetOutputPort());
+
+    auto mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+	mapper->SetInputConnection(transformFilter->GetOutputPort());
+	
+    auto actor = vtkSmartPointer<vtkActor>::New();
+    actor->SetMapper(mapper);
+    actor->GetProperty()->SetColor(BLACK);
+
+    return actor;
+}
+
+double Postprocessor::calculateAngle(Force force, char type) {
+    if (type == 'x' and force.getForceX() > 0) {
+        return 0;
+    } 
+    else if (type == 'x' and force.getForceX() < 0) {
+        return 180;
+    }
+    else if (type == 'y' and force.getForceY() > 0) {
+        return 90;
+    } 
+    else if (type == 'y' and force.getForceY() < 0) {
+        return -90;
+    }
+}
+
+void Postprocessor::addSupports(vtkSmartPointer<vtkRenderer>& renderer) {
+    for(const auto& support: preprocessor.getSupports()) {
+        Node* node = preprocessor.getNodeByIndex(support.getIndex());
+
+        double startPoint[3] = {node->getX(), node->getY(), 0.0};
+
+        if (support.getDispX() == 0) {
+            vtkSmartPointer<vtkActor> actor = createSupportActor(startPoint, true);
+            renderer->AddActor(actor);
+        }
+        if (support.getDispY() == 0) {
+            vtkSmartPointer<vtkActor> actor = createSupportActor(startPoint, false);
+            renderer->AddActor(actor);
+        }
+    }
+}
+
+vtkSmartPointer<vtkActor> Postprocessor::createSupportActor(double startPoint[3], bool isXAxis) {
+    // Создаем конус
+    vtkSmartPointer<vtkConeSource> coneSource = vtkSmartPointer<vtkConeSource>::New();
+    coneSource->SetHeight(LINE_WIDTH * 0.1); // Высота конуса
+    coneSource->SetRadius(LINE_WIDTH * 0.04); // Радиус основания конуса
+    coneSource->SetResolution(50); // Разрешение конуса
+
+    // Создаем трансформацию для поворота и перемещения конуса
+    vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
+
+    transform->Translate(startPoint[0], startPoint[1], startPoint[2]);
+    if (isXAxis) {
+        //transform->Translate(0 - coneSource->GetHeight() / 2.0, 0, 0);
+        transform->RotateZ(0); // Поворачиваем конус на 90 градусов вокруг оси Z, чтобы он был вдоль оси X
+         // Смещаем конус вдоль оси X
+    } else {
+        transform->RotateZ(90); // Конус остается направленным вдоль оси Y (по умолчанию)
+         // Смещаем конус вдоль оси Y
+    }
+    
+    transform->Translate(-coneSource->GetHeight() / 2, 0, 0);
+
+    // Применяем трансформацию к конусу
+    vtkSmartPointer<vtkTransformFilter> transformFilter = vtkSmartPointer<vtkTransformFilter>::New();
+    transformFilter->SetInputConnection(coneSource->GetOutputPort());
+    transformFilter->SetTransform(transform);
+
+    // Создаем маппер и актор для конуса
+    vtkSmartPointer<vtkPolyDataMapper> coneMapper = vtkSmartPointer<vtkPolyDataMapper>::New();
+    coneMapper->SetInputConnection(transformFilter->GetOutputPort());
+
+    vtkSmartPointer<vtkActor> coneActor = vtkSmartPointer<vtkActor>::New();
+    coneActor->SetMapper(coneMapper);
+    coneActor->GetProperty()->SetColor(BLACK);
+
+    return coneActor;
+}

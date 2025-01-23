@@ -15,6 +15,8 @@ private:
     Solver solver;
 
     const int WINDOW_SIZE = 600;
+    const double LINE_WIDTH = 3.0;
+    double BLACK[3] = {0, 0, 0};
 
     double STRESS_VIEWPORT[4] = {0.0, 0.0, 0.33, 1.0};
     double STRAIN_VIEWPORT[4] = {0.33, 0.0, 0.67, 1.0};
@@ -51,4 +53,14 @@ public:
     double calculateScaleFactor(double max_length);
 
     void createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata);
+
+    void addForces(vtkSmartPointer<vtkRenderer>& renderer);
+
+    vtkSmartPointer<vtkActor> createForceActor(double startPoint[3], double angle);
+
+    double calculateAngle(Force force, char type);
+
+    void addSupports(vtkSmartPointer<vtkRenderer>& renderer);
+
+    vtkSmartPointer<vtkActor> createSupportActor(double startPoint[3], bool isXAxis);
 };

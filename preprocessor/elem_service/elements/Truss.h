@@ -19,9 +19,6 @@ private:
 
 	int MATRIX_SIZE = 4;
 
-	double setLength(std::vector<Node*> nodes) const;
-	double setAngle(std::vector<Node*> nodes) const;
-
 public:
 	Truss(Material material, std::vector<int> indexes, std::vector<Node*> nodes, double section);
 	Truss(ElemParams& elemParams);
