@@ -2,9 +2,9 @@
 #include <vtkPolyData.h>
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
-#include "../../solver/Solver.h"
-#include "../../solver/preprocessor.h"
 #include "geometryManager.h"
+#include "../../preprocessor/preprocessor.h"
+#include "../../solver/Solver.h"
 
 
 void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {

@@ -53,11 +53,11 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(vtkSma
     mapperDeformed->SetInputData(polydataDeformed);
 
     vtkSmartPointer<vtkActor> actorOriginal = createActor(mapperOriginal);
-    actorOriginal->GetProperty()->SetColor(BLACK);
+    actorOriginal->GetProperty()->SetColor(const_cast<double*>(BLACK));
     actorOriginal->GetProperty()->SetOpacity(0.3);
 
     vtkSmartPointer<vtkActor> actorDeformed = createActor(mapperDeformed);
-    actorDeformed->GetProperty()->SetColor(BLACK);
+    actorDeformed->GetProperty()->SetColor(const_cast<double*>(BLACK));
 
     vtkSmartPointer<vtkRenderer> renderer = createRenderer(viewport);
     renderer->AddActor(actorOriginal);

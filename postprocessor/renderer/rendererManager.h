@@ -8,15 +8,16 @@
 #include <vtkColorTransferFunction.h>
 
 #include "vizualizationParams.h"
+#include "../geometry/geometryManager.h"
+#include "../boundaries/boundaryConditionsManager.h"
 
-class GeometryManager;
-class BoundaryConditionsManager;
+
 class Preprocessor;
                                                                        
 class RendererManager {
 public:
-    GeometryManager& geometryManager;
-    BoundaryConditionsManager& boundaryConditionsManager;
+    GeometryManager geometryManager;
+    BoundaryConditionsManager boundaryConditionsManager;
 
     vtkSmartPointer<vtkRenderer> createDataRenderer(vtkSmartPointer<vtkPolyData> polydata, std::vector<double> data, const double viewport[4], const char * name, Preprocessor& preprocessor);
     vtkSmartPointer<vtkRenderer> createDeformedShapeRenderer(vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor);

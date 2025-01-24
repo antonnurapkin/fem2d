@@ -3,7 +3,9 @@
 #include <vtkSmartPointer.h>
 #include <vtkRenderer.h>
 #include <vtkActor.h>
-#include "../preprocessor/preprocessor.h"
+
+class Preprocessor;
+class Force;
 
 class BoundaryConditionsManager {
 public:

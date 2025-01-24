@@ -1,4 +1,15 @@
 #include <vtkArrowSource.h>
+#include <vtkTransformPolyDataFilter.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkConeSource.h>
+#include <vtkSmartPointer.h>
+#include <vtkTransform.h>
+#include <vtkProperty.h>
+#include <vtkActor.h>
+#include <vtkTransformFilter.h>
+ 
+#include "../preprocessor/preprocessor.h"
+#include "../vizualizationParams.h"
 #include "boundaryConditionsManager.h"
 
 void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor){
@@ -39,7 +50,7 @@ vtkSmartPointer<vtkActor> BoundaryConditionsManager::createForceActor(double sta
 	
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
-    actor->GetProperty()->SetColor(BLACK);
+    actor->GetProperty()->SetColor(const_cast<double*>(BLACK));
 
     return actor;
 }
@@ -102,7 +113,7 @@ vtkSmartPointer<vtkActor> BoundaryConditionsManager::createSupportActor(double s
 
     vtkSmartPointer<vtkActor> coneActor = vtkSmartPointer<vtkActor>::New();
     coneActor->SetMapper(coneMapper);
-    coneActor->GetProperty()->SetColor(BLACK);
+    coneActor->GetProperty()->SetColor(const_cast<double*>(BLACK));
 
     return coneActor;
 }

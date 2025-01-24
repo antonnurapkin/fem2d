@@ -1,8 +1,8 @@
 #pragma once
-
 #include "renderer/rendererManager.h"
-#include "../solver/Solver.h"
 
+class Preprocessor;
+class Solver;
 
 class Postprocessor {
 private:
