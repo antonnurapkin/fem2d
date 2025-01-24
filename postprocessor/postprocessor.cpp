@@ -4,7 +4,7 @@
 #include <vtkPolyData.h>
 #include "vizualizationParams.h"
 #include "../preprocessor/preprocessor.h"
-#include "../solver/Solver.h"
+#include "../solver/solver.h"
 
 #include "postprocessor.h"
 
@@ -22,6 +22,7 @@ void Postprocessor::run() {
     vtkSmartPointer<vtkPolyData> polydataOriginalStress = vtkSmartPointer<vtkPolyData>::New();
     vtkSmartPointer<vtkPolyData> polydataDeformed = vtkSmartPointer<vtkPolyData>::New();
 
+    // TODO: Уменьшить количетсов polydata
     rendererManager.geometryManager.createGeometry(polydataOriginalStrain, preprocessor);
     rendererManager.geometryManager.createGeometry(polydataOriginalStress, preprocessor);
     rendererManager.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver);
@@ -41,7 +42,7 @@ void Postprocessor::run() {
         preprocessor
     );
     vtkSmartPointer<vtkRenderer> deformed_shape_renderer = rendererManager.createDeformedShapeRenderer(
-        polydataOriginal, 
+        polydataOriginalStrain, 
         polydataDeformed, 
         DEFORMED_SHAPE_VIEWPORT, 
         preprocessor

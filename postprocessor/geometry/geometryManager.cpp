@@ -4,7 +4,7 @@
 #include <vtkCellArray.h>
 #include "geometryManager.h"
 #include "../../preprocessor/preprocessor.h"
-#include "../../solver/Solver.h"
+#include "../../solver/solver.h"
 
 
 void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {

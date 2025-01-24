@@ -1,4 +1,4 @@
-add_library(solver_lib Solver.cpp Solver.h)
+add_library(solver_lib solver.cpp solver.h)
 
 add_subdirectory("utils")
 

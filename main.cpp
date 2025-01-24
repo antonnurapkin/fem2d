@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <string>
 
-#include "solver/Solver.h"
+#include "solver/solver.h"
 #include "postprocessor/postprocessor.h"
 
 // TODO: добавить обработку случая в конфиге:
