@@ -12,11 +12,11 @@
 #include "../vizualizationParams.h"
 #include "boundaryConditionsManager.h"
 
-void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor){
+void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
     for(const auto& force: preprocessor.getForces()) {
         Node* node = preprocessor.getNodeByIndex(force.getIndex());
 
-        double startPoint[3] = {node->getX(), node->getY(), 0.0};
+        double startPoint[3] = {node->getX() + node->getDispX() * scale, node->getY() + node->getDispY() * scale, 0.0};
 
         if (force.getForceX() != 0) {
             double angle = calculateAngle(force, 'x');

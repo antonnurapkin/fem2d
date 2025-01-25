@@ -20,7 +20,7 @@ public:
     BoundaryConditionsManager boundaryConditionsManager;
 
     vtkSmartPointer<vtkRenderer> createDataRenderer(vtkSmartPointer<vtkPolyData> polydata, std::vector<double> data, const double viewport[4], const char * name, Preprocessor& preprocessor);
-    vtkSmartPointer<vtkRenderer> createDeformedShapeRenderer(vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor);
+    vtkSmartPointer<vtkRenderer> createDeformedShapeRenderer(double scale, vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor);
 
     void addAxes(vtkSmartPointer<vtkRenderer>& renderer);
     

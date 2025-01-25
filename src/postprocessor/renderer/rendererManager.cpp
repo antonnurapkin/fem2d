@@ -44,7 +44,7 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer
     return renderer;
 }
 
-vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor) {
+vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(double scale, vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor) {
 
     vtkSmartPointer<vtkPolyDataMapper> mapperOriginal = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapperOriginal->SetInputData(polydataOriginal);
@@ -65,6 +65,7 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(vtkSma
 
     addAxes(renderer);
     boundaryConditionsManager.addSupports(renderer, preprocessor);
+    boundaryConditionsManager.addForces(renderer, preprocessor, scale);
 
     return renderer;
 }

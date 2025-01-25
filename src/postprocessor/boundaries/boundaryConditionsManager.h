@@ -9,7 +9,7 @@ class Force;
 
 class BoundaryConditionsManager {
 public:
-    void addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor);
+    void addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale = 0);
     vtkSmartPointer<vtkActor> createForceActor(double startPoint[3], double angle);
     double calculateAngle(Force force, char type);
     

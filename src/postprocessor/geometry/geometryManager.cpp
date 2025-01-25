@@ -35,7 +35,7 @@ void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Prep
     }
 }
 
-void GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor, Solver& solver) {
+double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor, Solver& solver) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
@@ -73,6 +73,8 @@ void GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polyda
     if (lines->GetNumberOfCells() > 0) {
         polydata->SetLines(lines);
     }
+
+    return scale;
 }
 
 double GeometryManager::calculateScaleFactor(double max_length, Solver& solver) {

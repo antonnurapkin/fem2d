@@ -20,12 +20,15 @@ void Postprocessor::run() {
     }
     vtkSmartPointer<vtkPolyData> polydataOriginalStrain = vtkSmartPointer<vtkPolyData>::New();
     vtkSmartPointer<vtkPolyData> polydataOriginalStress = vtkSmartPointer<vtkPolyData>::New();
+
+    vtkSmartPointer<vtkPolyData> polydataOriginal = vtkSmartPointer<vtkPolyData>::New();
     vtkSmartPointer<vtkPolyData> polydataDeformed = vtkSmartPointer<vtkPolyData>::New();
 
-    // TODO: Уменьшить количетсов polydata
     rendererManager.geometryManager.createGeometry(polydataOriginalStrain, preprocessor);
     rendererManager.geometryManager.createGeometry(polydataOriginalStress, preprocessor);
-    rendererManager.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver);
+
+    rendererManager.geometryManager.createGeometry(polydataOriginal, preprocessor);
+    double scale = rendererManager.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver);
     
     vtkSmartPointer<vtkRenderer> stress_renderer = rendererManager.createDataRenderer(
         polydataOriginalStress, 
@@ -42,7 +45,8 @@ void Postprocessor::run() {
         preprocessor
     );
     vtkSmartPointer<vtkRenderer> deformed_shape_renderer = rendererManager.createDeformedShapeRenderer(
-        polydataOriginalStrain, 
+        scale,
+        polydataOriginal, 
         polydataDeformed, 
         DEFORMED_SHAPE_VIEWPORT, 
         preprocessor
