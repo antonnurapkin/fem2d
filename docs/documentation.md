@@ -116,10 +116,10 @@ DISP,7,0,0
 
 1.  **Клонирование репозитория:**
 
-    ```bash
+```bash
     git clone https://github.com/antonnurapkin/fem2d.git
     cd fem2d
-    ```
+```
 
 2.  **Создание директории build и переход в неё:**
 
