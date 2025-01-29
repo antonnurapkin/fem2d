@@ -132,13 +132,12 @@ DISP,7,0,0
 
    ```bash
     cmake ..
-    cmake --build .
     ```
 
 4.  **Сборка проекта:**
 
-    ```bash
-        cmake --build .
+   ```bash
+    cmake --build .
     ```
 
 
