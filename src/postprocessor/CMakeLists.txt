@@ -12,8 +12,3 @@ add_subdirectory("geometry")
 add_subdirectory("boundaries")
 
 target_link_libraries(postprocessor_lib PUBLIC ${VTK_LIBRARIES})
-
-vtk_module_autoinit(
-  TARGETS postprocessor_lib
-  MODULES ${VTK_LIBRARIES}
-)
