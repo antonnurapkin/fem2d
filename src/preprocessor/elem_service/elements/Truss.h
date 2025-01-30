@@ -21,7 +21,7 @@ private:
 	int MATRIX_SIZE = 4;
 
 public:
-	Truss(Material material, std::vector<int> indexes, std::vector<Node*> nodes, double section);
+	Truss(Material material, std::vector<int> indexes, std::vector<std::shared_ptr<Node>> nodes, double section);
 	Truss(ElemParams& elemParams);
 
 	ublas::matrix<double> KMatrixElemGlobal() const override;
@@ -34,13 +34,13 @@ public:
 	double getStrain() const;
 	double getStress() const;
 
-	std::vector<Node*> getNodes() const override;
+	std::vector<std::shared_ptr<Node>> getNodes() const override;
 
 	std::vector<int> getNodesIndexes() const;
 
 	double getLength() const override;
 	
-	double setLength(std::vector<Node*> nodes) const;
-	double setAngle(std::vector<Node*> nodes) const;	
+	double setLength(std::vector<std::shared_ptr<Node>> nodes) const;
+	double setAngle(std::vector<std::shared_ptr<Node>> nodes) const;	
 };
 

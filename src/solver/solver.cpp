@@ -2,7 +2,10 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
+#include "../preprocessor/node/Node.h"
+#include "../preprocessor/elem_service/IElement.h"
 #include "solver.h"
+#include "../preprocessor/preprocessor.h"
 #include "utils/tools.h"
 
 
@@ -33,14 +36,14 @@ int Solver::calculateMatrixSize() {
 	return all_dofs;
 }
 
-ublas::matrix<double> Solver::assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, IElement* elem
+ublas::matrix<double> Solver::assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, std::shared_ptr<IElement> elem
 ) {
-	std::vector<Node*> nodes = elem->getNodes();
+	std::vector<std::shared_ptr<Node>> nodes = elem->getNodes();
 	
 	std::vector<int> indexes;
 
 	// �������������� -1 ��� ��� ���������� � �������� � ����
-	for (Node* node : nodes) {
+	for (std::shared_ptr<Node> node : nodes) {
 		indexes.push_back(node->getIndex() * 2 - 1 - 1);
 		indexes.push_back(node->getIndex() * 2 - 1);
 	}

@@ -18,7 +18,7 @@ public:
 	ublas::matrix<double> createKGlobal(int matrix_size);
 	ublas::vector<double> createFGlobal(int vector_size);
 
-	ublas::matrix<double> assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, IElement* elem);
+	ublas::matrix<double> assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, std::shared_ptr<IElement>);
 	ublas::matrix<double> applySupports(ublas::matrix<double>& Kglobal, int matrix_size);
 	
 	int calculateMatrixSize();

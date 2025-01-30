@@ -8,7 +8,7 @@
 class Node;
 
 struct ElemParams {
-	std::vector<Node*> nodes;
+	std::vector<std::shared_ptr<Node>> nodes;
 	Material material;
 	std::vector<int> indexes;
 	double geom_parameter;
