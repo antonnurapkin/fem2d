@@ -4,8 +4,9 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include "../../material/Material.h"
-#include "../IElement.h"
-#include "../ElemParams.h"
+
+class ElemParams;
+class IElement;
 
 class Truss : public IElement
 {

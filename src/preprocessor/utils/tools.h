@@ -3,9 +3,6 @@
 #include <map>
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
-#include <boost/numeric/ublas/lu.hpp>
-#include <boost/numeric/ublas/assignment.hpp>
-
 
 using namespace boost::numeric;
 

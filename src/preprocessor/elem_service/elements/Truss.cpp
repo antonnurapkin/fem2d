@@ -1,10 +1,11 @@
 #include <cmath>
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "Truss.h"
 #include "../../node/Node.h"
 #include "../ElemParams.h"
 #include "../../utils/tools.h"
+
+#include "Truss.h"
 
 using namespace boost::numeric;
 

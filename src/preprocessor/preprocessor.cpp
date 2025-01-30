@@ -1,5 +1,19 @@
+#include <fstream>
+#include <string>
+#include <cstring>
+#include <vector>
+#include <optional>
+#include "elem_service/IElement.h"
+#include "node/Node.h"
+#include "material/Material.h"
+#include "boundaries/Force.h"
+#include "boundaries/Support.h"
+#include "elem_service/ElemParams.h"
+#include "elem_service/ElemCreator.h"
+#include "utils/tools.h"
+#include "utils/Error.h"
+
 #include "preprocessor.h"
-#include <iostream>
 
 
 Preprocessor::Preprocessor(int number_params, char** params) {

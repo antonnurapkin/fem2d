@@ -1,7 +1,8 @@
 #pragma once
 #include <string>
-#include "IElement.h"
-#include "ElemParams.h"
+
+class IElement;
+class ElemParams;
 
 class ElemCreator
 {

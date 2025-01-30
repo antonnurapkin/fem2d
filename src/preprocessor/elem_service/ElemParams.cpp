@@ -1,3 +1,7 @@
+#include <vector>
+#include <string>
+#include <optional>
+#include <map>
 #include "ElemParams.h"
 #include "../utils/Error.h"
 

@@ -3,6 +3,7 @@
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
 #include "geometryManager.h"
+#include "../../preprocessor/node/node.h"
 #include "../../preprocessor/preprocessor.h"
 #include "../../solver/solver.h"
 

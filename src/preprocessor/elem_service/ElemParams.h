@@ -2,8 +2,10 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "../node/Node.h"
+#include <optional>
 #include "../material/Material.h"
+
+class Node;
 
 struct ElemParams {
 	std::vector<Node*> nodes;

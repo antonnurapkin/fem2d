@@ -1,19 +1,15 @@
 #pragma once
-#include<map>
 #include <vector>
-#include <array>
-#include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "../preprocessor/elem_service/IElement.h"
-#include "../preprocessor/preprocessor.h"
 
-
+class Preprocessor;
+class IElement;
 
 class Solver
 {
 private:
-	Preprocessor preprocessor;
+	Preprocessor& preprocessor;
 	ublas::vector<double> dispSolution;
 public:
 	Solver(Preprocessor& preprocessor);
