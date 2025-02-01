@@ -24,7 +24,6 @@ private:
 	std::vector<Support> supports;
 public:
     Preprocessor(int number_params, char** params);
-    ~Preprocessor();
 
 	std::string getPathToConfig(int number_params, char** params);
     void readConfig();
