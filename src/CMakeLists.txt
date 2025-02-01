@@ -11,7 +11,7 @@ include(${VCPKG_TOOLCHAIN_FILE})
 # find_package(VTK REQUIRED)
 find_package(VTK REQUIRED PATHS "D:/vcpkg/installed/x64-windows/share/vtk" NO_DEFAULT_PATH)
 find_package(Boost 1.86.0 REQUIRED)
-# find_package(Boost 1.86.0 REQUIRED COMPONENTS numeric_ublas)
+#find_package(Boost 1.86.0 REQUIRED COMPONENTS numeric_ublas)
 # find_package(VTK COMPONENTS 
 #   CommonColor
 #   CommonCore

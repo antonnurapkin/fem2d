@@ -1,3 +1,4 @@
+#include <memory>
 #include <vtkArrowSource.h>
 #include <vtkTransformPolyDataFilter.h>
 #include <vtkPolyDataMapper.h>
@@ -14,7 +15,7 @@
 
 void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
     for(const auto& force: preprocessor.getForces()) {
-        Node* node = preprocessor.getNodeByIndex(force.getIndex());
+        std::shared_ptr<Node> node = preprocessor.getNodeByIndex(force.getIndex());
 
         double startPoint[3] = {node->getX() + node->getDispX() * scale, node->getY() + node->getDispY() * scale, 0.0};
 
@@ -72,7 +73,7 @@ double BoundaryConditionsManager::calculateAngle(Force force, char type) {
 
 void BoundaryConditionsManager::addSupports(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor) {
     for(const auto& support: preprocessor.getSupports()) {
-        Node* node = preprocessor.getNodeByIndex(support.getIndex());
+        std::shared_ptr<Node> node = preprocessor.getNodeByIndex(support.getIndex());
 
         double startPoint[3] = {node->getX(), node->getY(), 0.0};
 

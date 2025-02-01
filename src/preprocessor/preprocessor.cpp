@@ -1,23 +1,23 @@
+#include <fstream>
+#include <string>
+#include <cstring>
+#include <vector>
+#include <optional>
+#include "elem_service/IElement.h"
+#include "node/Node.h"
+#include "material/Material.h"
+#include "boundaries/Force.h"
+#include "boundaries/Support.h"
+#include "elem_service/ElemParams.h"
+#include "elem_service/ElemCreator.h"
+#include "utils/tools.h"
+#include "utils/Error.h"
+
 #include "preprocessor.h"
-#include <iostream>
 
 
 Preprocessor::Preprocessor(int number_params, char** params) {
 	path_to_input_file = getPathToConfig(number_params, params);
-}
-
-Preprocessor::~Preprocessor() {
-    for (auto* elem : elements) {
-		if (elem != nullptr) {
-			delete elem;
-		}
-	}
-
-	for (Node* node: nodes) {
-		if (node != nullptr) {
-			delete node;
-		}
-	}
 }
 
 std::string Preprocessor::getPathToConfig(int number_params, char** params) {
@@ -31,7 +31,6 @@ std::string Preprocessor::getPathToConfig(int number_params, char** params) {
 		return std::string(params[2]);
 	}
 }
-
 
 void Preprocessor::readConfig() {
 	try {
@@ -59,7 +58,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("NODE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> node_data = getDataFromString(line, { "index", "x", "y" });
-					Node* node = new Node(node_data["index"], node_data["x"], node_data["y"]);
+					std::shared_ptr<Node> node = std::make_shared<Node>(node_data["index"], node_data["x"], node_data["y"]);
 					this->nodes.push_back(node);
 				}
 				// TODO: ������� �������� ������ ���������� � ����������� �� ���� ���������
@@ -68,7 +67,7 @@ void Preprocessor::readConfig() {
 
 					ElemParams elem_params = createElemParams(elem_data, section);
 
-					IElement* elem = ElemCreator::getElement(etype, elem_params);
+					std::shared_ptr<IElement> elem = ElemCreator::getElement(etype, elem_params);
 					elements.push_back(elem);
 				}
 
@@ -98,8 +97,8 @@ void Preprocessor::readConfig() {
 	}
 }
 
-Node* Preprocessor::getNodeByIndex(int index) {
-	for (Node* node : nodes) {
+std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) {
+	for (std::shared_ptr<Node> node : nodes) {
 		if (node->getIndex() == index) {
 			return node;
 		}
@@ -123,7 +122,7 @@ ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<do
 	int index2 = static_cast<int>(elem_data["index2"].value());
 	int material_index = static_cast<int>(elem_data["material_index"].value());
 
-	std::vector<Node*> elem_nodes = { getNodeByIndex(index1), getNodeByIndex(index2) };
+	std::vector<std::shared_ptr<Node>> elem_nodes = { getNodeByIndex(index1), getNodeByIndex(index2) };
 
 	ElemParams elem_params = {
 		elem_nodes,
@@ -150,11 +149,11 @@ std::vector<int> Preprocessor::getDofIndexes(Support support) {
 	return indexes;
 }
 
-std::vector<IElement*> Preprocessor::getElements() {
+std::vector<std::shared_ptr<IElement>> Preprocessor::getElements() {
 	return this->elements;
 }
 
-std::vector<Node*> Preprocessor::getNodes() {
+std::vector<std::shared_ptr<Node>> Preprocessor::getNodes() {
 	return this->nodes;
 }
 
