@@ -1,17 +1,18 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include "../../material/Material.h"
-
-class ElemParams;
-class IElement;
+#include "../../node/Node.h"
+#include "../IElement.h"
+#include "../ElemParams.h"
 
 class Truss : public IElement
 {
 private:
-	std::vector<Node*> nodes;
+	std::vector<std::shared_ptr<Node>> nodes;
 	Material material;
 	std::vector<int> indexes;
 	double section;

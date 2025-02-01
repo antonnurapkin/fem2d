@@ -2,10 +2,11 @@
 #include <vtkRenderer.h>
 #include <vtkRenderWindowInteractor.h>
 #include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
 #include "vizualizationParams.h"
 #include "../preprocessor/preprocessor.h"
+#include "../preprocessor/elem_service/IElement.h"
 #include "../solver/solver.h"
-
 #include "postprocessor.h"
 
 Postprocessor::Postprocessor(Preprocessor& preprocessor, Solver& solver): preprocessor(preprocessor), solver(solver) {};
@@ -14,7 +15,7 @@ void Postprocessor::run() {
 
     std::vector<double> stresses, strains;
 
-    for (IElement* elem : preprocessor.getElements()) {
+    for (std::shared_ptr<IElement> elem : preprocessor.getElements()) {
         stresses.push_back(elem->getStress());
         strains.push_back(elem->getStrain());
     }

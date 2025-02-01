@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <memory>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include "../node/Node.h"

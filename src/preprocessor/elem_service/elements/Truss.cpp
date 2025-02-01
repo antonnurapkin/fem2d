@@ -3,9 +3,9 @@
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "../../node/Node.h"
-#include "../ElemParams.h"
 #include "../../utils/tools.h"
-
+#include "../IElement.h"
+#include "../ElemParams.h"
 #include "Truss.h"
 
 using namespace boost::numeric;
@@ -86,7 +86,7 @@ double Truss::getStrain() const
 {	
 	ublas::matrix<double> disp = getDisplacments();
 
-	std::vector<Node*> nodes = getNodes();
+	std::vector<std::shared_ptr<Node>> nodes = getNodes();
 
 	double x1_new = nodes[0]->getX() + disp(0);
 	double x2_new = nodes[1]->getX() + disp(2);

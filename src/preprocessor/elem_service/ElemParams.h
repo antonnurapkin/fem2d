@@ -2,10 +2,10 @@
 #include <vector>
 #include <string>
 #include <map>
+#include <memory>
 #include <optional>
 #include "../material/Material.h"
-
-class Node;
+#include "../node/Node.h"
 
 struct ElemParams {
 	std::vector<std::shared_ptr<Node>> nodes;
