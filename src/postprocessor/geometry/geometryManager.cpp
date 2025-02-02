@@ -1,21 +1,25 @@
+#include <memory>
 #include <vtkSmartPointer.h>
 #include <vtkPolyData.h>
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
+#include <boost/numeric/ublas/vector.hpp>
 #include "geometryManager.h"
+#include "../../preprocessor/node/node.h"
 #include "../../preprocessor/preprocessor.h"
 #include "../../solver/solver.h"
+#include "../../preprocessor/elem_service/IElement.h"
 
 
 void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
-    for (Node* node: preprocessor.getNodes()) {
+    for (std::shared_ptr<Node> node: preprocessor.getNodes()) {
         points->InsertNextPoint(node->getX(), node->getY(), 0);
     }
 
-    for (IElement* elem : preprocessor.getElements()) {
+    for (std::shared_ptr<IElement> elem : preprocessor.getElements()) {
         std::vector<int> ids = elem->getNodesIndexes();
 
         int size = ids.size();
@@ -41,7 +45,7 @@ double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> poly
 
     double max_length = 0;
 
-    for (IElement* elem : preprocessor.getElements()) {
+    for (std::shared_ptr<IElement> elem : preprocessor.getElements()) {
         std::vector<int> ids = elem->getNodesIndexes();
 
         int size = ids.size();
@@ -60,7 +64,7 @@ double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> poly
 
     double scale = calculateScaleFactor(max_length, solver);
 
-    for (Node* node: preprocessor.getNodes()) {
+    for (std::shared_ptr<Node> node: preprocessor.getNodes()) {
         points->InsertNextPoint(
             node->getX() + node->getDispX() * scale, 
             node->getY() + node->getDispY() * scale, 
@@ -78,7 +82,7 @@ double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> poly
 }
 
 double GeometryManager::calculateScaleFactor(double max_length, Solver& solver) {
-    boost::numeric::ublas::vector<double> solution = solver.getSolution();
+    ublas::vector<double> solution = solver.getSolution();
 
     double max_disp = *std::max_element(solution.begin(), solution.end());
     double min_disp = *std::min_element(solution.begin(), solution.end());

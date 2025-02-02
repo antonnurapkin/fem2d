@@ -1,6 +1,6 @@
 #include <iostream>
-#include "Material.h"
 #include "../utils/Error.h"
+#include "Material.h"
 
 Material::Material(std::optional<double> Emod, std::optional<double> mu, std::optional<double> density, std::optional<int> index) {
 	Material::checkParameters(Emod, mu, density, index);

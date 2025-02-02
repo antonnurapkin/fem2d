@@ -1,35 +1,30 @@
 #pragma once
-#include<map>
 #include <vector>
-#include <array>
-#include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "../preprocessor/elem_service/IElement.h"
-#include "../preprocessor/preprocessor.h"
 
-
+// Прочие объявления классов
+class Preprocessor;
+class IElement;
 
 class Solver
 {
 private:
-	Preprocessor preprocessor;
-	ublas::vector<double> dispSolution;
+    Preprocessor& preprocessor;
+    boost::numeric::ublas::vector<double> dispSolution; // Убедись, что ublas правильно указан
 public:
-	Solver(Preprocessor& preprocessor);
-	void run();
+    Solver(Preprocessor& preprocessor);
+    void run();
 
-	ublas::matrix<double> createKGlobal(int matrix_size);
-	ublas::vector<double> createFGlobal(int vector_size);
+    boost::numeric::ublas::matrix<double> createKGlobal(int matrix_size);
+    boost::numeric::ublas::vector<double> createFGlobal(int vector_size);
 
-	ublas::matrix<double> assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, IElement* elem);
-	ublas::matrix<double> applySupports(ublas::matrix<double>& Kglobal, int matrix_size);
-	
-	int calculateMatrixSize();
+    boost::numeric::ublas::matrix<double> assembleMatrices(boost::numeric::ublas::matrix<double>& Klocal, boost::numeric::ublas::matrix<double>& Kglobal, std::shared_ptr<IElement>);
+    boost::numeric::ublas::matrix<double> applySupports(boost::numeric::ublas::matrix<double>& Kglobal, int matrix_size);
+    
+    int calculateMatrixSize();
 
-	void setSolutionToNodes(ublas::vector<double> solution);
-  
-	ublas::vector<double> getSolution();
+    void setSolutionToNodes(boost::numeric::ublas::vector<double> solution);
 
+    boost::numeric::ublas::vector<double> getSolution();
 };
-

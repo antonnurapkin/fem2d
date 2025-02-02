@@ -2,11 +2,13 @@
 #include <vector>
 #include <string>
 #include <map>
-#include "../node/Node.h"
+#include <memory>
+#include <optional>
 #include "../material/Material.h"
+#include "../node/Node.h"
 
 struct ElemParams {
-	std::vector<Node*> nodes;
+	std::vector<std::shared_ptr<Node>> nodes;
 	Material material;
 	std::vector<int> indexes;
 	double geom_parameter;

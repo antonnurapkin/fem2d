@@ -1,14 +1,16 @@
 #include <cmath>
+#include <memory>
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "Truss.h"
 #include "../../node/Node.h"
-#include "../ElemParams.h"
 #include "../../utils/tools.h"
+#include "../IElement.h"
+#include "../ElemParams.h"
+#include "Truss.h"
 
 using namespace boost::numeric;
 
-Truss::Truss(Material material, std::vector<int> indexes, std::vector<Node*> nodes, double section)
+Truss::Truss(Material material, std::vector<int> indexes, std::vector<std::shared_ptr<Node>> nodes, double section)
 	:material(material), indexes(indexes), nodes(nodes), section(section) {
 	length = setLength(nodes);
 	angle = setAngle(nodes);
@@ -57,7 +59,7 @@ ublas::matrix<double> Truss::DMatrix() const
 	return ublas::identity_matrix<double>(MATRIX_SIZE, MATRIX_SIZE) * material.getEmod();
 }
 
-std::vector<Node*> Truss::getNodes() const
+std::vector<std::shared_ptr<Node>> Truss::getNodes() const
 {
 	return nodes;
 }
@@ -84,7 +86,7 @@ double Truss::getStrain() const
 {	
 	ublas::matrix<double> disp = getDisplacments();
 
-	std::vector<Node*> nodes = getNodes();
+	std::vector<std::shared_ptr<Node>> nodes = getNodes();
 
 	double x1_new = nodes[0]->getX() + disp(0);
 	double x2_new = nodes[1]->getX() + disp(2);
@@ -105,7 +107,7 @@ double Truss::getStress() const
     return stress;
 }
 
-double Truss::setLength(std::vector<Node*> nodes) const
+double Truss::setLength(std::vector<std::shared_ptr<Node>> nodes) const
 {
 	double x1 = nodes[0]->getX();
 	double x2 = nodes[1]->getX();
@@ -116,7 +118,7 @@ double Truss::setLength(std::vector<Node*> nodes) const
 	return pow(pow(x1 - x2, 2) + pow(y1 - y2, 2), 0.5);
 }
 
-double Truss::setAngle(std::vector<Node*> nodes) const
+double Truss::setAngle(std::vector<std::shared_ptr<Node>> nodes) const
 {
 	double x1 = nodes[0]->getX();
 	double x2 = nodes[1]->getX();

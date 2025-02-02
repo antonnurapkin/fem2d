@@ -2,6 +2,7 @@
 #include <string>
 
 #include "solver/solver.h"
+#include "preprocessor/preprocessor.h"
 #include "postprocessor/postprocessor.h"
 
 // TODO: добавить обработку случая в конфиге:
