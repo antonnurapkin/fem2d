@@ -15,7 +15,6 @@ void Support::checkParameters(std::optional<int> index, std::optional<double> di
 	}
 }
 
-
 std::optional<double> Support::getDispX() const {
 	return this->disp_x;
 }
@@ -39,7 +38,3 @@ int Support::getIndex() const {
 void Support::setIndex(int index) {
 	this->index = index;
 }
-
-
-
-
