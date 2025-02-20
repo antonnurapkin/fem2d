@@ -5,9 +5,6 @@
 #include "preprocessor/preprocessor.h"
 #include "postprocessor/postprocessor.h"
 
-// TODO: добавить обработку случая в конфиге:
-// DISP,1,0,0
-// DISP,7,0,
 
 int main(int argc, char* argv[])
 {

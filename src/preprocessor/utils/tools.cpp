@@ -27,6 +27,11 @@ std::string getElementType(std::string line) {
 
 std::map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys) {
     std::map<std::string, std::optional<double>> result;
+
+    for (const auto& key : keys) {
+        result[key] = std::nullopt; // Init all values as std::nullopt
+    }
+    
     size_t start_index = line.find(",");
 
     if (start_index != std::string::npos) {
@@ -36,21 +41,23 @@ std::map<std::string, std::optional<double>> getDataFromString(std::string line,
         int index = 0;
 
         std::string temp_string;
-        while (getline(ss, temp_string, ','))
-        {
-            if (temp_string.empty()) {
+        while (getline(ss, temp_string, ',')) {
+            if (index < keys.size()) { // Make sure index is within the bounds of keys
+                if (temp_string.empty()) {
                 result[keys[index]] = std::nullopt;
-            }
-            else {
-                result[keys[index]] = std::stod(temp_string);
-            }
+                }
+                else {
+                    result[keys[index]] = std::stod(temp_string);
+                }
             index++;
+            }
         }
 
         return result;
     }
     else {
         throw PreprocessorError("Invalid configuration file");
+        return result;
     }
 }
 
