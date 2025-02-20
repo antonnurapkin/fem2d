@@ -45,10 +45,10 @@ std::map<std::string, std::optional<double>> getDataFromString(std::string line,
             if (index < keys.size()) { // Make sure index is within the bounds of keys
                 if (temp_string.empty()) {
                 result[keys[index]] = std::nullopt;
-            }
-            else {
-                result[keys[index]] = std::stod(temp_string);
-            }
+                }
+                else {
+                    result[keys[index]] = std::stod(temp_string);
+                }
             index++;
             }
         }
