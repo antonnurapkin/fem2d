@@ -23,8 +23,6 @@ void Solver::run() {
 
 	setSolutionToNodes(dispSolution);
 
-	setSolutionToNodes(dispSolution);
-
 	std::cout << "Solution:\n";
 
 	std::cout << dispSolution << std::endl;
