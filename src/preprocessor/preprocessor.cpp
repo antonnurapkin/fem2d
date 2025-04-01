@@ -73,7 +73,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("FORCE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> force_components = getDataFromString(line, { "index", "Fx", "Fy" });
-					Force force(force_components["index"], force_components["Fx"], force_components["Fy"]);
+					Force force = Force::createForce(force_components["index"], force_components["Fx"], force_components["Fy"]);
 					this->forces.push_back(force);
 				}
 

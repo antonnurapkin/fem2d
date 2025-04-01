@@ -7,15 +7,18 @@ private:
     int index;
     float force_x, force_y;
 public:
-    Force(std::optional<int> i, std::optional<float> x, std::optional<float> y);
-    void checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y);
+    Force(int i, float x, float y);
+
+    static Force createForce(std::optional<int> i, std::optional<float> x, std::optional<float> y);
     
-    // Геттеры
+    static void checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y);
+    
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     int getIndex() const;
     float getForceX() const;
     float getForceY() const;
 
-    // Сеттеры
+    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
     void setIndex(int i);
     void setForceX(float x);
     void setForceY(float y);
