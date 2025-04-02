@@ -65,7 +65,7 @@ void Preprocessor::readConfig() {
 				else if (line.find("ELEM") != std::string::npos) {
 					std::map<std::string, std::optional<double>> elem_data = getDataFromString(line, { "index1", "index2", "material_index" });
 
-					ElemParams elem_params = createElemParams(elem_data, section);
+					ElemParams elem_params = ElemParams::createElemParams(elem_data, section);
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
 					elements.push_back(elem);
 				}
@@ -112,25 +112,6 @@ Material Preprocessor::getMaterialByIndex(int index) {
 		}
 	}
 	throw PreprocessorError("Material with the specified index does not exist\n");
-}
-
-ElemParams Preprocessor::createElemParams(std::map<std::string, std::optional<double>> elem_data, double geometry) {
-	ElemParams::checkParameters(elem_data);
-
-	int index1 = static_cast<int>(elem_data["index1"].value());
-	int index2 = static_cast<int>(elem_data["index2"].value());
-	int material_index = static_cast<int>(elem_data["material_index"].value());
-
-	std::vector<std::shared_ptr<Node>> elem_nodes = { getNodeByIndex(index1), getNodeByIndex(index2) };
-
-	ElemParams elem_params = {
-		elem_nodes,
-		getMaterialByIndex(material_index),
-		std::vector<int> {index1, index2},
-		geometry
-	};
-
-	return elem_params;
 }
 
 std::vector<int> Preprocessor::getDofIndexes(Support support) {

@@ -28,8 +28,6 @@ public:
 	std::string getPathToConfig(int number_params, char** params);
     void readConfig();
 
-	ElemParams createElemParams(std::map<std::string, std::optional<double>> elem_data, double geometry);
-
 	std::vector<std::shared_ptr<IElement>> getElements();
 	std::vector<std::shared_ptr<Node>> getNodes();
 	std::vector<Material> getMaterials();
