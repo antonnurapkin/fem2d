@@ -2,13 +2,14 @@
 #include "../utils/Error.h"
 #include "Force.h"
 
-Force::Force(std::optional<int> i, std::optional<float> x, std::optional<float> y)
-{
-	checkParameters(i, x, y);
-	this->force_x = x.value();
-	this->force_y = y.value();
-	this->index = i.value();
+Force::Force(int i, float x, float y) : index(i), force_x(x), force_y(y) {};
+
+Force Force::createForce(std::optional<int> i, std::optional<float> x, std::optional<float> y) {
+	Force::checkParameters(i, x, y);
+
+	return Force(i.value(), x.value(), y.value());
 }
+
 
 void Force::checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y) {
 	if (!i.has_value() || !x.has_value() || !y.has_value()) {

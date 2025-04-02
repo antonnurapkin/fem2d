@@ -2,11 +2,14 @@
 #include "../utils/Error.h"
 #include <optional>
 
-Support::Support(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y) {
+Support::Support(int index, std::optional<double> disp_x, std::optional<double> disp_y):
+	index(index), disp_x(disp_y), disp_y(disp_y) {};
+
+
+Support Support::createSupport(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y) {
 	Support::checkParameters(index, disp_x, disp_y);
-	this->index = index.value();
-	this->disp_x = disp_x;
-	this->disp_y = disp_y;
+
+	return Support(index.value(), disp_x, disp_y);
 }
 
 void Support::checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y) {
@@ -14,7 +17,6 @@ void Support::checkParameters(std::optional<int> index, std::optional<double> di
 		throw PreprocessorError("Missing required parameter in displacements definition");
 	}
 }
-
 
 std::optional<double> Support::getDispX() const {
 	return this->disp_x;
@@ -39,7 +41,3 @@ int Support::getIndex() const {
 void Support::setIndex(int index) {
 	this->index = index;
 }
-
-
-
-

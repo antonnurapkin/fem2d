@@ -7,6 +7,6 @@ class ElemParams;
 class ElemCreator
 {
 public:
-	static std::shared_ptr<IElement> getElement(std::string type, ElemParams& elemParams);
+	static std::shared_ptr<IElement> createElement(std::string type, ElemParams& elemParams);
 };
 

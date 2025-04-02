@@ -2,15 +2,15 @@
 #include "../utils/Error.h"
 #include "Material.h"
 
-Material::Material(std::optional<double> Emod, std::optional<double> mu, std::optional<double> density, std::optional<int> index) {
-	Material::checkParameters(Emod, mu, density, index);
-	this->mu = mu.value();
-	this->Emod = Emod.value();
-	this->density = density.value();
-	this->index = index.value();
+Material::Material(double mu, double density, double Emod, int index) : mu(mu), density(density), Emod(Emod), index(index) {};
+
+Material Material::createMaterial(std::optional<double> Emod, std::optional<double> mu, std::optional<double> density, std::optional<int> index) {
+	Material::checkParameters(mu, density, Emod, index);
+
+	return Material(mu.value(), density.value(), Emod.value(), index.value());
 }
 
-void Material::checkParameters(std::optional<double> Emod, std::optional<double> mu, std::optional<double> density, std::optional<int> index) {
+void Material::checkParameters(std::optional<double> mu, std::optional<double> density, std::optional<double> Emod, std::optional<int> index) {
 	if (!mu.has_value() || !Emod.has_value() || !density.has_value() || !index.has_value()) {
 		throw PreprocessorError("Missing required parameter in material definition");
 	}

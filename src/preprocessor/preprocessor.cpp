@@ -48,7 +48,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("MATERIAL") != std::string::npos) {
 					std::map<std::string, std::optional<double>> mat_props = getDataFromString(line, { "Emod", "mu", "density", "index" });
-					Material material(mat_props["Emod"], mat_props["mu"], mat_props["density"], mat_props["index"]);
+					Material material = Material::createMaterial(mat_props["Emod"], mat_props["mu"], mat_props["density"], mat_props["index"]);
 					this->materials.push_back(material);
 				}
 
@@ -58,28 +58,27 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("NODE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> node_data = getDataFromString(line, { "index", "x", "y" });
-					std::shared_ptr<Node> node = std::make_shared<Node>(node_data["index"], node_data["x"], node_data["y"]);
+					std::shared_ptr<Node> node = Node::createNode(node_data["index"], node_data["x"], node_data["y"]);
 					this->nodes.push_back(node);
 				}
-				// TODO: ������� �������� ������ ���������� � ����������� �� ���� ���������
+				
 				else if (line.find("ELEM") != std::string::npos) {
 					std::map<std::string, std::optional<double>> elem_data = getDataFromString(line, { "index1", "index2", "material_index" });
 
 					ElemParams elem_params = createElemParams(elem_data, section);
-
-					std::shared_ptr<IElement> elem = ElemCreator::getElement(etype, elem_params);
+					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
 					elements.push_back(elem);
 				}
 
 				else if (line.find("FORCE") != std::string::npos) {
 					std::map<std::string, std::optional<double>> force_components = getDataFromString(line, { "index", "Fx", "Fy" });
-					Force force(force_components["index"], force_components["Fx"], force_components["Fy"]);
+					Force force = Force::createForce(force_components["index"], force_components["Fx"], force_components["Fy"]);
 					this->forces.push_back(force);
 				}
 
 				else if (line.find("DISP") != std::string::npos) {
 					std::map<std::string, std::optional<double>> support_components = getDataFromString(line, { "index", "disp_x", "disp_y" });
-					Support support(support_components["index"], support_components["disp_x"], support_components["disp_y"]);
+					Support support = Support::createSupport(support_components["index"], support_components["disp_x"], support_components["disp_y"]);
 					this->supports.push_back(support);
 				}
 			}

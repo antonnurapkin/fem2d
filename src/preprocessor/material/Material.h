@@ -3,16 +3,21 @@
 
 class Material {
 private:
-	double mu, density, Emod, index;
+	double mu;
+	double density;
+	double Emod;
+	double index;
 public:
-	Material(
-		std::optional<double> P_Emod, 
-		std::optional<double> p_mu,
-		std::optional<double> p_density,
+	Material(double mu, double Emod, double density, int index);
+
+	static Material createMaterial(
+		std::optional<double> Emod, 
+		std::optional<double> mu, 
+		std::optional<double> density, 
 		std::optional<int> index
 	);
 
-	void checkParameters(
+	static void checkParameters(
 		std::optional<double> Emod, 
 		std::optional<double> mu, 
 		std::optional<double> density, 

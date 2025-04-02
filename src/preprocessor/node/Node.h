@@ -1,14 +1,20 @@
 #pragma once
 #include <optional>
+#include <memory>
 
 class Node {
 private:
 	int index;
-	double x, y, disp_x = 0, disp_y = 0;
+	double x;
+	double y;
+	double disp_x = 0;
+	double disp_y = 0;
 public:
-	Node(std::optional<int> index, std::optional<double> x, std::optional<double> y);
+	Node(int index, double x, double y);
 
-	void checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y);
+	static std::shared_ptr<Node> createNode(std::optional<int> index, std::optional<double> x, std::optional<double> y);
+
+	static void checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y);
 
 	int getIndex() const;
 	void setIndex(int i);

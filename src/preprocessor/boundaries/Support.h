@@ -5,12 +5,14 @@ class Support
 {
 private:
     int index;
-    std::optional<double> disp_x, disp_y;
+    std::optional<double> disp_x;
+    std::optional<double> disp_y;
 public:
-    // �����������
-    Support(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
-    void checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
+    Support(int index, std::optional<double> disp_x, std::optional<double> disp_y);
 
+    static Support createSupport(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
+
+    static void checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
     // �������
     int getIndex() const;
     std::optional<double> getDispX() const;
