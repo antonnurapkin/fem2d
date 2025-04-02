@@ -5,7 +5,8 @@ class Force
 {
 private:
     int index;
-    float force_x, force_y;
+    float force_x;
+    float force_y;
 public:
     Force(int i, float x, float y);
 

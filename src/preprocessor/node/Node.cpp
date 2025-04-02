@@ -1,14 +1,15 @@
 #include <optional>
+#include <memory>
 #include "../utils/Error.h"
 #include "Node.h"
 
 
-Node::Node(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
-	Node::checkParameters(index, x, y);
+Node::Node(int index, double x, double y) : index(index), x(x), y(y) {};
 
-	this->index = index.value();
-	this->x = x.value();
-	this->y = y.value();
+std::shared_ptr<Node> Node::createNode(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
+	checkParameters(index, x, y);
+	
+	return std::make_shared<Node>(index.value(), x.value(), y.value());
 }
 
 void Node::checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
