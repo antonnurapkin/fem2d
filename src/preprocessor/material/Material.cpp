@@ -6,12 +6,12 @@
 Material::Material(double mu, double density, double Emod, int index) : mu(mu), density(density), Emod(Emod), index(index) {};
 
 Material Material::createMaterial(std::map<std::string, std::optional<double>> material_data) {
-	Material::checkParameters(material_data["Emod"], material_data["mu"], material_data["density"], material_data["index"]);
+	Material::checkParameters(material_data["mu"], material_data["density"], material_data["Emod"], material_data["index"]);
 
-	return Material(
-		material_data["Emod"].value(), 
+	return Material( 
 		material_data["mu"].value(), 
-		material_data["density"].value(), 
+		material_data["density"].value(),
+		material_data["Emod"].value(), 
 		material_data["index"].value()
 	);
 }

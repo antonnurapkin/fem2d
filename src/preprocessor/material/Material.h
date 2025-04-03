@@ -1,5 +1,7 @@
 #pragma once
 #include <optional>
+#include <map>
+#include <string>
 
 class Material {
 private:

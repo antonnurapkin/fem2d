@@ -1,6 +1,8 @@
 #pragma once
 #include <optional>
 #include <memory>
+#include <map>
+#include <string>
 
 class Node {
 private:
