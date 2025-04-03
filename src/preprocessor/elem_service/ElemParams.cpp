@@ -4,6 +4,7 @@
 #include <map>
 #include "ElemParams.h"
 #include "../utils/Error.h"
+#include "../preprocessor.h"
 
 
 void ElemParams::checkParameters(std::map<std::string, std::optional<double>> elem_data) {
@@ -12,9 +13,8 @@ void ElemParams::checkParameters(std::map<std::string, std::optional<double>> el
 	}
 }
 
-static ElemParams createElemParams(
-	const std::map<std::string, 
-	std::optional<double>>& elem_data, 
+ElemParams ElemParams::createElemParams(
+	std::map<std::string, std::optional<double>> elem_data, 
 	double geometry, 
 	Preprocessor& preprocessor
 ) {

@@ -65,7 +65,7 @@ void Preprocessor::readConfig() {
 				else if (line.find("ELEM") != std::string::npos) {
 					ConfigData elem_data = getDataFromString(line, { "index1", "index2", "material_index" });
 
-					ElemParams elem_params = ElemParams::createElemParams(elem_data, section);
+					ElemParams elem_params = ElemParams::createElemParams(elem_data, section, *this);
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
 					elements.push_back(elem);
 				}

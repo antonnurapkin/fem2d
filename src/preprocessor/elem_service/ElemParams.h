@@ -7,6 +7,8 @@
 #include "../material/Material.h"
 #include "../node/Node.h"
 
+class Preprocessor;
+
 struct ElemParams {
 	std::vector<std::shared_ptr<Node>> nodes;
 	Material material;
@@ -16,8 +18,7 @@ struct ElemParams {
 	static void checkParameters(std::map<std::string, std::optional<double>> elem_data);
 
 	static ElemParams createElemParams(
-		std::map<std::string, 
-		std::optional<double>> elem_data, 
+		std::map<std::string, std::optional<double>> elem_data,
 		double geometry, 
 		Preprocessor& preprocessor
 	);
