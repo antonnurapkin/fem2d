@@ -67,7 +67,6 @@ void Preprocessor::readConfig() {
 					ConfigData elem_data = getDataFromString(line, { "index1", "index2", "material_index" });
 
 					ElemParams elem_params = createElemParams(elem_data, section);
-
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
 					elements.push_back(elem);
 				}

@@ -13,7 +13,6 @@ public:
     static Support createSupport(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
 
     static void checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
-
     // �������
     int getIndex() const;
     std::optional<double> getDispX() const;
