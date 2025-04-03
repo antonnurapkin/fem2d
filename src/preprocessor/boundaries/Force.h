@@ -1,5 +1,6 @@
 #pragma once
 #include <optional>
+#include <map>
 
 class Force
 {
@@ -10,7 +11,7 @@ private:
 public:
     Force(int i, float x, float y);
 
-    static Force createForce(std::optional<int> i, std::optional<float> x, std::optional<float> y);
+    static Force createForce(std::map<std::string, std::optional<double>> force_components);
     
     static void checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y);
     

@@ -35,7 +35,6 @@ public:
 	std::vector<Support> getSupports();
 
 	std::vector<int> getDofIndexes(Support support);
-
 	std::shared_ptr<Node> getNodeByIndex(int index);
 	Material getMaterialByIndex(int index);
 	

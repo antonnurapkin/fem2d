@@ -1,5 +1,7 @@
 #pragma once
 #include <optional>
+#include <map>
+#include <string>
 
 class Material {
 private:
@@ -11,10 +13,7 @@ public:
 	Material(double mu, double Emod, double density, int index);
 
 	static Material createMaterial(
-		std::optional<double> Emod, 
-		std::optional<double> mu, 
-		std::optional<double> density, 
-		std::optional<int> index
+		std::map<std::string, std::optional<double>> material_data
 	);
 
 	static void checkParameters(
