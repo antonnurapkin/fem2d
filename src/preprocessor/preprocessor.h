@@ -28,6 +28,7 @@ public:
 	std::string getPathToConfig(int number_params, char** params);
     void readConfig();
 
+	// move to ElemParams class
 	ElemParams createElemParams(std::map<std::string, std::optional<double>> elem_data, double geometry);
 
 	std::vector<std::shared_ptr<IElement>> getElements();
@@ -37,7 +38,6 @@ public:
 	std::vector<Support> getSupports();
 
 	std::vector<int> getDofIndexes(Support support);
-
 	std::shared_ptr<Node> getNodeByIndex(int index);
 	Material getMaterialByIndex(int index);
 	
