@@ -1,15 +1,19 @@
 #include <optional>
+#include <map>
 #include <memory>
 #include "../utils/Error.h"
 #include "Node.h"
 
-
 Node::Node(int index, double x, double y) : index(index), x(x), y(y) {};
 
-std::shared_ptr<Node> Node::createNode(std::optional<int> index, std::optional<double> x, std::optional<double> y) {
-	checkParameters(index, x, y);
+std::shared_ptr<Node> Node::createNode(std::map<std::string, std::optional<double>> node_data) {
+	checkParameters(node_data["index"], node_data["x"], node_data["y"]);
 	
-	return std::make_shared<Node>(index.value(), x.value(), y.value());
+	return std::make_shared<Node>(
+		node_data["index"].value(), 
+		node_data["x"].value(), 
+		node_data["y"].value()
+	);
 }
 
 void Node::checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y) {

@@ -12,7 +12,6 @@
 #include "elem_service/ElemCreator.h"
 #include "utils/tools.h"
 #include "utils/Error.h"
-
 #include "preprocessor.h"
 
 using ConfigData = std::map<std::string, std::optional<double>>;
@@ -48,8 +47,8 @@ void Preprocessor::readConfig() {
 				}
 
 				else if (line.find("MATERIAL") != std::string::npos) {
-					ConfigData mat_props = getDataFromString(line, { "Emod", "mu", "density", "index" });
-					Material material = Material::createMaterial(mat_props["Emod"], mat_props["mu"], mat_props["density"], mat_props["index"]);
+					ConfigData material_data = getDataFromString(line, { "Emod", "mu", "density", "index" });
+					Material material = Material::createMaterial(material_data);
 					this->materials.push_back(material);
 				}
 
@@ -59,7 +58,7 @@ void Preprocessor::readConfig() {
 
 				else if (line.find("NODE") != std::string::npos) {
 					ConfigData node_data = getDataFromString(line, { "index", "x", "y" });
-					std::shared_ptr<Node> node = Node::createNode(node_data["index"], node_data["x"], node_data["y"]);
+					std::shared_ptr<Node> node = Node::createNode(node_data);
 					this->nodes.push_back(node);
 				}
 				
@@ -72,14 +71,14 @@ void Preprocessor::readConfig() {
 				}
 
 				else if (line.find("FORCE") != std::string::npos) {
-					ConfigData force_components = getDataFromString(line, { "index", "Fx", "Fy" });
-					Force force = Force::createForce(force_components);
+					ConfigData force_data = getDataFromString(line, { "index", "Fx", "Fy" });
+					Force force = Force::createForce(force_data);
 					this->forces.push_back(force);
 				}
 
 				else if (line.find("DISP") != std::string::npos) {
-					ConfigData support_components = getDataFromString(line, { "index", "disp_x", "disp_y" });
-					Support support = Support::createSupport(support_components["index"], support_components["disp_x"], support_components["disp_y"]);
+					ConfigData support_data = getDataFromString(line, { "index", "disp_x", "disp_y" });
+					Support support = Support::createSupport(support_data);
 					this->supports.push_back(support);
 				}
 			}
