@@ -14,4 +14,11 @@ struct ElemParams {
 	double geom_parameter;
 
 	static void checkParameters(std::map<std::string, std::optional<double>> elem_data);
+
+	static ElemParams createElemParams(
+		std::map<std::string, 
+		std::optional<double>> elem_data, 
+		double geometry, 
+		Preprocessor& preprocessor
+	);
 };
