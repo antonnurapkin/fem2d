@@ -3,15 +3,11 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 
-// Прочие объявления классов
 class Preprocessor;
 class IElement;
 
 class Solver
 {
-private:
-    Preprocessor& preprocessor;
-    boost::numeric::ublas::vector<double> dispSolution; // Убедись, что ublas правильно указан
 public:
     Solver(Preprocessor& preprocessor);
     void run();
@@ -27,4 +23,7 @@ public:
     void setSolutionToNodes(boost::numeric::ublas::vector<double>& solution);
 
     boost::numeric::ublas::vector<double> getSolution() const;
+private:
+    Preprocessor& preprocessor;
+    boost::numeric::ublas::vector<double> dispSolution;
 };
