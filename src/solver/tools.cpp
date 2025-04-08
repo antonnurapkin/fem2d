@@ -99,10 +99,10 @@ ublas::vector<double> solver_math::solveSystem(ublas::matrix<double>& A_matrix, 
     return backwardGaussToUp(U_upper, solution_temp);
 }
 
-void solver_math::print_matrix(ublas::matrix<double>& A) {
-    for (int i = 0; i < A.size1(); i++) {
-        for (int j = 0; j < A.size2(); j++) {
-            std::cout << A(i, j) << " ";
+void solver_math::print_matrix(ublas::matrix<double>& A_matrix) {
+    for (int i = 0; i < A_matrix.size1(); i++) {
+        for (int j = 0; j < A_matrix.size2(); j++) {
+            std::cout << A_matrix(i, j) << " ";
         }
         std::cout << std::endl;
     }
