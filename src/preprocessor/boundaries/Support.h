@@ -1,6 +1,6 @@
 #pragma once
 #include <optional>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class Support
@@ -12,7 +12,7 @@ private:
 public:
     Support(int index, std::optional<double> disp_x, std::optional<double> disp_y);
 
-    static Support createSupport(std::map<std::string, std::optional<double>> support_components);
+    static Support createSupport(std::unordered_map<std::string, std::optional<double>> support_components);
 
     static void checkParameters(std::optional<int> index, std::optional<double> disp_x, std::optional<double> disp_y);
     // �������

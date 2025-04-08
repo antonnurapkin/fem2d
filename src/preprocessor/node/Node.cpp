@@ -1,12 +1,12 @@
 #include <optional>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include "../utils/Error.h"
 #include "Node.h"
 
 Node::Node(int index, double x, double y) : index(index), x(x), y(y) {};
 
-std::shared_ptr<Node> Node::createNode(std::map<std::string, std::optional<double>> node_data) {
+std::shared_ptr<Node> Node::createNode(std::unordered_map<std::string, std::optional<double>> node_data) {
 	checkParameters(node_data["index"], node_data["x"], node_data["y"]);
 	
 	return std::make_shared<Node>(

@@ -1,20 +1,20 @@
 #include <vector>
 #include <string>
 #include <optional>
-#include <map>
+#include <unordered_map>
 #include "ElemParams.h"
 #include "../utils/Error.h"
 #include "../preprocessor.h"
 
 
-void ElemParams::checkParameters(std::map<std::string, std::optional<double>> elem_data) {
+void ElemParams::checkParameters(std::unordered_map<std::string, std::optional<double>> elem_data) {
 	if (!elem_data["index1"].has_value() || !elem_data["index2"].has_value() || !elem_data["material_index"].has_value()) {
 		throw PreprocessorError("Missing required parameter in any element definition");
 	}
 }
 
 ElemParams ElemParams::createElemParams(
-	std::map<std::string, std::optional<double>> elem_data, 
+	std::unordered_map<std::string, std::optional<double>> elem_data, 
 	double geometry, 
 	Preprocessor& preprocessor
 ) {

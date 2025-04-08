@@ -25,17 +25,17 @@ private:
 public:
     Preprocessor(int number_params, char** params);
 
-	std::string getPathToConfig(int number_params, char** params);
+	std::string getPathToConfig(int number_params, char** params) const;
     void readConfig();
 
-	std::vector<std::shared_ptr<IElement>> getElements();
-	std::vector<std::shared_ptr<Node>> getNodes();
-	std::vector<Material> getMaterials();
-	std::vector<Force> getForces();
-	std::vector<Support> getSupports();
+	std::vector<std::shared_ptr<IElement>> getElements() const;
+	std::vector<std::shared_ptr<Node>> getNodes() const;
+	std::vector<Material> getMaterials() const;
+	std::vector<Force> getForces() const;
+	std::vector<Support> getSupports() const;
 
-	std::vector<int> getDofIndexes(Support support);
-	std::shared_ptr<Node> getNodeByIndex(int index);
-	Material getMaterialByIndex(int index);
+	std::vector<int> getDofIndexes(const Support& support) const;
+	std::shared_ptr<Node> getNodeByIndex(int index) const;
+	Material getMaterialByIndex(int index) const;
 	
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include <optional>
 #include <memory>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class Node {
@@ -14,7 +14,7 @@ private:
 public:
 	Node(int index, double x, double y);
 
-	static std::shared_ptr<Node> createNode(std::map<std::string, std::optional<double>> node_data);
+	static std::shared_ptr<Node> createNode(std::unordered_map<std::string, std::optional<double>> node_data);
 
 	static void checkParameters(std::optional<int> index, std::optional<double> x, std::optional<double> y);
 

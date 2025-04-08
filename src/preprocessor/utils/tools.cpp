@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <sstream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <optional>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/lu.hpp>
@@ -25,8 +25,8 @@ std::string getElementType(std::string line) {
     }
 }
 
-std::map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys) {
-    std::map<std::string, std::optional<double>> result;
+std::unordered_map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys) {
+    std::unordered_map<std::string, std::optional<double>> result;
 
     for (const auto& key : keys) {
         result[key] = std::nullopt; // Init all values as std::nullopt

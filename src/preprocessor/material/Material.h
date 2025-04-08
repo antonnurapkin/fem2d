@@ -1,6 +1,6 @@
 #pragma once
 #include <optional>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 class Material {
@@ -13,7 +13,7 @@ public:
 	Material(double mu, double Emod, double density, int index);
 
 	static Material createMaterial(
-		std::map<std::string, std::optional<double>> material_data
+		std::unordered_map<std::string, std::optional<double>> material_data
 	);
 
 	static void checkParameters(

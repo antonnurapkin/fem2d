@@ -8,8 +8,6 @@
 using namespace boost::numeric;
 
 class IElement {
-private:
-	std::vector<std::shared_ptr<Node>> nodes;
 public:
 	virtual ublas::matrix<double> KMatrixElemGlobal() const = 0;
 	virtual ublas::matrix<double> BMatrix() const = 0;

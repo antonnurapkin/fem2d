@@ -14,13 +14,13 @@
 #include "utils/Error.h"
 #include "preprocessor.h"
 
-using ConfigData = std::map<std::string, std::optional<double>>;
+using ConfigData = std::unordered_map<std::string, std::optional<double>>;
 
 Preprocessor::Preprocessor(int number_params, char** params) {
 	path_to_input_file = getPathToConfig(number_params, params);
 }
 
-std::string Preprocessor::getPathToConfig(int number_params, char** params) {
+std::string Preprocessor::getPathToConfig(int number_params, char** params) const {
 	if (number_params < 3) {
 		throw PreprocessorError("Not enough launch arguments!");
 	} 
@@ -96,7 +96,7 @@ void Preprocessor::readConfig() {
 	}
 }
 
-std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) {
+std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) const {
 	for (std::shared_ptr<Node> node : nodes) {
 		if (node->getIndex() == index) {
 			return node;
@@ -105,7 +105,7 @@ std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) {
 	throw PreprocessorError("Node with the specified index does not exist\n");
 }
 
-Material Preprocessor::getMaterialByIndex(int index) {
+Material Preprocessor::getMaterialByIndex(int index) const {
 	for (Material material : materials) {
 		if (material.getIndex() == index) {
 			return material;
@@ -114,7 +114,7 @@ Material Preprocessor::getMaterialByIndex(int index) {
 	throw PreprocessorError("Material with the specified index does not exist\n");
 }
 
-std::vector<int> Preprocessor::getDofIndexes(Support support) {
+std::vector<int> Preprocessor::getDofIndexes(const Support& support) const {
 	std::vector<int> indexes;
 
 	int node_support_index = support.getIndex() - 1; // ���������� � ������������ � �������
@@ -129,22 +129,22 @@ std::vector<int> Preprocessor::getDofIndexes(Support support) {
 	return indexes;
 }
 
-std::vector<std::shared_ptr<IElement>> Preprocessor::getElements() {
-	return this->elements;
+std::vector<std::shared_ptr<IElement>> Preprocessor::getElements() const {
+	return elements;
 }
 
-std::vector<std::shared_ptr<Node>> Preprocessor::getNodes() {
-	return this->nodes;
+std::vector<std::shared_ptr<Node>> Preprocessor::getNodes() const {
+	return nodes;
 }
 
-std::vector<Material> Preprocessor::getMaterials() {
-	return this->materials;
+std::vector<Material> Preprocessor::getMaterials() const {
+	return materials;
 }
 
-std::vector<Force> Preprocessor::getForces() {
-	return this->forces;
+std::vector<Force> Preprocessor::getForces() const {
+	return forces;
 }
 
-std::vector<Support> Preprocessor::getSupports() {
-	return this->supports;
+std::vector<Support> Preprocessor::getSupports() const {
+	return supports;
 }

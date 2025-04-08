@@ -1,3 +1,4 @@
+#include <unordered_map>
 #include "Support.h"
 #include "../utils/Error.h"
 #include <optional>
@@ -6,7 +7,7 @@ Support::Support(int index, std::optional<double> disp_x, std::optional<double> 
 	index(index), disp_x(disp_y), disp_y(disp_y) {};
 
 
-Support Support::createSupport(std::map<std::string, std::optional<double>> support_components) {
+Support Support::createSupport(std::unordered_map<std::string, std::optional<double>> support_components) {
 	Support::checkParameters(support_components["index"], support_components["disp_x"], support_components["disp_y"]);
 
 	return Support(
