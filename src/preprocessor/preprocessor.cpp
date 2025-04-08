@@ -4,8 +4,8 @@
 #include <vector>
 #include <optional>
 #include "elem_service/IElement.h"
-#include "node/Node.h"
-#include "material/Material.h"
+#include "node/node.h"
+#include "material/material.h"
 #include "boundaries/Force.h"
 #include "boundaries/Support.h"
 #include "elem_service/ElemParams.h"

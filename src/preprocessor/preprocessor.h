@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
-#include "material/Material.h"
+#include "material/material.h"
 #include "boundaries/Force.h"
 #include "boundaries/Support.h"
 #include "elem_service/ElemParams.h"

@@ -2,7 +2,7 @@
 #include <memory>
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "../../node/Node.h"
+#include "../../node/node.h"
 #include "../../tools.h"
 #include "../IElement.h"
 #include "../ElemParams.h"

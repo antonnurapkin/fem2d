@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "../preprocessor/node/Node.h"
+#include "../preprocessor/node/node.h"
 #include "../preprocessor/elem_service/IElement.h"
 #include "solver.h"
 #include "../preprocessor/preprocessor.h"

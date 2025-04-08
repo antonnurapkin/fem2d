@@ -4,8 +4,8 @@
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "../../material/Material.h"
-#include "../../node/Node.h"
+#include "../../material/material.h"
+#include "../../node/node.h"
 #include "../IElement.h"
 #include "../ElemParams.h"
 
