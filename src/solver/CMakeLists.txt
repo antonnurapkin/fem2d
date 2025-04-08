@@ -1,6 +1,4 @@
-add_library(solver solver.cpp solver.h)
-
-add_subdirectory("utils")
+add_library(solver solver.cpp solver.h tools.h tools.cpp)
 
 target_include_directories(
     solver PUBLIC

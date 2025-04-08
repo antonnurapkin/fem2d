@@ -1,15 +1,9 @@
-#include <string>
-#include <stdexcept>
-#include <sstream>
-#include <vector>
-#include <map>
-#include <optional>
 #include <boost/numeric/ublas/io.hpp>
 #include "tools.h"
 
 using namespace boost::numeric;
 
-double getDet(ublas::matrix<double> matr) {
+double math::getDet(ublas::matrix<double> matr) {
     ublas::permutation_matrix<std::size_t> pm(matr.size1());
     ublas::lu_factorize(matr, pm);
 
@@ -29,7 +23,7 @@ double getDet(ublas::matrix<double> matr) {
     return det;
 }
 
-ublas::matrix<double> Kholetsky_decomposition(ublas::matrix<double>& A) {
+ublas::matrix<double> math::Kholetsky_decomposition(ublas::matrix<double>& A) {
 
     ublas::matrix<double> U_lower(A.size1(), A.size1(), 0);
 
@@ -52,7 +46,7 @@ ublas::matrix<double> Kholetsky_decomposition(ublas::matrix<double>& A) {
     return U_lower;
 }
 
-ublas::vector<double> backwardGaussToDown(ublas::matrix<double>& A_traingle_lower, ublas::vector<double>& b_vector) {
+ublas::vector<double> math::backwardGaussToDown(ublas::matrix<double>& A_traingle_lower, ublas::vector<double>& b_vector) {
     int size = A_traingle_lower.size1();
 
     ublas::vector<double> solution(size);
@@ -74,7 +68,7 @@ ublas::vector<double> backwardGaussToDown(ublas::matrix<double>& A_traingle_lowe
     return solution;
 }
 
-ublas::vector<double> backwardGaussToUp(ublas::matrix<double>& A_matrix, ublas::vector<double>& b_vector) {
+ublas::vector<double> math::backwardGaussToUp(ublas::matrix<double>& A_matrix, ublas::vector<double>& b_vector) {
     int size = A_matrix.size1();
 
     ublas::vector<double> solution(size);
@@ -94,7 +88,7 @@ ublas::vector<double> backwardGaussToUp(ublas::matrix<double>& A_matrix, ublas::
     return solution;
 }
 
-ublas::vector<double> solveSystem(ublas::matrix<double>& A_matrix, ublas::vector<double>& b_vector) {
+ublas::vector<double> math::solveSystem(ublas::matrix<double>& A_matrix, ublas::vector<double>& b_vector) {
 
     ublas::matrix<double> U_lower = Kholetsky_decomposition(A_matrix);
 
@@ -105,7 +99,7 @@ ublas::vector<double> solveSystem(ublas::matrix<double>& A_matrix, ublas::vector
     return backwardGaussToUp(U_upper, solution_temp);
 }
 
-void print_matrix(ublas::matrix<double>& A) {
+void math::print_matrix(ublas::matrix<double>& A) {
     for (int i = 0; i < A.size1(); i++) {
         for (int j = 0; j < A.size2(); j++) {
             std::cout << A(i, j) << " ";
