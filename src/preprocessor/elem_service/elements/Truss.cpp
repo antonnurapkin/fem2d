@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "../../node/Node.h"
-#include "../../utils/tools.h"
+#include "../../tools.h"
 #include "../IElement.h"
 #include "../ElemParams.h"
 #include "Truss.h"
@@ -26,7 +26,7 @@ Truss::Truss(ElemParams& elem_params)
 ublas::matrix<double> Truss::KMatrixElemGlobal() const {
 	ublas::matrix<double> K_elem_local = KMatrixElemLocal();
 
-	ublas::matrix<double> T_matrix = TransformMatrix(angle);
+	ublas::matrix<double> T_matrix = preprocessor_math::TransformMatrix(angle);
 
 	ublas::matrix<double> K_elem_global_temp = ublas::prod(K_elem_local, T_matrix);
 

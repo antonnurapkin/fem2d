@@ -1,4 +1,10 @@
-add_library(preprocessor preprocessor.cpp preprocessor.h)
+add_library(
+    preprocessor 
+    preprocessor.cpp 
+    preprocessor.h
+    tools.cpp
+    tools.h
+)
 
 add_subdirectory("utils")
 add_subdirectory("node")

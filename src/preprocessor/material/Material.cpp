@@ -1,6 +1,6 @@
 #include <iostream>
 #include <unordered_map>
-#include "../utils/Error.h"
+#include "../utils/error.h"
 #include "Material.h"
 
 Material::Material(double mu, double density, double Emod, int index) : mu(mu), density(density), Emod(Emod), index(index) {};

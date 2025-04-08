@@ -1,7 +1,7 @@
 #include <optional>
 #include <unordered_map>
 #include <memory>
-#include "../utils/Error.h"
+#include "../utils/error.h"
 #include "Node.h"
 
 Node::Node(int index, double x, double y) : index(index), x(x), y(y) {};

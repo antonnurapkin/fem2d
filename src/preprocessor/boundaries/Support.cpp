@@ -1,6 +1,6 @@
 #include <unordered_map>
 #include "Support.h"
-#include "../utils/Error.h"
+#include "../utils/error.h"
 #include <optional>
 
 Support::Support(int index, std::optional<double> disp_x, std::optional<double> disp_y):

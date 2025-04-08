@@ -10,8 +10,8 @@
 #include "boundaries/Support.h"
 #include "elem_service/ElemParams.h"
 #include "elem_service/ElemCreator.h"
-#include "utils/tools.h"
-#include "utils/Error.h"
+#include "tools.h"
+#include "utils/error.h"
 #include "preprocessor.h"
 
 using ConfigData = std::unordered_map<std::string, std::optional<double>>;
@@ -43,27 +43,27 @@ void Preprocessor::readConfig() {
 			while (std::getline(file, line)) {
 
 				if (line.find("ETYPE") != std::string::npos && etype.size() == 0) {
-					etype = getElementType(line);
+					etype = preprocessor_tools::getElementType(line);
 				}
 
 				else if (line.find("MATERIAL") != std::string::npos) {
-					ConfigData material_data = getDataFromString(line, { "Emod", "mu", "density", "index" });
+					ConfigData material_data = preprocessor_tools::getDataFromString(line, { "Emod", "mu", "density", "index" });
 					Material material = Material::createMaterial(material_data);
 					this->materials.push_back(material);
 				}
 
 				else if (line.find("SECTION") != std::string::npos) {
-					section = getSection(line);
+					section = preprocessor_tools::getSection(line);
 				}
 
 				else if (line.find("NODE") != std::string::npos) {
-					ConfigData node_data = getDataFromString(line, { "index", "x", "y" });
+					ConfigData node_data = preprocessor_tools::getDataFromString(line, { "index", "x", "y" });
 					std::shared_ptr<Node> node = Node::createNode(node_data);
 					this->nodes.push_back(node);
 				}
 				
 				else if (line.find("ELEM") != std::string::npos) {
-					ConfigData elem_data = getDataFromString(line, { "index1", "index2", "material_index" });
+					ConfigData elem_data = preprocessor_tools::getDataFromString(line, { "index1", "index2", "material_index" });
 
 					ElemParams elem_params = ElemParams::createElemParams(elem_data, section, *this);
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
@@ -71,13 +71,13 @@ void Preprocessor::readConfig() {
 				}
 
 				else if (line.find("FORCE") != std::string::npos) {
-					ConfigData force_data = getDataFromString(line, { "index", "Fx", "Fy" });
+					ConfigData force_data = preprocessor_tools::getDataFromString(line, { "index", "Fx", "Fy" });
 					Force force = Force::createForce(force_data);
 					this->forces.push_back(force);
 				}
 
 				else if (line.find("DISP") != std::string::npos) {
-					ConfigData support_data = getDataFromString(line, { "index", "disp_x", "disp_y" });
+					ConfigData support_data = preprocessor_tools::getDataFromString(line, { "index", "disp_x", "disp_y" });
 					Support support = Support::createSupport(support_data);
 					this->supports.push_back(support);
 				}

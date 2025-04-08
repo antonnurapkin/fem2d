@@ -14,14 +14,6 @@ class Node;
 class IElement;
 
 class Preprocessor{
-private:
-	std::string path_to_input_file;
-
-    std::vector<std::shared_ptr<IElement>> elements;
-	std::vector<std::shared_ptr<Node>> nodes;
-	std::vector<Material> materials;
-	std::vector<Force> forces;
-	std::vector<Support> supports;
 public:
     Preprocessor(int number_params, char** params);
 
@@ -38,4 +30,12 @@ public:
 	std::shared_ptr<Node> getNodeByIndex(int index) const;
 	Material getMaterialByIndex(int index) const;
 	
+private:
+	std::string path_to_input_file;
+
+    std::vector<std::shared_ptr<IElement>> elements;
+	std::vector<std::shared_ptr<Node>> nodes;
+	std::vector<Material> materials;
+	std::vector<Force> forces;
+	std::vector<Support> supports;
 };
