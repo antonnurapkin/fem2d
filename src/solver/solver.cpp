@@ -36,7 +36,7 @@ void Solver::run() {
 	ublas::matrix<double> Kglobal = fut_k_global.get();
 	ublas::vector<double> Fvector = fut_f_global.get();
 
-	dispSolution = math::solveSystem(Kglobal, Fvector);
+	dispSolution = solver_math::solveSystem(Kglobal, Fvector);
 
 	setSolutionToNodes(dispSolution);
 

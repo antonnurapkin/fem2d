@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/assignment.hpp>
 
-namespace math {
+namespace solver_math {
     using namespace boost::numeric;
 
     double getDet(ublas::matrix<double> matrix_);
