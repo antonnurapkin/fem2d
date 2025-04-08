@@ -11,7 +11,7 @@
 #include "elem_service/ElemParams.h"
 #include "elem_service/ElemCreator.h"
 #include "tools.h"
-#include "utils/error.h"
+#include "error.h"
 #include "preprocessor.h"
 
 using ConfigData = std::unordered_map<std::string, std::optional<double>>;
@@ -21,7 +21,7 @@ Preprocessor::Preprocessor(int number_params, char** params) {
 }
 
 std::string Preprocessor::getPathToConfig(int number_params, char** params) const {
-	if (number_params < 3) {
+	if (number_params < PARAMETERS_NUMBER) {
 		throw PreprocessorError("Not enough launch arguments!");
 	} 
 	else if (std::strcmp(params[1], "--input") != 0) {\

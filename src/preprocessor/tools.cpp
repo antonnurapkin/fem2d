@@ -7,7 +7,7 @@
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/assignment.hpp>
-#include "utils/error.h"
+#include "error.h"
 #include "tools.h"
 
 

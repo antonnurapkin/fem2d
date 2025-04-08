@@ -3,7 +3,7 @@
 #include <optional>
 #include <unordered_map>
 #include "ElemParams.h"
-#include "../utils/error.h"
+#include "../error.h"
 #include "../preprocessor.h"
 
 

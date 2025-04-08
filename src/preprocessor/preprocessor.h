@@ -15,6 +15,8 @@ class IElement;
 
 class Preprocessor{
 public:
+	int PARAMETERS_NUMBER = 3;
+
     Preprocessor(int number_params, char** params);
 
 	std::string getPathToConfig(int number_params, char** params) const;

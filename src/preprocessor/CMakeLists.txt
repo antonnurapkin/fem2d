@@ -4,9 +4,10 @@ add_library(
     preprocessor.h
     tools.cpp
     tools.h
+    error.cpp
+    error.h
 )
 
-add_subdirectory("utils")
 add_subdirectory("node")
 add_subdirectory("material")
 add_subdirectory("elem_service")

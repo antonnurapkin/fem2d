@@ -1,6 +1,6 @@
 #include <optional>
 #include <unordered_map>
-#include "../utils/error.h"
+#include "../error.h"
 #include "Force.h"
 
 Force::Force(int i, float x, float y) : index(i), force_x(x), force_y(y) {};
