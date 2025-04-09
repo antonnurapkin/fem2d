@@ -3,14 +3,20 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "../preprocessor/node/node.h"
-#include "../preprocessor/elem_service/IElement.h"
+#include "preprocessor/node/node.h"
+#include "preprocessor/elem_service/IElement.h"
+#include "preprocessor/preprocessor.h"
 #include "solver.h"
-#include "../preprocessor/preprocessor.h"
 #include "tools.h"
 
 
-Solver::Solver(Preprocessor& preprocessor): preprocessor(preprocessor) {}
+Solver::Solver(Preprocessor& preprocessor): preprocessor_(preprocessor) {
+	std::cout << "Solver was created successfully!\n";
+}
+
+Solver::~Solver() {
+	std::cout << "Solver was deleted successfully!\n";
+}
 
 void Solver::run() {
 
@@ -36,18 +42,18 @@ void Solver::run() {
 	ublas::matrix<double> Kglobal = fut_k_global.get();
 	ublas::vector<double> Fvector = fut_f_global.get();
 
-	dispSolution = solver_math::solveSystem(Kglobal, Fvector);
+	dispSolution_ = solver_math::solveSystem(Kglobal, Fvector);
 
-	setSolutionToNodes(dispSolution);
+	setSolutionToNodes(dispSolution_);
 
 	std::cout << "Solution:\n";
 
-	std::cout << dispSolution << std::endl;
+	std::cout << dispSolution_ << std::endl;
 }
 
 
 int Solver::calculateMatrixSize() const {
-	return 2 * preprocessor.getNodes().size();
+	return 2 * preprocessor_.getNodes().size();
 }
 
 ublas::matrix<double> Solver::assembleMatrices(ublas::matrix<double>& Klocal, ublas::matrix<double>& Kglobal, std::shared_ptr<IElement> elem) const {
@@ -75,7 +81,7 @@ ublas::matrix<double> Solver::createKGlobal(int matrix_size) const {
 	ublas::zero_matrix<double> zero_matrix(matrix_size, matrix_size);
 	ublas::matrix<double> Kglobal = zero_matrix;
 
-	for (auto elem : preprocessor.getElements()) {
+	for (auto elem : preprocessor_.getElements()) {
 		ublas::matrix<double> k_matrix_elem = elem->KMatrixElemGlobal();
 
 		Kglobal = assembleMatrices(k_matrix_elem, Kglobal, elem);
@@ -92,7 +98,7 @@ ublas::vector<double> Solver::createFGlobal(int vector_size) const {
 
 	int index;
 
-	for (auto force : preprocessor.getForces()) {
+	for (auto force : preprocessor_.getForces()) {
 		index = force.getIndex() - 1; //���������� � ������������ � ����
 
 		Fglobal(2 * index) += force.getForceX(); 
@@ -106,9 +112,9 @@ ublas::matrix<double> Solver::applySupports(ublas::matrix<double>& Kglobal, int 
 
 	ublas::zero_vector<double> zero_vector(matrix_size);
 
-	for (Support support : preprocessor.getSupports()) { 
+	for (Support support : preprocessor_.getSupports()) { 
 
-		std::vector<int> indexes = preprocessor.getDofIndexes(support);
+		std::vector<int> indexes = preprocessor_.getDofIndexes(support);
 
 		for (int index : indexes) {
 			ublas::column(Kglobal, index) = zero_vector;
@@ -122,13 +128,13 @@ ublas::matrix<double> Solver::applySupports(ublas::matrix<double>& Kglobal, int 
 
 void Solver::setSolutionToNodes(ublas::vector<double>& solution) {
 	
-	for (int i = 0; i < preprocessor.getNodes().size(); i++) {
-		preprocessor.getNodes()[i]->setDispX(solution[2 * i]);
-		preprocessor.getNodes()[i]->setDispY(solution[2 * i + 1]);
+	for (int i = 0; i < preprocessor_.getNodes().size(); i++) {
+		preprocessor_.getNodes()[i]->setDispX(solution[2 * i]);
+		preprocessor_.getNodes()[i]->setDispY(solution[2 * i + 1]);
 	}
 }
 
 ublas::vector<double> Solver::getSolution() const {
-	return dispSolution;
+	return dispSolution_;
 }
 

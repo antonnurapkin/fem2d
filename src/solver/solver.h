@@ -2,14 +2,19 @@
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include "../preprocessor/preprocessor.h"
+#include "../preprocessor/elem_service/IElement.h"
 
-class Preprocessor;
-class IElement;
-
-class Solver
+class Solver final
 {
 public:
     Solver(Preprocessor& preprocessor);
+    ~Solver();
+    Solver(const Solver& other) = delete;
+    Solver(Solver&& other) = delete;
+    Solver& operator=(const Solver& other) = delete;
+    Solver& operator=(Solver&& other) = delete;
+
     void run();
 
     boost::numeric::ublas::matrix<double> createKGlobal(int matrix_size) const ;
@@ -24,6 +29,6 @@ public:
 
     boost::numeric::ublas::vector<double> getSolution() const;
 private:
-    Preprocessor& preprocessor;
-    boost::numeric::ublas::vector<double> dispSolution;
+    Preprocessor& preprocessor_;
+    boost::numeric::ublas::vector<double> dispSolution_;
 };

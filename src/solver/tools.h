@@ -17,6 +17,6 @@ namespace solver_math {
     ublas::matrix<double> Kholetsky_decomposition(ublas::matrix<double>& A);
 
     void print_matrix(ublas::matrix<double>& A_matrix);
-} // namespace math 
+} // namespace solver_math 
 
 
