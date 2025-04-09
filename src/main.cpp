@@ -1,7 +1,4 @@
-﻿#include <iostream>
-#include <string>
-
-#include "solver/solver.h"
+﻿#include "solver/solver.h"
 #include "preprocessor/preprocessor.h"
 #include "postprocessor/postprocessor.h"
 
