@@ -21,8 +21,7 @@ std::string preprocessor_tools::getElementType(std::string line) {
         return etype;
     }
     else {
-        std::cerr << "Invalid element type setting\n";
-        std::exit(1);
+        throw PreprocessorError("Invalid element type setting");
     }
 }
 
@@ -58,7 +57,6 @@ std::unordered_map<std::string, std::optional<double>> preprocessor_tools::getDa
     }
     else {
         throw PreprocessorError("Invalid configuration file");
-        return result;
     }
 }
 

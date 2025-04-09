@@ -99,7 +99,7 @@ ublas::vector<double> Solver::createFGlobal(int vector_size) const {
 	int index;
 
 	for (const Force& force : preprocessor_.getForces()) {
-		index = force.getIndex() - 1; //���������� � ������������ � ����
+		index = force.getIndex() - 1; // additional minus 1 because indexing of nodes starts from 1
 
 		Fglobal(2 * index) += force.getForceX(); 
 		Fglobal(2 * index + 1) += force.getForceY();

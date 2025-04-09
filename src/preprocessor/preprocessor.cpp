@@ -92,7 +92,7 @@ void Preprocessor::readConfig() {
 	}
 	catch (const PreprocessorError& err) {
 		std::cout << "\nError while config file reading:\n" << err.what() << std::endl;
-		std::exit(1);
+		throw err;
 	}
 }
 
