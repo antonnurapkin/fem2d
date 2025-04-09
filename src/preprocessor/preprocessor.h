@@ -33,11 +33,11 @@ public:
 	Material getMaterialByIndex(int index) const;
 	
 private:
-	std::string path_to_input_file;
+	std::string path_to_input_file_;
 
-    std::vector<std::shared_ptr<IElement>> elements;
-	std::vector<std::shared_ptr<Node>> nodes;
-	std::vector<Material> materials;
-	std::vector<Force> forces;
-	std::vector<Support> supports;
+    std::vector<std::shared_ptr<IElement>> elements_;
+	std::vector<std::shared_ptr<Node>> nodes_;
+	std::vector<Material> materials_;
+	std::vector<Force> forces_;
+	std::vector<Support> supports_;
 };

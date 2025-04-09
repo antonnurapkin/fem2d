@@ -16,8 +16,8 @@
 
 using ConfigData = std::unordered_map<std::string, std::optional<double>>;
 
-Preprocessor::Preprocessor(int number_params, char** params) {
-	path_to_input_file = getPathToConfig(number_params, params);
+Preprocessor::Preprocessor(int number_params, char** params): path_to_input_file_(getPathToConfig(number_params, params)) {
+	std::cout << "Preprocessor was created successfully!\n";
 }
 
 std::string Preprocessor::getPathToConfig(int number_params, char** params) const {
@@ -34,7 +34,7 @@ std::string Preprocessor::getPathToConfig(int number_params, char** params) cons
 
 void Preprocessor::readConfig() {
 	try {
-		std::fstream file(path_to_input_file);
+		std::fstream file(path_to_input_file_);
 		if (file.is_open()) {
 			std::string line;
 			std::string etype;
@@ -49,7 +49,7 @@ void Preprocessor::readConfig() {
 				else if (line.find("MATERIAL") != std::string::npos) {
 					ConfigData material_data = preprocessor_tools::getDataFromString(line, { "Emod", "mu", "density", "index" });
 					Material material = Material::createMaterial(material_data);
-					this->materials.push_back(material);
+					materials_.push_back(material);
 				}
 
 				else if (line.find("SECTION") != std::string::npos) {
@@ -59,7 +59,7 @@ void Preprocessor::readConfig() {
 				else if (line.find("NODE") != std::string::npos) {
 					ConfigData node_data = preprocessor_tools::getDataFromString(line, { "index", "x", "y" });
 					std::shared_ptr<Node> node = Node::createNode(node_data);
-					this->nodes.push_back(node);
+					nodes_.push_back(node);
 				}
 				
 				else if (line.find("ELEM") != std::string::npos) {
@@ -67,24 +67,24 @@ void Preprocessor::readConfig() {
 
 					ElemParams elem_params = ElemParams::createElemParams(elem_data, section, *this);
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
-					elements.push_back(elem);
+					elements_.push_back(elem);
 				}
 
 				else if (line.find("FORCE") != std::string::npos) {
 					ConfigData force_data = preprocessor_tools::getDataFromString(line, { "index", "Fx", "Fy" });
 					Force force = Force::createForce(force_data);
-					this->forces.push_back(force);
+					forces_.push_back(force);
 				}
 
 				else if (line.find("DISP") != std::string::npos) {
 					ConfigData support_data = preprocessor_tools::getDataFromString(line, { "index", "disp_x", "disp_y" });
 					Support support = Support::createSupport(support_data);
-					this->supports.push_back(support);
+					supports_.push_back(support);
 				}
 			}
 
 			std::cout << "Configuration file was readed successfully!\n";
-			std::fstream file(path_to_input_file);
+			std::fstream file(path_to_input_file_);
 		}
 		else {
 			throw PreprocessorError("The config file does not exist in this path\n");
@@ -97,7 +97,7 @@ void Preprocessor::readConfig() {
 }
 
 std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) const {
-	for (std::shared_ptr<Node> node : nodes) {
+	for (const std::shared_ptr<Node>& node : nodes_) {
 		if (node->getIndex() == index) {
 			return node;
 		}
@@ -106,7 +106,7 @@ std::shared_ptr<Node> Preprocessor::getNodeByIndex(int index) const {
 }
 
 Material Preprocessor::getMaterialByIndex(int index) const {
-	for (Material material : materials) {
+	for (const Material& material : materials_) {
 		if (material.getIndex() == index) {
 			return material;
 		}
@@ -130,21 +130,21 @@ std::vector<int> Preprocessor::getDofIndexes(const Support& support) const {
 }
 
 std::vector<std::shared_ptr<IElement>> Preprocessor::getElements() const {
-	return elements;
+	return elements_;
 }
 
 std::vector<std::shared_ptr<Node>> Preprocessor::getNodes() const {
-	return nodes;
+	return nodes_;
 }
 
 std::vector<Material> Preprocessor::getMaterials() const {
-	return materials;
+	return materials_;
 }
 
 std::vector<Force> Preprocessor::getForces() const {
-	return forces;
+	return forces_;
 }
 
 std::vector<Support> Preprocessor::getSupports() const {
-	return supports;
+	return supports_;
 }
