@@ -61,8 +61,8 @@ ublas::matrix<double> Solver::assembleMatrices(ublas::matrix<double>& Klocal, ub
 	
 	std::vector<int> indexes;
 
-	// �������������� -1 ��� ��� ���������� � �������� � ����
-	for (std::shared_ptr<Node> node : nodes) {
+	// additional minus 1 because indexing of nodes starts from 1
+	for (const std::shared_ptr<Node>& node : nodes) {
 		indexes.push_back(node->getIndex() * 2 - 1 - 1);
 		indexes.push_back(node->getIndex() * 2 - 1);
 	}
@@ -81,7 +81,7 @@ ublas::matrix<double> Solver::createKGlobal(int matrix_size) const {
 	ublas::zero_matrix<double> zero_matrix(matrix_size, matrix_size);
 	ublas::matrix<double> Kglobal = zero_matrix;
 
-	for (auto elem : preprocessor_.getElements()) {
+	for (const std::shared_ptr<IElement>& elem : preprocessor_.getElements()) {
 		ublas::matrix<double> k_matrix_elem = elem->KMatrixElemGlobal();
 
 		Kglobal = assembleMatrices(k_matrix_elem, Kglobal, elem);
@@ -98,7 +98,7 @@ ublas::vector<double> Solver::createFGlobal(int vector_size) const {
 
 	int index;
 
-	for (auto force : preprocessor_.getForces()) {
+	for (const Force& force : preprocessor_.getForces()) {
 		index = force.getIndex() - 1; //���������� � ������������ � ����
 
 		Fglobal(2 * index) += force.getForceX(); 
@@ -112,7 +112,7 @@ ublas::matrix<double> Solver::applySupports(ublas::matrix<double>& Kglobal, int 
 
 	ublas::zero_vector<double> zero_vector(matrix_size);
 
-	for (Support support : preprocessor_.getSupports()) { 
+	for (const Support& support : preprocessor_.getSupports()) { 
 
 		std::vector<int> indexes = preprocessor_.getDofIndexes(support);
 
