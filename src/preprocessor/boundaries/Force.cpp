@@ -1,15 +1,19 @@
 #include <optional>
-#include "../utils/Error.h"
+#include <unordered_map>
+#include "../error.h"
 #include "Force.h"
 
 Force::Force(int i, float x, float y) : index(i), force_x(x), force_y(y) {};
 
-Force Force::createForce(std::optional<int> i, std::optional<float> x, std::optional<float> y) {
-	Force::checkParameters(i, x, y);
+Force Force::createForce(std::unordered_map<std::string, std::optional<double>> force_components) {
+	Force::checkParameters(force_components["index"], force_components["Fx"], force_components["Fy"]);
 
-	return Force(i.value(), x.value(), y.value());
+	return Force(
+		force_components["index"].value(), 
+		force_components["Fx"].value(), 
+		force_components["Fy"].value()
+	);
 }
-
 
 void Force::checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y) {
 	if (!i.has_value() || !x.has_value() || !y.has_value()) {

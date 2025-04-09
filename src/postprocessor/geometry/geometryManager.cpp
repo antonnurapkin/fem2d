@@ -5,7 +5,7 @@
 #include <vtkCellArray.h>
 #include <boost/numeric/ublas/vector.hpp>
 #include "geometryManager.h"
-#include "../../preprocessor/node/Node.h"
+#include "../../preprocessor/node/node.h"
 #include "../../preprocessor/preprocessor.h"
 #include "../../solver/solver.h"
 #include "../../preprocessor/elem_service/IElement.h"

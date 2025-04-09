@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <optional>
-#include "material/Material.h"
+#include "material/material.h"
 #include "boundaries/Force.h"
 #include "boundaries/Support.h"
 #include "elem_service/ElemParams.h"
@@ -14,29 +14,30 @@ class Node;
 class IElement;
 
 class Preprocessor{
-private:
-	std::string path_to_input_file;
-
-    std::vector<std::shared_ptr<IElement>> elements;
-	std::vector<std::shared_ptr<Node>> nodes;
-	std::vector<Material> materials;
-	std::vector<Force> forces;
-	std::vector<Support> supports;
 public:
+	int PARAMETERS_NUMBER = 3;
+
     Preprocessor(int number_params, char** params);
 
-	std::string getPathToConfig(int number_params, char** params);
+	std::string getPathToConfig(int number_params, char** params) const;
     void readConfig();
 
-	std::vector<std::shared_ptr<IElement>> getElements();
-	std::vector<std::shared_ptr<Node>> getNodes();
-	std::vector<Material> getMaterials();
-	std::vector<Force> getForces();
-	std::vector<Support> getSupports();
+	std::vector<std::shared_ptr<IElement>> getElements() const;
+	std::vector<std::shared_ptr<Node>> getNodes() const;
+	std::vector<Material> getMaterials() const;
+	std::vector<Force> getForces() const;
+	std::vector<Support> getSupports() const;
 
-	std::vector<int> getDofIndexes(Support support);
-
-	std::shared_ptr<Node> getNodeByIndex(int index);
-	Material getMaterialByIndex(int index);
+	std::vector<int> getDofIndexes(const Support& support) const;
+	std::shared_ptr<Node> getNodeByIndex(int index) const;
+	Material getMaterialByIndex(int index) const;
 	
+private:
+	std::string path_to_input_file_;
+
+    std::vector<std::shared_ptr<IElement>> elements_;
+	std::vector<std::shared_ptr<Node>> nodes_;
+	std::vector<Material> materials_;
+	std::vector<Force> forces_;
+	std::vector<Support> supports_;
 };

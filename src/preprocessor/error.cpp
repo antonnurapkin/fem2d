@@ -1,4 +1,4 @@
-#include "Error.h"
+#include "error.h"
 
 PreprocessorError::PreprocessorError(const char* msg) : message(msg) {};
 

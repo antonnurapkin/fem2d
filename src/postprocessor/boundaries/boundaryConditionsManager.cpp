@@ -57,16 +57,16 @@ vtkSmartPointer<vtkActor> BoundaryConditionsManager::createForceActor(double sta
 }
 
 double BoundaryConditionsManager::calculateAngle(Force force, char type) {
-    if (type == 'x' and force.getForceX() > 0) {
+    if (type == 'x' && force.getForceX() > 0) {
         return 0;
     } 
-    else if (type == 'x' and force.getForceX() < 0) {
+    else if (type == 'x' && force.getForceX() < 0) {
         return 180;
     }
-    else if (type == 'y' and force.getForceY() > 0) {
+    else if (type == 'y' && force.getForceY() > 0) {
         return 90;
     } 
-    else if (type == 'y' and force.getForceY() < 0) {
+    else if (type == 'y' && force.getForceY() < 0) {
         return -90;
     }
 }

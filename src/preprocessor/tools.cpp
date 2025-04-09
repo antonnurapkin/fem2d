@@ -2,31 +2,31 @@
 #include <stdexcept>
 #include <sstream>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <optional>
 #include <boost/numeric/ublas/io.hpp>
 #include <boost/numeric/ublas/lu.hpp>
 #include <boost/numeric/ublas/assignment.hpp>
-#include "Error.h"
+#include "error.h"
 #include "tools.h"
+
 
 using namespace boost::numeric;
 
 
-std::string getElementType(std::string line) {
+std::string preprocessor_tools::getElementType(std::string line) {
     size_t index = line.find(",");
     if (index != std::string::npos) {
         std::string etype = line.substr(index + 1);
         return etype;
     }
     else {
-        std::cerr << "Invalid element type setting\n";
-        std::exit(1);
+        throw PreprocessorError("Invalid element type setting");
     }
 }
 
-std::map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys) {
-    std::map<std::string, std::optional<double>> result;
+std::unordered_map<std::string, std::optional<double>> preprocessor_tools::getDataFromString(std::string line, std::vector<std::string> keys) {
+    std::unordered_map<std::string, std::optional<double>> result;
 
     for (const auto& key : keys) {
         result[key] = std::nullopt; // Init all values as std::nullopt
@@ -57,11 +57,10 @@ std::map<std::string, std::optional<double>> getDataFromString(std::string line,
     }
     else {
         throw PreprocessorError("Invalid configuration file");
-        return result;
     }
 }
 
-double getSection(std::string line) {
+double preprocessor_tools::getSection(std::string line) {
     size_t index = line.find(",");
     if (index != std::string::npos) {
         std::string section = line.substr(index + 1);
@@ -72,7 +71,7 @@ double getSection(std::string line) {
     }
 }
 
-ublas::matrix<double> TransformMatrix(double angle) {
+ublas::matrix<double> preprocessor_math::TransformMatrix(double angle) {
     ublas::matrix<double> T_matrix(4, 4);
 
     T_matrix <<= cos(angle), sin(angle), 0, 0,

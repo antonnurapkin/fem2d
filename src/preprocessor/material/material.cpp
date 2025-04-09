@@ -1,13 +1,19 @@
 #include <iostream>
-#include "../utils/Error.h"
-#include "Material.h"
+#include <unordered_map>
+#include "../error.h"
+#include "material.h"
 
 Material::Material(double mu, double density, double Emod, int index) : mu(mu), density(density), Emod(Emod), index(index) {};
 
-Material Material::createMaterial(std::optional<double> Emod, std::optional<double> mu, std::optional<double> density, std::optional<int> index) {
-	Material::checkParameters(mu, density, Emod, index);
+Material Material::createMaterial(std::unordered_map<std::string, std::optional<double>> material_data) {
+	Material::checkParameters(material_data["mu"], material_data["density"], material_data["Emod"], material_data["index"]);
 
-	return Material(mu.value(), density.value(), Emod.value(), index.value());
+	return Material( 
+		material_data["mu"].value(), 
+		material_data["density"].value(),
+		material_data["Emod"].value(), 
+		material_data["index"].value()
+	);
 }
 
 void Material::checkParameters(std::optional<double> mu, std::optional<double> density, std::optional<double> Emod, std::optional<int> index) {

@@ -1,11 +1,13 @@
 #pragma once
 #include <vector>
 #include <string>
-#include <map>
+#include <unordered_map>
 #include <memory>
 #include <optional>
-#include "../material/Material.h"
-#include "../node/Node.h"
+#include "../material/material.h"
+#include "../node/node.h"
+
+class Preprocessor;
 
 struct ElemParams {
 	std::vector<std::shared_ptr<Node>> nodes;
@@ -13,11 +15,10 @@ struct ElemParams {
 	std::vector<int> indexes;
 	double geom_parameter;
 
-	static void checkParameters(std::map<std::string, std::optional<double>> elem_data);
+	static void checkParameters(std::unordered_map<std::string, std::optional<double>> elem_data);
 
 	static ElemParams createElemParams(
-		std::map<std::string, 
-		std::optional<double>> elem_data, 
+		std::unordered_map<std::string, std::optional<double>> elem_data,
 		double geometry, 
 		Preprocessor& preprocessor
 	);
