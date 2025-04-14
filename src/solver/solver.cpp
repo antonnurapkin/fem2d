@@ -1,5 +1,7 @@
 #include <vector>
 #include <future>
+#include <utility>
+#include <thread>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
@@ -8,6 +10,7 @@
 #include "preprocessor/preprocessor.h"
 #include "solver.h"
 #include "tools.h"
+#include "error.cpp"
 
 
 Solver::Solver(Preprocessor& preprocessor): preprocessor_(preprocessor) {
@@ -27,33 +30,32 @@ Solver& Solver::operator=(const Solver& other) {
 }
 
 void Solver::run() {
-	
-	int matrix_size = calculateMatrixSize();
+	try {
+		int matrix_size = calculateMatrixSize();
 
-	//ublas::matrix<double> Kglobal = createKGlobal(matrix_size);
-	//ublas::vector<double> Fvector = createFGlobal(matrix_size);
+		auto fut_k_global = std::async(
+			std::launch::async, 
+			[this, matrix_size]() {
+				return this->createKGlobal(matrix_size);
+			}
+		);
 
-	auto fut_k_global = std::async(
-		std::launch::async, 
-		[this, matrix_size]() {
-			return this->createKGlobal(matrix_size);
-		}
-	);
+		auto fut_f_global = std::async(
+			std::launch::async, 
+			[this, matrix_size]() {
+				return this->createFGlobal(matrix_size);
+			}
+		);
 
-	auto fut_f_global = std::async(
-		std::launch::async, 
-		[this, matrix_size]() {
-			return this->createFGlobal(matrix_size);
-		}
-	);
+		ublas::matrix<double> Kglobal = fut_k_global.get();
+		ublas::vector<double> Fvector = fut_f_global.get();
 
-	ublas::matrix<double> Kglobal = fut_k_global.get();
-	ublas::vector<double> Fvector = fut_f_global.get();
+		dispSolution_ = solver_math::solveSystem(Kglobal, Fvector);
 
-	dispSolution_ = solver_math::solveSystem(Kglobal, Fvector);
-
-	setSolutionToNodes(dispSolution_);
-
+		setSolutionToNodes(dispSolution_);
+	} catch (const std::exception& err) {
+		throw SolverError(err.what());
+	}
 }
 
 

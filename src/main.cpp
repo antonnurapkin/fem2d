@@ -3,6 +3,7 @@
 #include "preprocessor/preprocessor.h"
 #include "postprocessor/postprocessor.h"
 #include "preprocessor/error.h"
+#include "solver/error.h"
 
 
 int main(int argc, char* argv[])
@@ -18,6 +19,9 @@ int main(int argc, char* argv[])
 		postprocessor.run();
 	} catch (const PreprocessorError& err) {
 		std::cout << "PreprocessorError:\n" <<err.what();
+		return -1;
+	} catch (const SolverError& err) {
+		std::cout << "SolverError:\n" <<err.what();
 		return -1;
 	} catch (const std::exception& err) {
 		std::cout << err.what();
