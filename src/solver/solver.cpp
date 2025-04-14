@@ -18,8 +18,16 @@ Solver::~Solver() {
 	std::cout << "Solver was deleted successfully!\n";
 }
 
-void Solver::run() {
+Solver& Solver::operator=(const Solver& other) {
+	if (&other != this) {
+		preprocessor_ = other.preprocessor_; 
+		dispSolution_ = other.dispSolution_;
+	}
+	return *this;
+}
 
+void Solver::run() {
+	
 	int matrix_size = calculateMatrixSize();
 
 	//ublas::matrix<double> Kglobal = createKGlobal(matrix_size);
@@ -46,9 +54,6 @@ void Solver::run() {
 
 	setSolutionToNodes(dispSolution_);
 
-	std::cout << "Solution:\n";
-
-	std::cout << dispSolution_ << std::endl;
 }
 
 
@@ -138,3 +143,6 @@ ublas::vector<double> Solver::getSolution() const {
 	return dispSolution_;
 }
 
+Preprocessor& Solver::getPreprocessor() {
+	return preprocessor_;
+}

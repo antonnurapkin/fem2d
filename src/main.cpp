@@ -14,14 +14,17 @@ int main(int argc, char* argv[])
 		Solver solver(preprocessor);
 		solver.run();
 
-		Postprocessor postprocessor(preprocessor, solver);
+		Postprocessor postprocessor(solver);
 		postprocessor.run();
 	} catch (const PreprocessorError& err) {
 		std::cout << "PreprocessorError:\n" <<err.what();
+		return -1;
 	} catch (const std::exception& err) {
 		std::cout << err.what();
+		return -1;
 	} catch (...) {
 		std::cerr << "Caught an unknown exception!\n";
+		return -1;
 	}
 	std::cout << "The program has finished working\n";
 

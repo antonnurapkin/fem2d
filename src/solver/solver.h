@@ -12,7 +12,7 @@ public:
     ~Solver();
     Solver(const Solver& other) = delete;
     Solver(Solver&& other) = delete;
-    Solver& operator=(const Solver& other) = delete;
+    Solver& operator=(const Solver& other);
     Solver& operator=(Solver&& other) = delete;
 
     void run();
@@ -28,6 +28,7 @@ public:
     void setSolutionToNodes(boost::numeric::ublas::vector<double>& solution);
 
     boost::numeric::ublas::vector<double> getSolution() const;
+    Preprocessor& getPreprocessor();
 private:
     Preprocessor& preprocessor_;
     boost::numeric::ublas::vector<double> dispSolution_;

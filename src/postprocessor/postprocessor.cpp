@@ -9,9 +9,13 @@
 #include "../solver/solver.h"
 #include "postprocessor.h"
 
-Postprocessor::Postprocessor(Preprocessor& preprocessor, Solver& solver): preprocessor(preprocessor), solver(solver) {};
+Postprocessor::Postprocessor(Solver& solver): solver(solver) {
+    std::cout << "Postprocessor was created successfully!\n";
+};
 
 void Postprocessor::run() {
+
+    Preprocessor& preprocessor = solver.getPreprocessor();
 
     std::vector<double> stresses, strains;
 
