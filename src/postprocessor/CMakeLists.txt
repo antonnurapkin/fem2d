@@ -3,6 +3,7 @@ add_library(postprocessor postprocessor.cpp postprocessor.h vizualizationParams.
 target_include_directories(
     postprocessor PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${Boost_INCLUDE_DIRS}
     ${VTK_INCLUDE_DIRS}
 )

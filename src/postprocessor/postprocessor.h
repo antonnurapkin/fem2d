@@ -1,7 +1,7 @@
 #pragma once
 #include "renderer/rendererManager.h"
-#include "../solver/solver.h"
-#include "../preprocessor/preprocessor.h"
+#include "solver/solver.h"
+#include "preprocessor/preprocessor.h"
 
 class Postprocessor {
 private:

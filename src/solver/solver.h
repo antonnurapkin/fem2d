@@ -2,8 +2,8 @@
 #include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "../preprocessor/preprocessor.h"
-#include "../preprocessor/elem_service/IElement.h"
+#include "preprocessor/preprocessor.h"
+#include "preprocessor/elem_service/IElement.h"
 
 class Solver final
 {
