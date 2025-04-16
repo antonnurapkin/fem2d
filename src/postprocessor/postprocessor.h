@@ -4,13 +4,12 @@
 #include "preprocessor/preprocessor.h"
 
 class Postprocessor {
-private:
-    Solver& solver;
-
-    RendererManager rendererManager;
-
 public:
     Postprocessor(Solver& solver);
 
     void run();
+private:
+    Solver& solver;
+
+    RendererManager rendererManager;
 };

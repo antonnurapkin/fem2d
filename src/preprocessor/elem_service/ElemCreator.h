@@ -1,12 +1,10 @@
 #pragma once
 #include <string>
-
-class IElement;
-class ElemParams;
+#include "IElement.h"
+#include "ElemParams.h"
 
 class ElemCreator
 {
 public:
-	static std::shared_ptr<IElement> createElement(std::string type, ElemParams& elemParams);
+	static std::shared_ptr<IElement> createElement(const std::string& type, ElemParams& elemParams);
 };
-

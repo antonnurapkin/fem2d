@@ -9,8 +9,8 @@
 #include <vtkActor.h>
 #include <vtkTransformFilter.h>
  
-#include "../preprocessor/preprocessor.h"
-#include "../vizualizationParams.h"
+#include "preprocessor/preprocessor.h"
+#include "vizualizationParams.h"
 #include "boundaryConditionsManager.h"
 
 void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){

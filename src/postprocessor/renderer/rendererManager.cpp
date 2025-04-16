@@ -8,8 +8,8 @@
 #include <vtkTransform.h>
 #include <vtkAxesActor.h>
 
-#include "../geometry/geometryManager.h"
-#include "../boundaries/boundaryConditionsManager.h"
+#include "geometry/geometryManager.h"
+#include "boundaries/boundaryConditionsManager.h"
 
 #include "rendererManager.h"
 

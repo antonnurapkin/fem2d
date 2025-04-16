@@ -8,8 +8,8 @@
 #include <vtkColorTransferFunction.h>
 
 #include "vizualizationParams.h"
-#include "../geometry/geometryManager.h"
-#include "../boundaries/boundaryConditionsManager.h"
+#include "geometry/geometryManager.h"
+#include "boundaries/boundaryConditionsManager.h"
 
 
 class Preprocessor;

@@ -2,11 +2,11 @@
 #include <memory>
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
-#include "../../node/node.h"
-#include "../../tools.h"
-#include "../IElement.h"
-#include "../ElemParams.h"
-#include "Truss.h"
+#include "node/node.h"
+#include "elem_service/IElement.h"
+#include "elem_service/ElemParams.h"
+#include "tools.h"
+#include "truss.h"
 
 using namespace boost::numeric;
 

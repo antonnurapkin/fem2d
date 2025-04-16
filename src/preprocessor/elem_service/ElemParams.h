@@ -4,8 +4,8 @@
 #include <unordered_map>
 #include <memory>
 #include <optional>
-#include "../material/material.h"
-#include "../node/node.h"
+#include "material/material.h"
+#include "node/node.h"
 
 class Preprocessor;
 

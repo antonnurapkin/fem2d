@@ -17,5 +17,6 @@ add_subdirectory("elem_service/elements")
 target_include_directories(
     preprocessor PUBLIC
     ${CMAKE_CURRENT_SOURCE_DIR}
+    PRIVATE
     ${Boost_INCLUDE_DIRS}
 )

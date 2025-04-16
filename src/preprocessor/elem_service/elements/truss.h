@@ -4,23 +4,13 @@
 #include <string>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
-#include "../../material/material.h"
-#include "../../node/node.h"
-#include "../IElement.h"
-#include "../ElemParams.h"
+#include "material/material.h"
+#include "node/node.h"
+#include "elem_service/IElement.h"
+#include "elem_service/ElemParams.h"
 
 class Truss : public IElement
 {
-private:
-	std::vector<std::shared_ptr<Node>> nodes;
-	Material material;
-	std::vector<int> indexes;
-	double section;
-	double length;
-	double angle;
-
-	int MATRIX_SIZE = 4;
-
 public:
 	Truss(Material material, std::vector<int> indexes, std::vector<std::shared_ptr<Node>> nodes, double section);
 	Truss(ElemParams& elemParams);
@@ -42,6 +32,15 @@ public:
 	double getLength() const override;
 	
 	double setLength(std::vector<std::shared_ptr<Node>> nodes) const;
-	double setAngle(std::vector<std::shared_ptr<Node>> nodes) const;	
+	double setAngle(std::vector<std::shared_ptr<Node>> nodes) const;
+private:
+	std::vector<std::shared_ptr<Node>> nodes;
+	Material material;
+	std::vector<int> indexes;
+	double section;
+	double length;
+	double angle;
+
+	int MATRIX_SIZE = 4;	
 };
 

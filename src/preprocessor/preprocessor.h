@@ -15,8 +15,6 @@ class IElement;
 
 class Preprocessor{
 public:
-	int PARAMETERS_NUMBER = 3;
-
     Preprocessor(int number_params, char** params);
 
 	std::string getPathToConfig(int number_params, char** params) const;
@@ -40,4 +38,6 @@ private:
 	std::vector<Material> materials_;
 	std::vector<Force> forces_;
 	std::vector<Support> supports_;
+
+	int PARAMETERS_NUMBER = 3;
 };

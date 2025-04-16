@@ -18,4 +18,4 @@ namespace preprocessor_math {
     using namespace boost::numeric;
 
     ublas::matrix<double> TransformMatrix(double angle);
-}
+} // namespace preprocessor_math

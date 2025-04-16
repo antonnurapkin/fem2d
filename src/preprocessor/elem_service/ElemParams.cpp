@@ -3,8 +3,8 @@
 #include <optional>
 #include <unordered_map>
 #include "ElemParams.h"
-#include "../error.h"
-#include "../preprocessor.h"
+#include "error.h"
+#include "preprocessor.h"
 
 
 void ElemParams::checkParameters(std::unordered_map<std::string, std::optional<double>> elem_data) {
