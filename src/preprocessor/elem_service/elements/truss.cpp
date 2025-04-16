@@ -3,8 +3,8 @@
 #include <boost/numeric/ublas/assignment.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "node/node.h"
-#include "elem_service/IElement.h"
-#include "elem_service/ElemParams.h"
+#include "elem_service/ielement.h"
+#include "elem_service/elem_params.h"
 #include "tools.h"
 #include "truss.h"
 

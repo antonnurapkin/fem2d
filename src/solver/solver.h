@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
 #include "preprocessor.h"
-#include "elem_service/IElement.h"
+#include "elem_service/ielement.h"
 
 class Solver final
 {

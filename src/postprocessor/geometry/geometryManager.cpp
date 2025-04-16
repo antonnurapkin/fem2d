@@ -8,7 +8,7 @@
 #include "preprocessor/node/node.h"
 #include "preprocessor/preprocessor.h"
 #include "solver/solver.h"
-#include "preprocessor/elem_service/IElement.h"
+#include "preprocessor/elem_service/ielement.h"
 
 
 void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {

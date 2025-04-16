@@ -6,14 +6,14 @@
 #include <memory>
 #include <optional>
 #include "material/material.h"
+#include "node/node.h"
 #include "boundaries/Force.h"
 #include "boundaries/Support.h"
-#include "elem_service/ElemParams.h"
+#include "elem_service/elem_params.h"
+#include "elem_service/ielement.h"
 
-class Node;
-class IElement;
 
-class Preprocessor{
+class Preprocessor final{
 public:
     Preprocessor(int number_params, char** params);
 
@@ -39,5 +39,5 @@ private:
 	std::vector<Force> forces_;
 	std::vector<Support> supports_;
 
-	int PARAMETERS_NUMBER = 3;
+	static const int PARAMETERS_NUMBER = 3;
 };

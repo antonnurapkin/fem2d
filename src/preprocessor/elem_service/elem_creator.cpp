@@ -1,8 +1,8 @@
 #include <memory>
 #include "elements/truss.h"
-#include "ElemParams.h"
-#include "IElement.h"
-#include "ElemCreator.h"
+#include "elem_params.h"
+#include "ielement.h"
+#include "elem_creator.h"
 
 std::shared_ptr<IElement> ElemCreator::createElement(const std::string& type, ElemParams& elemParams)
 {

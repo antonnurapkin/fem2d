@@ -6,10 +6,10 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include "material/material.h"
 #include "node/node.h"
-#include "elem_service/IElement.h"
-#include "elem_service/ElemParams.h"
+#include "elem_service/ielement.h"
+#include "elem_service/elem_params.h"
 
-class Truss : public IElement
+class Truss final : public IElement
 {
 public:
 	Truss(Material material, std::vector<int> indexes, std::vector<std::shared_ptr<Node>> nodes, double section);

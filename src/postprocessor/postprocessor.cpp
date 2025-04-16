@@ -5,7 +5,7 @@
 #include <vtkSmartPointer.h>
 #include "vizualizationParams.h"
 #include "preprocessor/preprocessor.h"
-#include "preprocessor/elem_service/IElement.h"
+#include "preprocessor/elem_service/ielement.h"
 #include "solver/solver.h"
 #include "postprocessor.h"
 

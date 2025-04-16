@@ -3,13 +3,13 @@
 #include <cstring>
 #include <vector>
 #include <optional>
-#include "elem_service/IElement.h"
+#include "elem_service/ielement.h"
 #include "node/node.h"
 #include "material/material.h"
 #include "boundaries/Force.h"
 #include "boundaries/Support.h"
-#include "elem_service/ElemParams.h"
-#include "elem_service/ElemCreator.h"
+#include "elem_service/elem_params.h"
+#include "elem_service/elem_creator.h"
 #include "tools.h"
 #include "error.h"
 #include "preprocessor.h"
@@ -22,10 +22,10 @@ Preprocessor::Preprocessor(int number_params, char** params): path_to_input_file
 
 std::string Preprocessor::getPathToConfig(int number_params, char** params) const {
 	if (number_params < PARAMETERS_NUMBER) {
-		throw PreprocessorError("Not enough launch arguments!");
+		throw PreprocessorError("Not enough launch arguments!\n");
 	} 
 	else if (std::strcmp(params[1], "--input") != 0) {\
-		throw PreprocessorError("Unknown launch argument");	
+		throw PreprocessorError("Unknown launch argument\n");	
 	} 
 	else {
 		return std::string(params[2]);
@@ -62,10 +62,21 @@ void Preprocessor::readConfig() {
 					nodes_.push_back(node);
 				}
 				
+				// TODO: Подумать как упростить метод и унифицировать
 				else if (line.find("ELEM") != std::string::npos) {
 					ConfigData elem_data = preprocessor_tools::getDataFromString(line, { "index1", "index2", "material_index" });
+					
+					ElemParams::checkParameters(elem_data);
 
-					ElemParams elem_params = ElemParams::createElemParams(elem_data, section, *this);
+					int index1 = static_cast<int>(elem_data.at("index1").value());
+					int index2 = static_cast<int>(elem_data.at("index2").value());
+					int material_index = static_cast<int>(elem_data.at("material_index").value());
+					
+					std::shared_ptr<Node> node1 = getNodeByIndex(index1);
+					std::shared_ptr<Node> node2 = getNodeByIndex(index2);
+					Material material = getMaterialByIndex(material_index);
+
+					ElemParams elem_params(std::vector<std::shared_ptr<Node>> {node1, node2}, std::vector<int> {index1, index2}, material, section);
 					std::shared_ptr<IElement> elem = ElemCreator::createElement(etype, elem_params);
 					elements_.push_back(elem);
 				}

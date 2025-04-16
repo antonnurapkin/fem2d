@@ -6,7 +6,7 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/io.hpp>
 #include "preprocessor/node/node.h"
-#include "preprocessor/elem_service/IElement.h"
+#include "preprocessor/elem_service/ielement.h"
 #include "preprocessor/preprocessor.h"
 #include "solver.h"
 #include "tools.h"
@@ -53,6 +53,8 @@ void Solver::run() {
 		dispSolution_ = solver_math::solveSystem(Kglobal, Fvector);
 
 		setSolutionToNodes(dispSolution_);
+
+		std::cout << "The system of equations was solved successfully!\n";
 	} catch (const std::exception& err) {
 		throw SolverError(err.what());
 	}
