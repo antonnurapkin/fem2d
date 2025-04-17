@@ -1,5 +1,5 @@
 #pragma once
-#include "renderer/rendererManager.h"
+#include "renderer/renderer_manager.h"
 #include "solver/solver.h"
 #include "preprocessor/preprocessor.h"
 

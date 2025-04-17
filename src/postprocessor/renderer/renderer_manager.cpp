@@ -8,10 +8,9 @@
 #include <vtkTransform.h>
 #include <vtkAxesActor.h>
 
-#include "geometry/geometryManager.h"
-#include "boundaries/boundaryConditionsManager.h"
-
-#include "rendererManager.h"
+#include "geometry/geometry_manager.h"
+#include "boundaries/boundary_conditions_manager.h"
+#include "renderer_manager.h"
 
 vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer<vtkPolyData> polydata, std::vector<double> data, const double viewport[4], const char * name, Preprocessor& preprocessor) {
     vtkSmartPointer<vtkFloatArray> data_store = vtkSmartPointer<vtkFloatArray>::New();

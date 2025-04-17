@@ -3,7 +3,7 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
-#include "vizualizationParams.h"
+#include "vizualization_params.h"
 #include "preprocessor/preprocessor.h"
 #include "preprocessor/elem_service/ielement.h"
 #include "solver/solver.h"

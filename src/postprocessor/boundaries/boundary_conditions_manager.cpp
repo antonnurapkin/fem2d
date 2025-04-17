@@ -10,8 +10,8 @@
 #include <vtkTransformFilter.h>
  
 #include "preprocessor/preprocessor.h"
-#include "vizualizationParams.h"
-#include "boundaryConditionsManager.h"
+#include "vizualization_params.h"
+#include "boundary_conditions_manager.h"
 
 void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
     for(const auto& force: preprocessor.getForces()) {

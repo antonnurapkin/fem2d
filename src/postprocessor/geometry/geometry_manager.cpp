@@ -4,7 +4,7 @@
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
 #include <boost/numeric/ublas/vector.hpp>
-#include "geometryManager.h"
+#include "geometry_manager.h"
 #include "preprocessor/node/node.h"
 #include "preprocessor/preprocessor.h"
 #include "solver/solver.h"

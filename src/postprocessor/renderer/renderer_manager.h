@@ -7,12 +7,10 @@
 #include <vtkPolyDataMapper.h>
 #include <vtkColorTransferFunction.h>
 
-#include "vizualizationParams.h"
-#include "geometry/geometryManager.h"
-#include "boundaries/boundaryConditionsManager.h"
-
-
-class Preprocessor;
+#include "vizualization_params.h"
+#include "geometry/geometry_manager.h"
+#include "boundaries/boundary_conditions_manager.h"
+#include "preprocessor/preprocessor.h"
                                                                        
 class RendererManager {
 public:

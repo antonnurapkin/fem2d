@@ -4,8 +4,11 @@
 #include <vtkRenderer.h>
 #include <vtkActor.h>
 
-class Preprocessor;
-class Force;
+#include "preprocessor/preprocessor.h"
+#include "preprocessor/boundaries/force.h"
+
+// class Preprocessor;
+// class Force;
 
 class BoundaryConditionsManager {
 public:

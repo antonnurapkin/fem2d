@@ -1,4 +1,4 @@
-add_library(postprocessor postprocessor.cpp postprocessor.h vizualizationParams.h)
+add_library(postprocessor postprocessor.cpp postprocessor.h vizualization_params.h)
 
 target_include_directories(
     postprocessor PUBLIC
