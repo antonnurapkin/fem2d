@@ -7,8 +7,8 @@
 #include <optional>
 #include "material/material.h"
 #include "node/node.h"
-#include "boundaries/Force.h"
-#include "boundaries/Support.h"
+#include "boundaries/force.h"
+#include "boundaries/support.h"
 #include "elem_service/elem_params.h"
 #include "elem_service/ielement.h"
 
