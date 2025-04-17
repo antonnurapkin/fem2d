@@ -15,14 +15,7 @@ public:
     
     static void checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y);
     
-    // �������
     int getIndex() const;
     float getForceX() const;
     float getForceY() const;
-
-    // �������
-    void setIndex(int i);
-    void setForceX(float x);
-    void setForceY(float y);
-
 };

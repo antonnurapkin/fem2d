@@ -20,6 +20,47 @@ Preprocessor::Preprocessor(int number_params, char** params): path_to_input_file
 	std::cout << "Preprocessor was created successfully!\n";
 }
 
+Preprocessor::~Preprocessor() {
+	std::cout << "Preprocessor was deleted!\n";
+}
+
+Preprocessor::Preprocessor(const Preprocessor& other) {
+	path_to_input_file_ = other.path_to_input_file_;
+    elements_ = other.elements_;
+	nodes_ = other.nodes_;
+	materials_ = other.materials_;
+	forces_ = other.forces_;
+	supports_ = other.supports_;
+}
+
+Preprocessor::Preprocessor(Preprocessor&& other) {
+	path_to_input_file_ = other.path_to_input_file_;
+    elements_ = other.elements_;
+	nodes_ = other.nodes_;
+	materials_ = other.materials_;
+	forces_ = other.forces_;
+	supports_ = other.supports_;
+
+	other.path_to_input_file_ = std::string();	
+	other.elements_ = std::vector<std::shared_ptr<IElement>> {};	
+	other.nodes_ = std::vector<std::shared_ptr<Node>> {};	
+	other.materials_ = std::vector<Material> {};	
+	other.forces_ = std::vector<Force> {};	
+	other.supports_ = std::vector<Support> {};
+}
+
+Preprocessor& Preprocessor::operator=(const Preprocessor& other) {
+	if (this != &other) {
+		path_to_input_file_ = other.path_to_input_file_;
+		elements_ = other.elements_;
+		nodes_ = other.nodes_;
+		materials_ = other.materials_;
+		forces_ = other.forces_;
+		supports_ = other.supports_;
+	}
+	return *this;
+}
+
 std::string Preprocessor::getPathToConfig(int number_params, char** params) const {
 	if (number_params < PARAMETERS_NUMBER) {
 		throw PreprocessorError("Not enough launch arguments!\n");

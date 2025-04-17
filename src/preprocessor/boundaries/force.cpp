@@ -21,11 +21,15 @@ void Force::checkParameters(std::optional<int> i, std::optional<float> x, std::o
 	}
 }
 
-int Force::getIndex() const { return this->index; }
-float Force::getForceX() const { return this->force_x; }
-float Force::getForceY() const { return this->force_y; }
+int Force::getIndex() const { 
+	return this->index;
+}
 
-void Force::setIndex(int i) { this->index = i; }
-void Force::setForceX(float x) { this->force_x = x; }
-void Force::setForceY(float y) { this->force_y = y; }
+float Force::getForceX() const { 
+	return this->force_x;
+}
+
+float Force::getForceY() const { 
+	return this->force_y;
+}
 

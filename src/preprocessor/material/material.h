@@ -27,9 +27,4 @@ public:
 	double getMu() const;
 	double getDensity() const;
 	int getIndex() const;
-
-	void setEmod(double p_Emod);
-	void setMu(double p_mu);
-	void setDensity(double p_density);
-	void setIndex(int index);
 };

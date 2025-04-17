@@ -13,6 +13,10 @@ Postprocessor::Postprocessor(Solver& solver): solver(solver) {
     std::cout << "Postprocessor was created successfully!\n";
 };
 
+Postprocessor::~Postprocessor() {
+    std::cout << "Postprocessor was deleted successfully!\n";
+}
+
 void Postprocessor::run() {
 
     Preprocessor& preprocessor = solver.getPreprocessor();

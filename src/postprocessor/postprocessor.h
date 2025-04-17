@@ -6,6 +6,7 @@
 class Postprocessor {
 public:
     Postprocessor(Solver& solver);
+    ~Postprocessor();
 
     void run();
 private:

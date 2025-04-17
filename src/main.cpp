@@ -30,7 +30,7 @@ int main(int argc, char* argv[])
 		std::cerr << "Caught an unknown exception!\n";
 		return -1;
 	}
-	std::cout << "The program has finished working\n";
+	std::cout << "The program has finished working!\n";
 
     return 0;
 }

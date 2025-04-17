@@ -34,42 +34,6 @@ void Material::checkParameters(std::optional<double> mu, std::optional<double> d
 	}
 }
 
-void Material::setMu(double mu) {
-	if (0 < mu < 1) {
-		this->mu = mu;
-	}
-	else {
-		throw PreprocessorError("Mu is out of range\n");
-	}
-}
-
-void Material::setEmod(double Emod) {
-	if (Emod > 0) {
-		this->Emod = Emod;
-	}
-	else {
-		throw PreprocessorError("Emod is lower than zero\n");
-	}
-}
-
-void Material::setDensity(double density) {
-	if (density > 0) {
-		this->density = density;
-	}
-	else {
-		throw PreprocessorError("Density is lower than zero\n");
-	}
-}
-
-void Material::setIndex(int index) {
-	if (index > 0) {
-		this->index = index;
-	}
-	else {
-		throw PreprocessorError("Index is lower than zero\n");
-	}
-}
-
 double Material::getMu() const {
 	return mu;
 }
