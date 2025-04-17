@@ -9,7 +9,7 @@
 #include "solver/solver.h"
 #include "postprocessor.h"
 
-Postprocessor::Postprocessor(Solver& solver): solver(solver) {
+Postprocessor::Postprocessor(Solver& solver): solver_(solver) {
     std::cout << "Postprocessor was created successfully!\n";
 };
 
@@ -19,7 +19,7 @@ Postprocessor::~Postprocessor() {
 
 void Postprocessor::run() {
 
-    Preprocessor& preprocessor = solver.getPreprocessor();
+    Preprocessor& preprocessor = solver_.getPreprocessor();
 
     std::vector<double> stresses, strains;
 
@@ -33,27 +33,27 @@ void Postprocessor::run() {
     vtkSmartPointer<vtkPolyData> polydataOriginal = vtkSmartPointer<vtkPolyData>::New();
     vtkSmartPointer<vtkPolyData> polydataDeformed = vtkSmartPointer<vtkPolyData>::New();
 
-    rendererManager.geometryManager.createGeometry(polydataOriginalStrain, preprocessor);
-    rendererManager.geometryManager.createGeometry(polydataOriginalStress, preprocessor);
+    rendererManager_.geometryManager.createGeometry(polydataOriginalStrain, preprocessor);
+    rendererManager_.geometryManager.createGeometry(polydataOriginalStress, preprocessor);
 
-    rendererManager.geometryManager.createGeometry(polydataOriginal, preprocessor);
-    double scale = rendererManager.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver);
+    rendererManager_.geometryManager.createGeometry(polydataOriginal, preprocessor);
+    double scale = rendererManager_.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver_);
     
-    vtkSmartPointer<vtkRenderer> stress_renderer = rendererManager.createDataRenderer(
+    vtkSmartPointer<vtkRenderer> stress_renderer = rendererManager_.createDataRenderer(
         polydataOriginalStress, 
         stresses, 
         STRESS_VIEWPORT, 
         STRESS_NAME,
         preprocessor
     );
-    vtkSmartPointer<vtkRenderer> strain_renderer = rendererManager.createDataRenderer(
+    vtkSmartPointer<vtkRenderer> strain_renderer = rendererManager_.createDataRenderer(
         polydataOriginalStrain, 
         strains, 
         STRAIN_VIEWPORT, 
         STRAIN_NAME, 
         preprocessor
     );
-    vtkSmartPointer<vtkRenderer> deformed_shape_renderer = rendererManager.createDeformedShapeRenderer(
+    vtkSmartPointer<vtkRenderer> deformed_shape_renderer = rendererManager_.createDeformedShapeRenderer(
         scale,
         polydataOriginal, 
         polydataDeformed, 

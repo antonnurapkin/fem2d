@@ -10,7 +10,6 @@ public:
 
     void run();
 private:
-    Solver& solver;
-
-    RendererManager rendererManager;
+    Solver& solver_;
+    RendererManager rendererManager_;
 };
