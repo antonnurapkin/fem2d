@@ -1,26 +1,25 @@
-#include <string>
-#include <stdexcept>
-#include <sstream>
-#include <vector>
-#include <unordered_map>
-#include <optional>
-#include <boost/numeric/ublas/io.hpp>
-#include <boost/numeric/ublas/lu.hpp>
-#include <boost/numeric/ublas/assignment.hpp>
-#include "error.h"
 #include "tools.h"
 
+#include <boost/numeric/ublas/assignment.hpp>
+#include <boost/numeric/ublas/io.hpp>
+#include <boost/numeric/ublas/lu.hpp>
+#include <optional>
+#include <sstream>
+#include <stdexcept>
+#include <string>
+#include <unordered_map>
+#include <vector>
+
+#include "error.h"
 
 using namespace boost::numeric;
-
 
 std::string preprocessor_tools::getElementType(std::string line) {
     size_t index = line.find(",");
     if (index != std::string::npos) {
         std::string etype = line.substr(index + 1);
         return etype;
-    }
-    else {
+    } else {
         throw PreprocessorError("Invalid element type setting");
     }
 }
@@ -29,9 +28,9 @@ std::unordered_map<std::string, std::optional<double>> preprocessor_tools::getDa
     std::unordered_map<std::string, std::optional<double>> result;
 
     for (const auto& key : keys) {
-        result[key] = std::nullopt; // Init all values as std::nullopt
+        result[key] = std::nullopt;  // Init all values as std::nullopt
     }
-    
+
     size_t start_index = line.find(",");
 
     if (start_index != std::string::npos) {
@@ -42,20 +41,18 @@ std::unordered_map<std::string, std::optional<double>> preprocessor_tools::getDa
 
         std::string temp_string;
         while (getline(ss, temp_string, ',')) {
-            if (index < keys.size()) { // Make sure index is within the bounds of keys
+            if (index < keys.size()) {  // Make sure index is within the bounds of keys
                 if (temp_string.empty()) {
-                result[keys[index]] = std::nullopt;
-                }
-                else {
+                    result[keys[index]] = std::nullopt;
+                } else {
                     result[keys[index]] = std::stod(temp_string);
                 }
-            index++;
+                index++;
             }
         }
 
         return result;
-    }
-    else {
+    } else {
         throw PreprocessorError("Invalid configuration file");
     }
 }
@@ -65,8 +62,7 @@ double preprocessor_tools::getSection(std::string line) {
     if (index != std::string::npos) {
         std::string section = line.substr(index + 1);
         return std::stod(section);
-    }
-    else {
+    } else {
         std::cerr << "Invalid element type setting\n";
     }
 }
@@ -74,11 +70,7 @@ double preprocessor_tools::getSection(std::string line) {
 ublas::matrix<double> preprocessor_math::TransformMatrix(double angle) {
     ublas::matrix<double> T_matrix(4, 4);
 
-    T_matrix <<= cos(angle), sin(angle), 0, 0,
-        -sin(angle), cos(angle), 0, 0,
-        0, 0, cos(angle), sin(angle),
-        0, 0, -sin(angle), cos(angle);
+    T_matrix <<= cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle), 0, 0, 0, 0, cos(angle), sin(angle), 0, 0, -sin(angle), cos(angle);
 
     return T_matrix;
 }
-

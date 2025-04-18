@@ -1,7 +1,7 @@
 #include "error.h"
 
-SolverError::SolverError(const char* msg) : message(msg) {};
+SolverError::SolverError(const char* msg) : message(msg){};
 
 const char* SolverError::what() const throw() {
-	return message.c_str();
+    return message.c_str();
 }

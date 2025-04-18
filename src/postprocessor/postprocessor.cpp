@@ -1,17 +1,18 @@
-#include <vtkRenderWindow.h>
-#include <vtkRenderer.h>
-#include <vtkRenderWindowInteractor.h>
-#include <vtkPolyData.h>
-#include <vtkSmartPointer.h>
-#include "preprocessor/preprocessor.h"
-#include "preprocessor/elem_service/ielement.h"
-#include "solver/solver.h"
 #include "postprocessor.h"
+
+#include <vtkPolyData.h>
+#include <vtkRenderWindow.h>
+#include <vtkRenderWindowInteractor.h>
+#include <vtkRenderer.h>
+#include <vtkSmartPointer.h>
+
 #include "geometry/geometry_manager.h"
+#include "preprocessor/elem_service/ielement.h"
+#include "preprocessor/preprocessor.h"
+#include "solver/solver.h"
 #include "vizualization_params.h"
 
-
-Postprocessor::Postprocessor(Solver& solver): solver_(solver) {
+Postprocessor::Postprocessor(Solver& solver) : solver_(solver) {
     std::cout << "Postprocessor was created successfully!\n";
 };
 
@@ -20,7 +21,6 @@ Postprocessor::~Postprocessor() {
 }
 
 void Postprocessor::run() {
-
     Preprocessor& preprocessor = solver_.getPreprocessor();
 
     std::vector<double> stresses, strains;
@@ -40,28 +40,13 @@ void Postprocessor::run() {
 
     geometry::createGeometry(polydataOriginal, preprocessor);
     double scale = geometry::createDeformedGeometry(polydataDeformed, preprocessor, solver_);
-    
-    vtkSmartPointer<vtkRenderer> stress_renderer = rendererManager_.createDataRenderer(
-        polydataOriginalStress, 
-        stresses, 
-        STRESS_VIEWPORT, 
-        STRESS_NAME,
-        preprocessor
-    );
-    vtkSmartPointer<vtkRenderer> strain_renderer = rendererManager_.createDataRenderer(
-        polydataOriginalStrain, 
-        strains, 
-        STRAIN_VIEWPORT, 
-        STRAIN_NAME, 
-        preprocessor
-    );
-    vtkSmartPointer<vtkRenderer> deformed_shape_renderer = rendererManager_.createDeformedShapeRenderer(
-        scale,
-        polydataOriginal, 
-        polydataDeformed, 
-        DEFORMED_SHAPE_VIEWPORT, 
-        preprocessor
-    ); 
+
+    vtkSmartPointer<vtkRenderer> stress_renderer =
+        rendererManager_.createDataRenderer(polydataOriginalStress, stresses, STRESS_VIEWPORT, STRESS_NAME, preprocessor);
+    vtkSmartPointer<vtkRenderer> strain_renderer =
+        rendererManager_.createDataRenderer(polydataOriginalStrain, strains, STRAIN_VIEWPORT, STRAIN_NAME, preprocessor);
+    vtkSmartPointer<vtkRenderer> deformed_shape_renderer =
+        rendererManager_.createDeformedShapeRenderer(scale, polydataOriginal, polydataDeformed, DEFORMED_SHAPE_VIEWPORT, preprocessor);
 
     vtkSmartPointer<vtkRenderWindow> renderWindow = vtkSmartPointer<vtkRenderWindow>::New();
     renderWindow->AddRenderer(stress_renderer);

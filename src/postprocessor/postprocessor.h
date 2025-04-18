@@ -1,15 +1,16 @@
 #pragma once
+#include "preprocessor/preprocessor.h"
 #include "renderer/renderer_manager.h"
 #include "solver/solver.h"
-#include "preprocessor/preprocessor.h"
 
 class Postprocessor {
-public:
+   public:
     Postprocessor(Solver& solver);
     ~Postprocessor();
 
     void run();
-private:
+
+   private:
     Solver& solver_;
     RendererManager rendererManager_;
 };

@@ -1,17 +1,20 @@
-#include <vtkFloatArray.h>
-#include <vtkCellData.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkColorTransferFunction.h>
-#include <vtkProperty.h>
-#include <vtkTextProperty.h>
-#include <vtkScalarBarActor.h>
-#include <vtkTransform.h>
-#include <vtkAxesActor.h>
-#include "geometry/geometry_manager.h"
-#include "boundaries/boundary_conditions_manager.h"
 #include "renderer_manager.h"
 
-vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer<vtkPolyData> polydata, std::vector<double> data, const double viewport[4], const char * name, Preprocessor& preprocessor) {
+#include <vtkAxesActor.h>
+#include <vtkCellData.h>
+#include <vtkColorTransferFunction.h>
+#include <vtkFloatArray.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkScalarBarActor.h>
+#include <vtkTextProperty.h>
+#include <vtkTransform.h>
+
+#include "boundaries/boundary_conditions_manager.h"
+#include "geometry/geometry_manager.h"
+
+vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer<vtkPolyData> polydata, std::vector<double> data,
+                                                                 const double viewport[4], const char* name, Preprocessor& preprocessor) {
     vtkSmartPointer<vtkFloatArray> data_store = vtkSmartPointer<vtkFloatArray>::New();
     data_store->SetNumberOfComponents(1);
 
@@ -42,8 +45,9 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer
     return renderer;
 }
 
-vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(double scale, vtkSmartPointer<vtkPolyData> polydataOriginal, vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4], Preprocessor& preprocessor) {
-
+vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(double scale, vtkSmartPointer<vtkPolyData> polydataOriginal,
+                                                                          vtkSmartPointer<vtkPolyData> polydataDeformed, const double viewport[4],
+                                                                          Preprocessor& preprocessor) {
     vtkSmartPointer<vtkPolyDataMapper> mapperOriginal = vtkSmartPointer<vtkPolyDataMapper>::New();
     mapperOriginal->SetInputData(polydataOriginal);
 
@@ -92,22 +96,22 @@ vtkSmartPointer<vtkActor> RendererManager::createActor(vtkSmartPointer<vtkPolyDa
     return actor;
 }
 
-void RendererManager::createScalarBar(vtkSmartPointer<vtkRenderer> renderer, vtkScalarsToColors* lookupTable, const char * name) {
+void RendererManager::createScalarBar(vtkSmartPointer<vtkRenderer> renderer, vtkScalarsToColors* lookupTable, const char* name) {
     vtkNew<vtkScalarBarActor> scalarBar;
     scalarBar->SetLookupTable(lookupTable);
-    scalarBar->SetTitle(name); // Используем имя, переданное в функцию, как заголовок
+    scalarBar->SetTitle(name);  // Используем имя, переданное в функцию, как заголовок
     scalarBar->SetNumberOfLabels(8);
 
-    scalarBar->SetPosition(0.05, 0.05); //  Левый нижний угол, отступ 5%
-    scalarBar->SetPosition2(0.05, 0.9); // Вертикальная полоса
-    scalarBar->GetLabelTextProperty()->SetColor(0, 0, 0); // Установить цвет текста меток в черный
-    scalarBar->GetTitleTextProperty()->SetColor(0, 0, 0); // Установить цвет заголовка в черный
+    scalarBar->SetPosition(0.05, 0.05);                    //  Левый нижний угол, отступ 5%
+    scalarBar->SetPosition2(0.05, 0.9);                    // Вертикальная полоса
+    scalarBar->GetLabelTextProperty()->SetColor(0, 0, 0);  // Установить цвет текста меток в черный
+    scalarBar->GetTitleTextProperty()->SetColor(0, 0, 0);  // Установить цвет заголовка в черный
     scalarBar->SetUnconstrainedFontSize(24);
 
     renderer->AddActor2D(scalarBar);
 }
 
-vtkSmartPointer<vtkColorTransferFunction> RendererManager::createColorTransferFunction(double min_value, double max_value){
+vtkSmartPointer<vtkColorTransferFunction> RendererManager::createColorTransferFunction(double min_value, double max_value) {
     vtkSmartPointer<vtkColorTransferFunction> ctf = vtkSmartPointer<vtkColorTransferFunction>::New();
     ctf->SetColorSpaceToRGB();
 

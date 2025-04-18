@@ -1,19 +1,22 @@
-#include <memory>
-#include <vtkArrowSource.h>
-#include <vtkTransformPolyDataFilter.h>
-#include <vtkPolyDataMapper.h>
-#include <vtkConeSource.h>
-#include <vtkSmartPointer.h>
-#include <vtkTransform.h>
-#include <vtkProperty.h>
-#include <vtkActor.h>
-#include <vtkTransformFilter.h>
-#include "preprocessor/preprocessor.h"
-#include "vizualization_params.h"
 #include "boundary_conditions_manager.h"
 
-void boundary_conditions::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
-    for(const auto& force: preprocessor.getForces()) {
+#include <vtkActor.h>
+#include <vtkArrowSource.h>
+#include <vtkConeSource.h>
+#include <vtkPolyDataMapper.h>
+#include <vtkProperty.h>
+#include <vtkSmartPointer.h>
+#include <vtkTransform.h>
+#include <vtkTransformFilter.h>
+#include <vtkTransformPolyDataFilter.h>
+
+#include <memory>
+
+#include "preprocessor/preprocessor.h"
+#include "vizualization_params.h"
+
+void boundary_conditions::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale) {
+    for (const auto& force : preprocessor.getForces()) {
         std::shared_ptr<Node> node = preprocessor.getNodeByIndex(force.getIndex());
 
         double startPoint[3] = {node->getX() + node->getDispX() * scale, node->getY() + node->getDispY() * scale, 0.0};
@@ -32,7 +35,6 @@ void boundary_conditions::addForces(vtkSmartPointer<vtkRenderer>& renderer, Prep
 }
 
 vtkSmartPointer<vtkActor> boundary_conditions::createForceActor(double startPoint[3], double angle) {
-
     auto arrowSource = vtkSmartPointer<vtkArrowSource>::New();
     arrowSource->SetShaftRadius(LINE_WIDTH * 0.005);
     arrowSource->SetTipRadius(LINE_WIDTH * 0.02);
@@ -42,12 +44,12 @@ vtkSmartPointer<vtkActor> boundary_conditions::createForceActor(double startPoin
     transform->RotateZ(angle);
 
     auto transformFilter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-	transformFilter->SetTransform(transform);
-	transformFilter->SetInputConnection(arrowSource->GetOutputPort());
+    transformFilter->SetTransform(transform);
+    transformFilter->SetInputConnection(arrowSource->GetOutputPort());
 
     auto mapper = vtkSmartPointer<vtkPolyDataMapper>::New();
-	mapper->SetInputConnection(transformFilter->GetOutputPort());
-	
+    mapper->SetInputConnection(transformFilter->GetOutputPort());
+
     auto actor = vtkSmartPointer<vtkActor>::New();
     actor->SetMapper(mapper);
     actor->GetProperty()->SetColor(const_cast<double*>(BLACK));
@@ -58,20 +60,17 @@ vtkSmartPointer<vtkActor> boundary_conditions::createForceActor(double startPoin
 double boundary_conditions::calculateAngle(Force force, char type) {
     if (type == 'x' && force.getForceX() > 0) {
         return 0;
-    } 
-    else if (type == 'x' && force.getForceX() < 0) {
+    } else if (type == 'x' && force.getForceX() < 0) {
         return 180;
-    }
-    else if (type == 'y' && force.getForceY() > 0) {
+    } else if (type == 'y' && force.getForceY() > 0) {
         return 90;
-    } 
-    else if (type == 'y' && force.getForceY() < 0) {
+    } else if (type == 'y' && force.getForceY() < 0) {
         return -90;
     }
 }
 
 void boundary_conditions::addSupports(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor) {
-    for(const auto& support: preprocessor.getSupports()) {
+    for (const auto& support : preprocessor.getSupports()) {
         std::shared_ptr<Node> node = preprocessor.getNodeByIndex(support.getIndex());
 
         double startPoint[3] = {node->getX(), node->getY(), 0.0};
@@ -89,9 +88,9 @@ void boundary_conditions::addSupports(vtkSmartPointer<vtkRenderer>& renderer, Pr
 
 vtkSmartPointer<vtkActor> boundary_conditions::createSupportActor(double startPoint[3], bool isXAxis) {
     vtkSmartPointer<vtkConeSource> coneSource = vtkSmartPointer<vtkConeSource>::New();
-    coneSource->SetHeight(LINE_WIDTH * 0.1); // Высота конуса
-    coneSource->SetRadius(LINE_WIDTH * 0.04); // Радиус основания конуса
-    coneSource->SetResolution(50); // Разрешение конуса
+    coneSource->SetHeight(LINE_WIDTH * 0.1);   // Высота конуса
+    coneSource->SetRadius(LINE_WIDTH * 0.04);  // Радиус основания конуса
+    coneSource->SetResolution(50);             // Разрешение конуса
 
     vtkSmartPointer<vtkTransform> transform = vtkSmartPointer<vtkTransform>::New();
 
@@ -101,7 +100,7 @@ vtkSmartPointer<vtkActor> boundary_conditions::createSupportActor(double startPo
     } else {
         transform->RotateZ(90);
     }
-    
+
     transform->Translate(-coneSource->GetHeight() / 2, 0, 0);
 
     vtkSmartPointer<vtkTransformFilter> transformFilter = vtkSmartPointer<vtkTransformFilter>::New();
@@ -117,4 +116,3 @@ vtkSmartPointer<vtkActor> boundary_conditions::createSupportActor(double startPo
 
     return coneActor;
 }
-

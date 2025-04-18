@@ -1,15 +1,15 @@
 #pragma once
 #include <optional>
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
-class Support
-{
-private:
+class Support {
+   private:
     int index;
     std::optional<double> disp_x;
     std::optional<double> disp_y;
-public:
+
+   public:
     Support(int index, std::optional<double> disp_x, std::optional<double> disp_y);
 
     static Support createSupport(std::unordered_map<std::string, std::optional<double>> support_components);

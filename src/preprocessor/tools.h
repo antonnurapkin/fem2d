@@ -1,21 +1,21 @@
 #pragma once
-#include <string>
-#include <map>
-#include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
+#include <map>
+#include <string>
+#include <vector>
 
 namespace preprocessor_tools {
-    using namespace boost::numeric;
+using namespace boost::numeric;
 
-    std::string getElementType(std::string line);
+std::string getElementType(std::string line);
 
-    double getSection(std::string line);
+double getSection(std::string line);
 
-    std::unordered_map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys);
-} // namespace preprocessor_tools
+std::unordered_map<std::string, std::optional<double>> getDataFromString(std::string line, std::vector<std::string> keys);
+}  // namespace preprocessor_tools
 
 namespace preprocessor_math {
-    using namespace boost::numeric;
+using namespace boost::numeric;
 
-    ublas::matrix<double> TransformMatrix(double angle);
-} // namespace preprocessor_math
+ublas::matrix<double> TransformMatrix(double angle);
+}  // namespace preprocessor_math

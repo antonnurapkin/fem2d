@@ -1,21 +1,23 @@
-#include <memory>
-#include <vtkSmartPointer.h>
-#include <vtkPolyData.h>
-#include <vtkPoints.h>
-#include <vtkCellArray.h>
-#include <boost/numeric/ublas/vector.hpp>
-#include "preprocessor/node/node.h"
-#include "preprocessor/preprocessor.h"
-#include "preprocessor/elem_service/ielement.h"
-#include "solver/solver.h"
 #include "geometry_manager.h"
 
+#include <vtkCellArray.h>
+#include <vtkPoints.h>
+#include <vtkPolyData.h>
+#include <vtkSmartPointer.h>
+
+#include <boost/numeric/ublas/vector.hpp>
+#include <memory>
+
+#include "preprocessor/elem_service/ielement.h"
+#include "preprocessor/node/node.h"
+#include "preprocessor/preprocessor.h"
+#include "solver/solver.h"
 
 void geometry::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
-    for (std::shared_ptr<Node> node: preprocessor.getNodes()) {
+    for (std::shared_ptr<Node> node : preprocessor.getNodes()) {
         points->InsertNextPoint(node->getX(), node->getY(), 0);
     }
 
@@ -64,12 +66,8 @@ double geometry::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata, P
 
     double scale = calculateScaleFactor(max_length, solver);
 
-    for (std::shared_ptr<Node> node: preprocessor.getNodes()) {
-        points->InsertNextPoint(
-            node->getX() + node->getDispX() * scale, 
-            node->getY() + node->getDispY() * scale, 
-            0
-        );
+    for (std::shared_ptr<Node> node : preprocessor.getNodes()) {
+        points->InsertNextPoint(node->getX() + node->getDispX() * scale, node->getY() + node->getDispY() * scale, 0);
     }
 
     polydata->SetPoints(points);
@@ -94,5 +92,4 @@ double geometry::calculateScaleFactor(double max_length, Solver& solver) {
     double scale = (max_length / 50) / ratio;
 
     return scale;
-
 }
