@@ -27,3 +27,19 @@ vtk_module_autoinit(
   MODULES ${VTK_LIBRARIES}
 )
 
+# Проверка наличия clang-format
+find_program(CLANG_FORMAT_EXECUTABLE NAMES clang-format)
+
+if(NOT CLANG_FORMAT_EXECUTABLE)
+    message(WARNING "clang-format не найден. Цель 'format' недоступна.")
+else()
+    # Создание цели для форматирования
+    add_custom_target(format
+        COMMAND ${CMAKE_COMMAND} -E echo "Форматирование кода с помощью clang-format..."
+        COMMAND ${CMAKE_COMMAND} -E chdir ${CMAKE_SOURCE_DIR}
+            bash -c "find . -type f \\( -name '*.cpp' -o -name '*.h' -o -name '*.hpp' \\) -exec ${CLANG_FORMAT_EXECUTABLE} -i {} +"
+        COMMENT "Форматирование завершено."
+        VERBATIM
+    )
+endif()
+
