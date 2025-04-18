@@ -7,7 +7,6 @@
 #include <vtkScalarBarActor.h>
 #include <vtkTransform.h>
 #include <vtkAxesActor.h>
-
 #include "geometry/geometry_manager.h"
 #include "boundaries/boundary_conditions_manager.h"
 #include "renderer_manager.h"
@@ -37,8 +36,8 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDataRenderer(vtkSmartPointer
     renderer->AddActor(actor);
     createScalarBar(renderer, mapper->GetLookupTable(), name);
     addAxes(renderer);
-    boundaryConditionsManager.addForces(renderer, preprocessor);
-    boundaryConditionsManager.addSupports(renderer, preprocessor);
+    boundary_conditions::addForces(renderer, preprocessor);
+    boundary_conditions::addSupports(renderer, preprocessor);
 
     return renderer;
 }
@@ -63,8 +62,8 @@ vtkSmartPointer<vtkRenderer> RendererManager::createDeformedShapeRenderer(double
     renderer->AddActor(actorDeformed);
 
     addAxes(renderer);
-    boundaryConditionsManager.addSupports(renderer, preprocessor);
-    boundaryConditionsManager.addForces(renderer, preprocessor, scale);
+    boundary_conditions::addSupports(renderer, preprocessor);
+    boundary_conditions::addForces(renderer, preprocessor, scale);
 
     return renderer;
 }

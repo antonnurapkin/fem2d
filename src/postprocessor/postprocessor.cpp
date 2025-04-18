@@ -3,11 +3,13 @@
 #include <vtkRenderWindowInteractor.h>
 #include <vtkPolyData.h>
 #include <vtkSmartPointer.h>
-#include "vizualization_params.h"
 #include "preprocessor/preprocessor.h"
 #include "preprocessor/elem_service/ielement.h"
 #include "solver/solver.h"
 #include "postprocessor.h"
+#include "geometry/geometry_manager.h"
+#include "vizualization_params.h"
+
 
 Postprocessor::Postprocessor(Solver& solver): solver_(solver) {
     std::cout << "Postprocessor was created successfully!\n";
@@ -33,11 +35,11 @@ void Postprocessor::run() {
     vtkSmartPointer<vtkPolyData> polydataOriginal = vtkSmartPointer<vtkPolyData>::New();
     vtkSmartPointer<vtkPolyData> polydataDeformed = vtkSmartPointer<vtkPolyData>::New();
 
-    rendererManager_.geometryManager.createGeometry(polydataOriginalStrain, preprocessor);
-    rendererManager_.geometryManager.createGeometry(polydataOriginalStress, preprocessor);
+    geometry::createGeometry(polydataOriginalStrain, preprocessor);
+    geometry::createGeometry(polydataOriginalStress, preprocessor);
 
-    rendererManager_.geometryManager.createGeometry(polydataOriginal, preprocessor);
-    double scale = rendererManager_.geometryManager.createDeformedGeometry(polydataDeformed, preprocessor, solver_);
+    geometry::createGeometry(polydataOriginal, preprocessor);
+    double scale = geometry::createDeformedGeometry(polydataDeformed, preprocessor, solver_);
     
     vtkSmartPointer<vtkRenderer> stress_renderer = rendererManager_.createDataRenderer(
         polydataOriginalStress, 

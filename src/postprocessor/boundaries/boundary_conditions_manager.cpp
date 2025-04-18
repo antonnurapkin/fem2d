@@ -8,12 +8,11 @@
 #include <vtkProperty.h>
 #include <vtkActor.h>
 #include <vtkTransformFilter.h>
- 
 #include "preprocessor/preprocessor.h"
 #include "vizualization_params.h"
 #include "boundary_conditions_manager.h"
 
-void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
+void boundary_conditions::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale){
     for(const auto& force: preprocessor.getForces()) {
         std::shared_ptr<Node> node = preprocessor.getNodeByIndex(force.getIndex());
 
@@ -32,7 +31,7 @@ void BoundaryConditionsManager::addForces(vtkSmartPointer<vtkRenderer>& renderer
     }
 }
 
-vtkSmartPointer<vtkActor> BoundaryConditionsManager::createForceActor(double startPoint[3], double angle) {
+vtkSmartPointer<vtkActor> boundary_conditions::createForceActor(double startPoint[3], double angle) {
 
     auto arrowSource = vtkSmartPointer<vtkArrowSource>::New();
     arrowSource->SetShaftRadius(LINE_WIDTH * 0.005);
@@ -56,7 +55,7 @@ vtkSmartPointer<vtkActor> BoundaryConditionsManager::createForceActor(double sta
     return actor;
 }
 
-double BoundaryConditionsManager::calculateAngle(Force force, char type) {
+double boundary_conditions::calculateAngle(Force force, char type) {
     if (type == 'x' && force.getForceX() > 0) {
         return 0;
     } 
@@ -71,7 +70,7 @@ double BoundaryConditionsManager::calculateAngle(Force force, char type) {
     }
 }
 
-void BoundaryConditionsManager::addSupports(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor) {
+void boundary_conditions::addSupports(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor) {
     for(const auto& support: preprocessor.getSupports()) {
         std::shared_ptr<Node> node = preprocessor.getNodeByIndex(support.getIndex());
 
@@ -88,7 +87,7 @@ void BoundaryConditionsManager::addSupports(vtkSmartPointer<vtkRenderer>& render
     }
 }
 
-vtkSmartPointer<vtkActor> BoundaryConditionsManager::createSupportActor(double startPoint[3], bool isXAxis) {
+vtkSmartPointer<vtkActor> boundary_conditions::createSupportActor(double startPoint[3], bool isXAxis) {
     vtkSmartPointer<vtkConeSource> coneSource = vtkSmartPointer<vtkConeSource>::New();
     coneSource->SetHeight(LINE_WIDTH * 0.1); // Высота конуса
     coneSource->SetRadius(LINE_WIDTH * 0.04); // Радиус основания конуса

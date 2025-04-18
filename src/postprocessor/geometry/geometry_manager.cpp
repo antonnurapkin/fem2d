@@ -4,14 +4,14 @@
 #include <vtkPoints.h>
 #include <vtkCellArray.h>
 #include <boost/numeric/ublas/vector.hpp>
-#include "geometry_manager.h"
 #include "preprocessor/node/node.h"
 #include "preprocessor/preprocessor.h"
-#include "solver/solver.h"
 #include "preprocessor/elem_service/ielement.h"
+#include "solver/solver.h"
+#include "geometry_manager.h"
 
 
-void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {
+void geometry::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
@@ -39,7 +39,7 @@ void GeometryManager::createGeometry(vtkSmartPointer<vtkPolyData> polydata, Prep
     }
 }
 
-double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor, Solver& solver) {
+double geometry::createDeformedGeometry(vtkSmartPointer<vtkPolyData> polydata, Preprocessor& preprocessor, Solver& solver) {
     vtkSmartPointer<vtkPoints> points = vtkSmartPointer<vtkPoints>::New();
     vtkSmartPointer<vtkCellArray> lines = vtkSmartPointer<vtkCellArray>::New();
 
@@ -81,7 +81,7 @@ double GeometryManager::createDeformedGeometry(vtkSmartPointer<vtkPolyData> poly
     return scale;
 }
 
-double GeometryManager::calculateScaleFactor(double max_length, Solver& solver) {
+double geometry::calculateScaleFactor(double max_length, Solver& solver) {
     ublas::vector<double> solution = solver.getSolution();
 
     double max_disp = *std::max_element(solution.begin(), solution.end());
