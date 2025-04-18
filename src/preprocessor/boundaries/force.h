@@ -6,16 +6,16 @@ class Force
 {
 private:
     int index;
-    float force_x;
-    float force_y;
+    double force_x;
+    double force_y;
 public:
-    Force(int i, float x, float y);
+    Force(int i, double x, double y);
 
     static Force createForce(std::unordered_map<std::string, std::optional<double>> force_components);
     
-    static void checkParameters(std::optional<int> i, std::optional<float> x, std::optional<float> y);
+    static void checkParameters(std::optional<int> i, std::optional<double> x, std::optional<double> y);
     
     int getIndex() const;
-    float getForceX() const;
-    float getForceY() const;
+    double getForceX() const;
+    double getForceY() const;
 };
