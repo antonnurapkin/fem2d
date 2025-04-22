@@ -22,12 +22,12 @@ class Truss final : public IElement {
 
     ublas::matrix<double> getDisplacments() const;
 
-    double getStrain() const;
-    double getStress() const;
+    double getStrain() const override;
+    double getStress() const override;
 
     std::vector<std::shared_ptr<Node>> getNodes() const override;
 
-    std::vector<int> getNodesIndexes() const;
+    std::vector<int> getNodesIndexes() const override;
 
     double getLength() const override;
 

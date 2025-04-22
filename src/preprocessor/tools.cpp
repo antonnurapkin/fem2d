@@ -63,7 +63,7 @@ double preprocessor_tools::getSection(std::string line) {
         std::string section = line.substr(index + 1);
         return std::stod(section);
     } else {
-        std::cerr << "Invalid element type setting\n";
+        throw PreprocessorError("Invalid element type setting\n");
     }
 }
 

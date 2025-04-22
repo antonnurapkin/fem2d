@@ -1,6 +1,7 @@
 #pragma once
 #include <boost/numeric/ublas/matrix.hpp>
 #include <map>
+#include <optional>
 #include <string>
 #include <vector>
 

@@ -56,8 +56,6 @@ ublas::vector<double> solver_math::backwardGaussToDown(ublas::matrix<double>& A_
         double temp = 0;
 
         for (int k = 0; k < i; k++) {
-            double A_ki = A_traingle_lower(k, i);
-            double sol_k = solution(k);
             temp += A_traingle_lower(i, k) * solution(k);
         }
 

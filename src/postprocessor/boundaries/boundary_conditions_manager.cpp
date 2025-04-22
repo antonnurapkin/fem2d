@@ -14,6 +14,7 @@
 
 #include "preprocessor/preprocessor.h"
 #include "vizualization_params.h"
+#include "error.h"
 
 void boundary_conditions::addForces(vtkSmartPointer<vtkRenderer>& renderer, Preprocessor& preprocessor, double scale) {
     for (const auto& force : preprocessor.getForces()) {
@@ -64,7 +65,7 @@ double boundary_conditions::calculateAngle(Force force, char type) {
         return 180;
     } else if (type == 'y' && force.getForceY() > 0) {
         return 90;
-    } else if (type == 'y' && force.getForceY() < 0) {
+    } else { // (type == 'y' && force.getForceY() < 0)
         return -90;
     }
 }

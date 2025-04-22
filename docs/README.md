@@ -164,6 +164,12 @@ DISP,7,0,0
 <li>path/to/config.txt - путь к вашему конфигурационному файлу.</li>
 </ul>
 
+## Запуск clang-tidy
+
+```bash
+    python3 run-clang-tidy.py -p ./build -extra-arg="-Wno-deprecated-declarations"
+```
+
 ## Дополнительная информация
 
 <ol>

@@ -83,9 +83,9 @@ double geometry::calculateScaleFactor(double max_length, Solver& solver) {
     ublas::vector<double> solution = solver.getSolution();
 
     double max_disp = *std::max_element(solution.begin(), solution.end());
-    double min_disp = *std::min_element(solution.begin(), solution.end());
+    // double min_disp = *std::min_element(solution.begin(), solution.end());
 
-    double max_abs_disp = std::max(abs(max_disp), abs(min_disp));
+    // double max_abs_disp = std::max(abs(max_disp), abs(min_disp));
 
     double ratio = max_disp / max_length;
 
