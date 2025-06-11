@@ -1,30 +1,37 @@
 #pragma once
-#include <vector>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/vector.hpp>
+#include <vector>
 
-// Прочие объявления классов
-class Preprocessor;
-class IElement;
+#include "elem_service/ielement.h"
+#include "preprocessor.h"
 
-class Solver
-{
-private:
-    Preprocessor& preprocessor;
-    boost::numeric::ublas::vector<double> dispSolution; // Убедись, что ublas правильно указан
-public:
+class Solver final {
+   public:
     Solver(Preprocessor& preprocessor);
+    ~Solver();
+    Solver(const Solver& other) = delete;
+    Solver(Solver&& other) = delete;
+    Solver& operator=(const Solver& other);
+    Solver& operator=(Solver&& other) = delete;
+
     void run();
 
-    boost::numeric::ublas::matrix<double> createKGlobal(int matrix_size);
-    boost::numeric::ublas::vector<double> createFGlobal(int vector_size);
+    boost::numeric::ublas::matrix<double> createKGlobal(int matrix_size) const;
+    boost::numeric::ublas::vector<double> createFGlobal(int vector_size) const;
 
-    boost::numeric::ublas::matrix<double> assembleMatrices(boost::numeric::ublas::matrix<double>& Klocal, boost::numeric::ublas::matrix<double>& Kglobal, std::shared_ptr<IElement>);
-    boost::numeric::ublas::matrix<double> applySupports(boost::numeric::ublas::matrix<double>& Kglobal, int matrix_size);
-    
-    int calculateMatrixSize();
+    boost::numeric::ublas::matrix<double> assembleMatrices(boost::numeric::ublas::matrix<double>& Klocal,
+                                                           boost::numeric::ublas::matrix<double>& Kglobal, std::shared_ptr<IElement>) const;
+    boost::numeric::ublas::matrix<double> applySupports(boost::numeric::ublas::matrix<double>& Kglobal, int matrix_size) const;
 
-    void setSolutionToNodes(boost::numeric::ublas::vector<double> solution);
+    int calculateMatrixSize() const;
 
-    boost::numeric::ublas::vector<double> getSolution();
+    void setSolutionToNodes(boost::numeric::ublas::vector<double>& solution);
+
+    boost::numeric::ublas::vector<double> getSolution() const;
+    Preprocessor& getPreprocessor();
+
+   private:
+    Preprocessor& preprocessor_;
+    boost::numeric::ublas::vector<double> dispSolution_;
 };
